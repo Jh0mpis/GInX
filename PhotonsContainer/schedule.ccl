@@ -1,0 +1,25 @@
+SCHEDULE test_init_fields AT POSTINITIAL {
+    LANG: C
+    OPTIONS: local
+    WRITES: ADMBaseX::metric(everywhere)
+    WRITES: ADMBaseX::lapse(everywhere)
+    WRITES: ADMBaseX::shift(everywhere)
+    WRITES: ADMBaseX::curv(everywhere)
+} "Fields setup"
+
+SCHEDULE test_setup AT POSTINITIAL AFTER test_init_fields {
+    LANG: C
+    OPTIONS: local
+} "setup"
+
+SCHEDULE test AT evol
+{
+    LANG: C
+    OPTIONS: global
+} "testing evolution"
+
+SCHEDULE print AT evol AFTER test
+{
+    LANG: C
+    OPTIONS: global
+} "print the particles"
