@@ -1,0 +1,7 @@
+# Main make.code.defn file for the thorn Particles
+
+#source files in this directory
+SRCS = test.cxx
+
+# Subdirectories containing source files
+SUBDIRS =
