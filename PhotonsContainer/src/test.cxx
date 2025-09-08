@@ -1,11 +1,13 @@
+#include <cctk.h>
+
 #include "CParameters.h"
 #include "Initializers.hxx"
 #include "Photons.hxx"
 #include "PhotonsContainer.hxx"
+#include "PhotonsInitializers.hxx"
 
 #include <driver.hxx>
 
-#include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
 #include <cctk_Types.h>
@@ -21,7 +23,12 @@ using PC = Containers::PhotonsContainer<ParticleData>;
 std::vector<std::unique_ptr<PC>> g_nupcs;
 
 extern "C" void test_setup(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
+
+  const int tl = 0;
+  const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
+  assert(gi_metric >= 0 && "Failed to get the metric group index");
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
@@ -29,9 +36,17 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
   }
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
-    g_nupcs[patch]->initialize(
-        Initializer::random_initializer<ParticleData, PC>, {2, 2, 2});
+    auto &pc = g_nupcs.at(patch);
+    auto &pd = CarpetX::ghext->patchdata.at(patch);
+    for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
+      const auto &ld = pd.leveldata.at(lev);
+      const auto &gd_metric = *ld.groupdata.at(gi_metric);
+      const amrex::MultiFab &metric = *gd_metric.mfab[tl];
+    pc->initialize(
+        photons_init::random_photons_initializer<ParticleData, PC>, photons_per_cell, metric, lev);
+    }
   }
+
 }
 
 extern "C" void test_init_fields(CCTK_ARGUMENTS) {
@@ -105,7 +120,9 @@ extern "C" void print(CCTK_ARGUMENTS) {
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     auto &pc = g_nupcs.at(patch);
-    pc->outputParticlesPlot(CCTK_PASS_CTOC);
-    pc->outputParticlesAscii(CCTK_PASS_CTOC);
+    pc->outputParticlesPlot(CCTK_PASS_CTOC, particle_plot_every,
+                            std::string(out_dir));
+    pc->outputParticlesAscii(CCTK_PASS_CTOC, particle_tsv_every,
+                             std::string(out_dir));
   }
 }
