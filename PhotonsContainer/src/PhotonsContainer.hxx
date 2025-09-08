@@ -6,6 +6,7 @@
 #define PHOTONSCONTAINER_HXX
 
 // Import libraries
+#include "AMReX_Array.H"
 #include "AMReX_GpuLaunchFunctsC.H"
 #include "BaseParticleContainer.hxx"
 #include "Interpolator.hxx"
@@ -20,6 +21,7 @@
 #include <algorithm>
 #include <cctk.h>
 #include <cctk_Arguments.h>
+#include <cctk_Parameters.h>
 #include <iostream>
 
 namespace Containers {
@@ -219,16 +221,34 @@ PhotonsContainer<StructType>::compute_rhs(
                                            dx, 5)},
   }};
 
+  const CCTK_REAL inv_det_gamma =
+      1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
+             2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -
+             gamma_x[2] * gamma_x[2] * gamma_x[3] -
+             gamma_x[4] * gamma_x[4] * gamma_x[0] -
+             gamma_x[1] * gamma_x[1] * gamma_x[5]);
+
+  const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
+      (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,
+      (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,
+      (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,
+      (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,
+      (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
+      (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
+
   const CCTK_REAL &V1 = u[3];
   const CCTK_REAL &V2 = u[4];
   const CCTK_REAL &V3 = u[5];
 
   // Compute the rhs for position
-  rhs[0] = lapse_x * (gamma_x[0] * V1 + gamma_x[1] * V2 + gamma_x[2] * V3) -
+  rhs[0] = lapse_x * (gamma_inv_x[0] * V1 + gamma_inv_x[1] * V2 +
+                      gamma_inv_x[2] * V3) -
            shift_x[0];
-  rhs[1] = lapse_x * (gamma_x[1] * V1 + gamma_x[3] * V2 + gamma_x[4] * V3) -
+  rhs[1] = lapse_x * (gamma_inv_x[1] * V1 + gamma_inv_x[3] * V2 +
+                      gamma_inv_x[4] * V3) -
            shift_x[1];
-  rhs[2] = lapse_x * (gamma_x[2] * V1 + gamma_x[4] * V2 + gamma_x[5] * V3) -
+  rhs[2] = lapse_x * (gamma_inv_x[2] * V1 + gamma_inv_x[4] * V2 +
+                      gamma_inv_x[5] * V3) -
            shift_x[2];
 
   const amrex::GpuArray<CCTK_REAL, 3> V = {V1, V2, V3};
@@ -237,10 +257,12 @@ PhotonsContainer<StructType>::compute_rhs(
     rhs[3 + i] =
         -d_lapse_x[i] +
         (VecVecMul(d_lapse_x, V) -
-         lapse_x * VecVecMul(SMatVecMul(curv_x, SMatVecMul(gamma_x, V)),
-                             SMatVecMul(gamma_x, V))) *
-            V[i] -
-        0.5 * lapse_x * VecVecMul(V, SMatVecMul(d_gamma_x[i], V)) +
+         lapse_x * VecVecMul(SMatVecMul(curv_x, SMatVecMul(gamma_inv_x, V)),
+                             SMatVecMul(gamma_inv_x, V))) *
+            V[i] +
+        0.5 * lapse_x *
+            VecVecMul(SMatVecMul(gamma_inv_x, SMatVecMul(d_gamma_x[i], V)),
+                      SMatVecMul(gamma_inv_x, V)) +
         VecVecMul(V, d_shift_x[i]);
   }
 
@@ -349,7 +371,6 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
 
   const auto dx = this->Geom(lev).CellSizeArray();
   const auto plo = this->Geom(lev).ProbLoArray();
-  // for each particle:
 
   for (Iterator::ParticleIterator<StructType> pti(*this, lev); pti.isValid();
        ++pti) {
@@ -387,8 +408,9 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[6] += 0.5 * dt * rhs_1[6];
 
       // f2 = rhs(u + 0.5 * dt * f1, t) for the runge kutta 4 step
-      auto rhs_2 = this->compute_rhs(U, 0.0 + 0.5 * dt, lapse_array, shift_array,
-                                metric_array, curv_array, dt, dx, lev, plo);
+      auto rhs_2 =
+          this->compute_rhs(U, 0.0 + 0.5 * dt, lapse_array, shift_array,
+                            metric_array, curv_array, dt, dx, lev, plo);
 
       particles[i].pos(0) += (1. / 6.) * dt * (rhs_1[0] + 2. * rhs_2[0]);
       particles[i].pos(1) += (1. / 6.) * dt * (rhs_1[1] + 2. * rhs_2[1]);
@@ -406,9 +428,8 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[6] += 0.5 * dt * rhs_2[6];
 
       // f3 = rhs(u + 0.5 * dt * f2, t) for the runge kutta 4 step
-      rhs_1 =
-          this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
-                            curv_array, dt, dx, lev, plo);
+      rhs_1 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
+                                curv_array, dt, dx, lev, plo);
 
       U[0] += dt * rhs_1[0];
       U[1] += dt * rhs_1[1];
@@ -419,9 +440,8 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[6] += dt * rhs_1[6];
 
       // f4 = rhs(u + dt * f3, t) for the runge kutta 4 step
-      rhs_2 =
-          this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
-                            curv_array, dt, dx, lev, plo);
+      rhs_2 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
+                                curv_array, dt, dx, lev, plo);
 
       // Runge kutta 2 step
       particles[i].pos(0) += (1. / 6.) * dt * (2. * rhs_1[0] + rhs_2[0]);
