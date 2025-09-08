@@ -1,0 +1,38 @@
+INT photons_per_cell "Number of photons per cell unit"{
+    1:*
+} 1
+
+
+SHARES: ParticlesContainer
+
+USES INT particle_plot_every
+USES INT particle_tsv_every
+
+SHARES: IO
+
+USES STRING filereader_ID_dir
+USES STRING filereader_ID_files
+USES STRING filereader_ID_vars
+
+USES STRING out_dir
+USES CCTK_INT out_every
+USES KEYWORD out_mode
+USES CCTK_INT out_proc_every
+
+USES BOOLEAN checkpoint_ID
+USES INT checkpoint_every
+USES REAL checkpoint_every_walltime_hours
+USES BOOLEAN checkpoint_on_terminate
+USES STRING checkpoint_dir
+USES STRING checkpoint_file
+
+USES KEYWORD recover
+USES STRING recover_dir
+USES STRING recover_file
+
+USES CCTK_REAL out_xline_y
+USES CCTK_REAL out_xline_z
+USES CCTK_REAL out_yline_x
+USES CCTK_REAL out_yline_z
+USES CCTK_REAL out_zline_x
+USES CCTK_REAL out_zline_y
