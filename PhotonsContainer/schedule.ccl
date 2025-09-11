@@ -1,16 +1,33 @@
-SCHEDULE test_init_fields AT POSTINITIAL {
-    LANG: C
-    OPTIONS: local
-    WRITES: ADMBaseX::metric(everywhere)
-    WRITES: ADMBaseX::lapse(everywhere)
-    WRITES: ADMBaseX::shift(everywhere)
-    WRITES: ADMBaseX::curv(everywhere)
-} "Fields setup"
+if (CCTK_Equals(initial_metric, "minkowski")) {
+    SCHEDULE init_minkowski AT CCTK_INITIAL {
+        LANG: C
+        OPTIONS: local
+        WRITES: ADMBaseX::metric(everywhere)
+        WRITES: ADMBaseX::lapse(everywhere)
+        WRITES: ADMBaseX::shift(everywhere)
+        WRITES: ADMBaseX::curv(everywhere)
+    } "Minkowski Fields setup"
+} else if (CCTK_Equals(initial_metric, "iso schwarzschild")) {
+    SCHEDULE init_iso_schwarzschild AT CCTK_INITIAL {
+        LANG: C
+        OPTIONS: local
+        WRITES: ADMBaseX::metric(everywhere)
+        WRITES: ADMBaseX::lapse(everywhere)
+        WRITES: ADMBaseX::shift(everywhere)
+        WRITES: ADMBaseX::curv(everywhere)
+    } "Fields setup"
+}
 
-SCHEDULE test_setup AT POSTINITIAL AFTER test_init_fields {
+SCHEDULE test_setup AT CCTK_POSTINITIAL {
     LANG: C
-    OPTIONS: local
+    OPTIONS: global
 } "setup"
+
+SCHEDULE print AT CCTK_POSTINITIAL AFTER test_setup
+{
+    LANG: C
+    OPTIONS: global
+} "print the particles"
 
 SCHEDULE test AT evol
 {
