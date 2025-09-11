@@ -19,6 +19,7 @@
 #include <AMReX_Particles.H>
 #include <AMReX_REAL.H>
 #include <algorithm>
+#include <cassert>
 #include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
@@ -107,118 +108,118 @@ PhotonsContainer<StructType>::compute_rhs(
 
   // Interpolate lapse
   const CCTK_REAL lapse_x =
-      barycentric_cubic_3d<3>(lapse, i0, j0, k0, u[0], u[1], u[2], dx);
+      barycentric_cubic_3d<3>(lapse, i0, j0, k0, u[0], u[1], u[2], dx, plo);
 
   // Interpolate shift
   const amrex::GpuArray<CCTK_REAL, 3> shift_x = {
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, 0),
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, 1),
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, 2)};
+      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 0),
+      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 1),
+      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 2)};
 
   // Interpolate metric
   const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               0), // g_11
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               1), // g_12 & g_21
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               2), // g_13 & g_31
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               3), // g_22
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               4), // g_23, g_32
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               5)}; // g_33
 
   // Interpolate Curvature
   const amrex::GpuArray<CCTK_REAL, 6> curv_x = {
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               0), // K_11
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               1), // K_12 & g_21
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               2), // K_13 & K_31
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               3), // K_22
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               4), // K_23, K_32
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx,
+      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               5)}; // K_33
 
   // Interpolate partial lapse
   const amrex::GpuArray<CCTK_REAL, 3> d_lapse_x = {
       deriv_barycentric_cubic_3d<1, 2, 0>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx),
+                                          dx, plo),
       deriv_barycentric_cubic_3d<1, 2, 1>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx),
+                                          dx, plo),
       deriv_barycentric_cubic_3d<1, 2, 2>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx)};
+                                          dx, plo)};
 
   // Interpolate partial shift
   const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x = {
       {// first derivatives along x of shift
        {deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 0),
+                                            dx, plo, 0),
         deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 1),
+                                            dx, plo, 1),
         deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 2)},
+                                            dx, plo, 2)},
        // first derivatives along y of shift
        {deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 0),
+                                            dx, plo, 0),
         deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 1),
+                                            dx, plo, 1),
         deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 2)},
+                                            dx, plo, 2)},
        // first derivatives along z of shift
        {deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 0),
+                                            dx, plo, 0),
         deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 1),
+                                            dx, plo, 1),
         deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, 2)}}};
+                                            dx, plo, 2)}}};
 
   // Interpolate partial metric
   const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x{{
       // first derivatives along x of metric
       {deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 0),
+                                           dx, plo, 0),
        deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 1),
+                                           dx, plo, 1),
        deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 2),
+                                           dx, plo, 2),
        deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 3),
+                                           dx, plo, 3),
        deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 4),
+                                           dx, plo, 4),
        deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 5)},
+                                           dx, plo, 5)},
       // first derivatives along y of metric
       {deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 0),
+                                           dx, plo, 0),
        deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 1),
+                                           dx, plo, 1),
        deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 2),
+                                           dx, plo, 2),
        deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 3),
+                                           dx, plo, 3),
        deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 4),
+                                           dx, plo, 4),
        deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 5)},
+                                           dx, plo, 5)},
       // first derivatives along z of metric
       {deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 0),
+                                           dx, plo, 0),
        deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 1),
+                                           dx, plo, 1),
        deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 2),
+                                           dx, plo, 2),
        deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 3),
+                                           dx, plo, 3),
        deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 4),
+                                           dx, plo, 4),
        deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, 5)},
+                                           dx, plo, 5)},
   }};
 
   const CCTK_REAL inv_det_gamma =
@@ -346,9 +347,12 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
       vels_z[i] += dt * rhs_1[5];
 
       // Check if is outside of the grid
-      if (particles[i].pos(0) > phi0[0] || particles[i].pos(0) < plo0[0] ||
-          particles[i].pos(1) > phi0[1] || particles[i].pos(1) < plo0[1] ||
-          particles[i].pos(2) > phi0[2] || particles[i].pos(2) < plo0[2]) {
+      if (particles[i].pos(0) > (phi0[0] - dx[0]) ||
+          particles[i].pos(0) < (plo0[0] + dx[0]) ||
+          particles[i].pos(1) > (phi0[1] - dx[1]) ||
+          particles[i].pos(1) < (plo0[1] + dx[1]) ||
+          particles[i].pos(2) > (phi0[2] - dx[2]) ||
+          particles[i].pos(2) < (plo0[2] + dx[2])) {
         particles[i].id() = -1;
       }
     });
@@ -364,7 +368,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
                                              const amrex::MultiFab &curv,
                                              const CCTK_REAL &dt,
                                              const int &lev) {
-  CCTK_INFO("Evolving using RK4");
+  CCTK_INFO("Evolving particles using Runge-Kutta 4.");
 
   const auto plo0 = this->Geom(0).ProbLoArray();
   const auto phi0 = this->Geom(0).ProbHiArray();
@@ -407,11 +411,19 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[5] += 0.5 * dt * rhs_1[5];
       U[6] += 0.5 * dt * rhs_1[6];
 
+      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+        particles[i].id() = -1;
+        return;
+      }
+
       // f2 = rhs(u + 0.5 * dt * f1, t) for the runge kutta 4 step
       auto rhs_2 =
           this->compute_rhs(U, 0.0 + 0.5 * dt, lapse_array, shift_array,
                             metric_array, curv_array, dt, dx, lev, plo);
 
+      // Update particles with the f1 and f2 from RK4
       particles[i].pos(0) += (1. / 6.) * dt * (rhs_1[0] + 2. * rhs_2[0]);
       particles[i].pos(1) += (1. / 6.) * dt * (rhs_1[1] + 2. * rhs_2[1]);
       particles[i].pos(2) += (1. / 6.) * dt * (rhs_1[2] + 2. * rhs_2[2]);
@@ -427,6 +439,23 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[5] += 0.5 * dt * rhs_2[5];
       U[6] += 0.5 * dt * rhs_2[6];
 
+      if (particles[i].pos(0) > (phi0[0] - 0.5 * dx[0]) ||
+          particles[i].pos(0) < (plo0[0] + 0.5 * dx[0]) ||
+          particles[i].pos(1) > (phi0[1] - 0.5 * dx[1]) ||
+          particles[i].pos(1) < (plo0[1] + 0.5 * dx[1]) ||
+          particles[i].pos(2) > (phi0[2] - 0.5 * dx[2]) ||
+          particles[i].pos(2) < (plo0[2] + 0.5 * dx[2])) {
+        particles[i].id() = -1;
+        return;
+      }
+
+      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+        particles[i].id() = -1;
+        return;
+      }
+
       // f3 = rhs(u + 0.5 * dt * f2, t) for the runge kutta 4 step
       rhs_1 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
                                 curv_array, dt, dx, lev, plo);
@@ -439,11 +468,18 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       U[5] += dt * rhs_1[5];
       U[6] += dt * rhs_1[6];
 
+      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+        particles[i].id() = -1;
+        return;
+      }
+
       // f4 = rhs(u + dt * f3, t) for the runge kutta 4 step
       rhs_2 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
                                 curv_array, dt, dx, lev, plo);
 
-      // Runge kutta 2 step
+      // Update particles with the f3 and f4 from RK4
       particles[i].pos(0) += (1. / 6.) * dt * (2. * rhs_1[0] + rhs_2[0]);
       particles[i].pos(1) += (1. / 6.) * dt * (2. * rhs_1[1] + rhs_2[1]);
       particles[i].pos(2) += (1. / 6.) * dt * (2. * rhs_1[2] + rhs_2[2]);
@@ -452,10 +488,14 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
       vels_z[i] += (1. / 6.) * dt * (2. * rhs_1[5] + rhs_2[5]);
 
       // Check if is outside of the grid
-      if (particles[i].pos(0) > phi0[0] || particles[i].pos(0) < plo0[0] ||
-          particles[i].pos(1) > phi0[1] || particles[i].pos(1) < plo0[1] ||
-          particles[i].pos(2) > phi0[2] || particles[i].pos(2) < plo0[2]) {
+      if (particles[i].pos(0) > (phi0[0] - 0.5 * dx[0]) ||
+          particles[i].pos(0) < (plo0[0] + 0.5 * dx[0]) ||
+          particles[i].pos(1) > (phi0[1] - 0.5 * dx[1]) ||
+          particles[i].pos(1) < (plo0[1] + 0.5 * dx[1]) ||
+          particles[i].pos(2) > (phi0[2] - 0.5 * dx[2]) ||
+          particles[i].pos(2) < (plo0[2] + 0.5 * dx[2])) {
         particles[i].id() = -1;
+        return;
       }
     });
   }

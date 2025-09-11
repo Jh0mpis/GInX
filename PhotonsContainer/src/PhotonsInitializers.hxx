@@ -30,10 +30,9 @@ void random_photons_initializer(ParticleContainerClass &pc,
   // Get the lower and higher value over the ParticleContainer Geometry
   const auto p_lo = pc.Geom(lev).ProbLoArray();
   const auto p_hi = pc.Geom(lev).ProbHiArray();
+  std::cout <<"\n\n\n" << p_hi[0] << " " << p_hi[1] << " " << p_hi[2] << "\n\n\n";
 
   amrex::MFIter mfi = pc.MakeMFIter(lev);
-  std::cout << "WHYYYYYYYYYYYY------------------------? " << mfi.isValid()
-            << std::endl;
 
   // Iterating over all the tiles of the particle data structure
   for (; mfi.isValid(); ++mfi) {
@@ -101,41 +100,43 @@ void random_photons_initializer(ParticleContainerClass &pc,
       for (int i_part = 0; i_part < number_of_particles_per_cell; i_part++) {
         amrex::Real ratio[AMREX_SPACEDIM];
 
+        // Create particles outside of an sphere of radius 0.5
         // Generate a random position
-        ratio[0] = amrex::Random(engine);
-        ratio[1] = amrex::Random(engine);
-        ratio[2] = amrex::Random(engine);
-
-        amrex::Real x = p_lo[0] + (i + ratio[0]) * dx[0];
-        amrex::Real y = p_lo[1] + (j + ratio[1]) * dx[1];
-        amrex::Real z = p_lo[2] + (k + ratio[2]) * dx[2];
+        ratio[0] = (std::abs(p_hi[0] - p_lo[0])*0.5 - 0.7) * amrex::Random(engine) + 0.7;
+        ratio[1] = amrex::Random(engine) * M_PI;
+        ratio[2] = amrex::Random(engine) * 2. * M_PI;
 
         typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
         p.id() = pidx + 1;
         p.cpu() = proc_id;
 
-        p.pos(0) = x;
-        p.pos(1) = y;
-        p.pos(2) = z;
+        p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
+        p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
+        p.pos(2) = ratio[0] * std::cos(ratio[1]);
 
-        const int i0 = amrex::Math::floor((x - p_lo[0]) / dx[0]);
-        const int j0 = amrex::Math::floor((y - p_lo[1]) / dx[1]);
-        const int k0 = amrex::Math::floor((z - p_lo[2]) / dx[2]);
+        const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
+        const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
+        const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
 
         // Interpolate metric
         const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo,
                                     0), // g_11
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo,
                                     1), // g_12 & g_21
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo,
                                     2), // g_13 & g_31
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo,
                                     3), // g_22
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo,
                                     4), // g_23, g_32
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, x, y, z, dx,
-                                    5)}; // g_33
+            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+                                    p.pos(1), p.pos(2), dx, p_lo, 5)}; // g_33
 
         const CCTK_REAL inv_det_gamma =
             1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
@@ -176,8 +177,8 @@ void random_photons_initializer(ParticleContainerClass &pc,
         ++pidx;
       }
     });
-    std::cout << "PARTICLES CREATED: "
-              << particle_tile.GetArrayOfStructs().size() << std::endl;
+    CCTK_VINFO("%d particles created",
+               particle_tile.GetArrayOfStructs().size());
   }
 
 } // random_photons_initializer
