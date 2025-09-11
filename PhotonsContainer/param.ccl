@@ -2,6 +2,15 @@ INT photons_per_cell "Number of photons per cell unit"{
     1:*
 } 1
 
+REAL black_hole_mass "Black hole mass" {
+    0:*
+} 1.0
+
+KEYWORD initial_metric "metric to initialize" {
+    "minkowski" :: "Minkowski metric"
+    "iso schwarzschild" :: "Isotropic Schwarzswchild metric"
+    "none" :: "Not initialize using a metric"
+} "iso schwarzschild" 
 
 SHARES: ParticlesContainer
 
