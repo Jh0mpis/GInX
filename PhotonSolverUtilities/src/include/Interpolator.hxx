@@ -12,6 +12,7 @@
 #include "cctk_Types.h"
 #include <array>
 #include <cctk.h>
+#include <iostream>
 
 namespace Interpolator {
 
@@ -109,10 +110,11 @@ template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_1d(const int (&points)[N + 1],
                      const CCTK_REAL (&weights)[N + 1],
-                     const CCTK_REAL (&values)[N + 1], CCTK_REAL x) {
+                     const CCTK_REAL (&values)[N + 1], const CCTK_REAL &x,
+                     const CCTK_REAL &plo, const CCTK_REAL &dx) {
 
   for (int i = 0; i <= N; i++) {
-    if (x == points[i]) {
+    if (x == plo + points[i] * dx) {
       return values[i];
     }
   }
@@ -121,7 +123,7 @@ barycentric_cubic_1d(const int (&points)[N + 1],
   CCTK_REAL den{0.0};
 
   for (int i = 0; i <= N; i++) {
-    CCTK_REAL term = weights[i] / (x - points[i]);
+    CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
     num += term * values[i];
     den += term;
   }
@@ -134,7 +136,8 @@ AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
-                     const amrex::GpuArray<double, 3> &dx, const int &comp) {
+                     const amrex::GpuArray<double, 3> &dx,
+                     const amrex::GpuArray<double, 3> &plo, const int &comp) {
 
   int nodes[INTERPOLATION_ORDER + 1];
   CCTK_REAL w[INTERPOLATION_ORDER + 1];
@@ -191,23 +194,35 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
     for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
       CCTK_REAL values[INTERPOLATION_ORDER + 1];
+      CCTK_INT points[INTERPOLATION_ORDER + 1];
       for (int i = 0; i <= INTERPOLATION_ORDER; i++) {
         values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);
+        // std::cout << "f("<<plo[0] + (i0 + nodes[i])*dx[0]<<", "<<plo[1] + (j0 + nodes[j])*dx[1]<<", "<<plo[2] + (k0 + nodes[i])*dx[2]<<") = " << values[i] << "\n";
+        points[i] = i0 + nodes[i];
       }
-      G[j][k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, w, values, x);
+      G[j][k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, values, x,
+                                                          plo[0], dx[0]);
     }
   }
 
   CCTK_REAL H[INTERPOLATION_ORDER + 1];
   for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
     CCTK_REAL values[INTERPOLATION_ORDER + 1];
+    CCTK_INT points[INTERPOLATION_ORDER + 1];
     for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
       values[j] = G[j][k];
+      points[j] = j0 + nodes[j];
     }
-    H[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, v, values, y);
+    H[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, v, values, y,
+                                                     plo[1], dx[1]);
   }
 
-  return barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, u, H, z);
+  CCTK_INT points[INTERPOLATION_ORDER + 1];
+  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
+    points[k] = k0 + nodes[k];
+  }
+  return barycentric_cubic_1d<INTERPOLATION_ORDER>(points, u, H, z, plo[2],
+                                                   dx[2]);
 } // barycentric_cubic_3d with component
 
 template <int INTERPOLATION_ORDER>
@@ -215,17 +230,22 @@ AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
-                     const amrex::GpuArray<double, 3> &dx) {
+                     const amrex::GpuArray<double, 3> &dx,
+                     const amrex::GpuArray<double, 3> &plo) {
 
-  return barycentric_cubic_3d<INTERPOLATION_ORDER>(f, i0, j0, k0, x, y, z, dx, 0);
+  return barycentric_cubic_3d<INTERPOLATION_ORDER>(f, i0, j0, k0, x, y, z, dx,
+                                                   plo, 0);
 } // barycentric_cubic_3d No component
 
 template <int INTERPOLATION_ORDER, int DERIVATIVE_ORDER, int DIRECTION>
 AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
-deriv_barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
-                     int const &j0, int const &k0, CCTK_REAL const &x,
-                     CCTK_REAL const &y, CCTK_REAL const &z,
-                     const amrex::GpuArray<double, 3> &dx, const int &comp) {
+deriv_barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f,
+                           int const &i0, int const &j0, int const &k0,
+                           CCTK_REAL const &x, CCTK_REAL const &y,
+                           CCTK_REAL const &z,
+                           const amrex::GpuArray<double, 3> &dx,
+                           const amrex::GpuArray<double, 3> &plo,
+                           const int &comp) {
 
   int nodes[INTERPOLATION_ORDER + 1];
   CCTK_REAL w[INTERPOLATION_ORDER + 1];
@@ -282,34 +302,49 @@ deriv_barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i
   for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
     for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
       CCTK_REAL values[INTERPOLATION_ORDER + 1];
+      CCTK_INT points[INTERPOLATION_ORDER + 1];
       for (int i = 0; i <= INTERPOLATION_ORDER; i++) {
-        values[i] = first_derivative<DIRECTION, CCTK_REAL, DERIVATIVE_ORDER>(f, i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp, dx);
+        values[i] = first_derivative<DIRECTION, CCTK_REAL, DERIVATIVE_ORDER>(
+            f, i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp, dx);
+        points[i] = i0 + nodes[i];
       }
-      G[j][k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, w, values, x);
+      G[j][k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, values, x,
+                                                          plo[0], dx[0]);
     }
   }
 
   CCTK_REAL H[INTERPOLATION_ORDER + 1];
   for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
     CCTK_REAL values[INTERPOLATION_ORDER + 1];
+    CCTK_INT points[INTERPOLATION_ORDER + 1];
     for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
       values[j] = G[j][k];
+      points[j] = j0 + nodes[j];
     }
-    H[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, v, values, y);
+    H[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, v, values, y,
+                                                     plo[1], dx[1]);
   }
 
-  return barycentric_cubic_1d<INTERPOLATION_ORDER>(nodes, u, H, z);
-} //deriv_barycentric_cubic_3d with comp
-
+  CCTK_INT points[INTERPOLATION_ORDER + 1];
+  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
+    points[k] = k0 + nodes[k];
+  }
+  return barycentric_cubic_1d<INTERPOLATION_ORDER>(points, u, H, z, plo[2],
+                                                   dx[2]);
+} // deriv_barycentric_cubic_3d with comp
 
 template <int INTERPOLATION_ORDER, int DERIVATIVE_ORDER, int DIRECTION>
 AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
-deriv_barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
-                     int const &j0, int const &k0, CCTK_REAL const &x,
-                     CCTK_REAL const &y, CCTK_REAL const &z,
-                     const amrex::GpuArray<double, 3> &dx) {
+deriv_barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f,
+                           int const &i0, int const &j0, int const &k0,
+                           CCTK_REAL const &x, CCTK_REAL const &y,
+                           CCTK_REAL const &z,
+                           const amrex::GpuArray<double, 3> &dx,
+                           const amrex::GpuArray<double, 3> &plo) {
 
-  return deriv_barycentric_cubic_3d<INTERPOLATION_ORDER, DERIVATIVE_ORDER, DIRECTION>(f, i0, j0, k0, x, y, z, dx, 0);
+  return deriv_barycentric_cubic_3d<INTERPOLATION_ORDER, DERIVATIVE_ORDER,
+                                    DIRECTION>(f, i0, j0, k0, x, y, z, dx, plo,
+                                               0);
 }
 
 } // namespace Interpolator
