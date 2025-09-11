@@ -33,52 +33,100 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
     g_nupcs.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
-  }
 
-  for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     auto &pc = g_nupcs.at(patch);
     auto &pd = CarpetX::ghext->patchdata.at(patch);
+
     for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
       const auto &ld = pd.leveldata.at(lev);
       const auto &gd_metric = *ld.groupdata.at(gi_metric);
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
-    pc->initialize(
-        photons_init::random_photons_initializer<ParticleData, PC>, photons_per_cell, metric, lev);
+
+      pc->initialize(photons_init::random_photons_initializer<ParticleData, PC>,
+                     photons_per_cell, metric, lev);
+      pc->Redistribute();
     }
   }
-
 }
 
-extern "C" void test_init_fields(CCTK_ARGUMENTS) {
+extern "C" void init_minkowski(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
-  DECLARE_CCTK_ARGUMENTSX_test_init_fields;
+  DECLARE_CCTK_ARGUMENTSX_init_minkowski;
 
-  CCTK_INFO("INIT FIELDS");
+  CCTK_INFO("Initializing Minkowski coordinates");
 
   // Initialize the metric, lapse, beta and K
-  grid.loop_all_device<0, 0, 0>(grid.nghostzones,
-                                [=] CCTK_DEVICE(const Loop::PointDesc &p)
-                                    CCTK_ATTRIBUTE_ALWAYS_INLINE {
-                                      alp(p.I) = 1.0;
-                                      betax(p.I) = 0.0;
-                                      betay(p.I) = 0.0;
-                                      betaz(p.I) = 0.0;
-                                      gxx(p.I) = 1.0;
-                                      gxy(p.I) = 0.0;
-                                      gxz(p.I) = 0.0;
-                                      gyy(p.I) = 1.0;
-                                      gyz(p.I) = 0.0;
-                                      gzz(p.I) = 1.0;
-                                      kxx(p.I) = 0.0;
-                                      kxy(p.I) = 0.0;
-                                      kxz(p.I) = 0.0;
-                                      kyy(p.I) = 0.0;
-                                      kyz(p.I) = 0.0;
-                                      kzz(p.I) = 0.0;
-                                    });
+  grid.loop_all_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE
+      {
+
+        alp(p.I) = 1.0;
+        betax(p.I) = 0.0;
+        betay(p.I) = 0.0;
+        betaz(p.I) = 0.0;
+        gxx(p.I) = 1.0;
+        gxy(p.I) = 0.0;
+        gxz(p.I) = 0.0;
+        gyy(p.I) = 1.0;
+        gyz(p.I) = 0.0;
+        gzz(p.I) = 1.0;
+        kxx(p.I) = 0.0;
+        kxy(p.I) = 0.0;
+        kxz(p.I) = 0.0;
+        kyy(p.I) = 0.0;
+        kyz(p.I) = 0.0;
+        kzz(p.I) = 0.0;
+      });
+
+  CCTK_INFO("FIELDS INITIALIZED");
+}
+
+extern "C" void init_iso_schwarzschild(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_PARAMETERS;
+  DECLARE_CCTK_ARGUMENTSX_init_iso_schwarzschild;
+
+  CCTK_INFO("Initializing Schwarzschild using Isotropic coordinates");
+
+  // Initialize the metric, lapse, beta and K
+  grid.loop_all_device<0, 0, 0>(
+      grid.nghostzones,
+      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+        const auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+        const auto psi = 1.0 + 2.0 * black_hole_mass / (4.0 * R);
+        const auto psi_2 = psi * psi;
+        const auto psi_4 = psi_2 * psi_2;
+
+        if (R > 0.5 * black_hole_mass) {
+          alp(p.I) = (1.0 - 2.0 * black_hole_mass / (4.0 * R)) /
+                     (1.0 + 2.0 * black_hole_mass / (4.0 * R));
+          gxx(p.I) = psi_4;
+          gyy(p.I) = psi_4; 
+          gzz(p.I) = psi_4; 
+        } else {
+          alp(p.I) = 0.0;
+          gxx(p.I) = 1.0;
+          gyy(p.I) = 1.0;
+          gzz(p.I) = 1.0;
+        }
+
+        betax(p.I) = 0.0;
+        betay(p.I) = 0.0;
+        betaz(p.I) = 0.0;
+        gxy(p.I) = 0.0;
+        gxz(p.I) = 0.0;
+        gyz(p.I) = 0.0;
+        kxx(p.I) = 0.0;
+        kxy(p.I) = 0.0;
+        kxz(p.I) = 0.0;
+        kyy(p.I) = 0.0;
+        kyz(p.I) = 0.0;
+        kzz(p.I) = 0.0;
+      });
 }
 
 extern "C" void test(CCTK_ARGUMENTS) {
+  CCTK_INFO("EVOLVING");
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
 
