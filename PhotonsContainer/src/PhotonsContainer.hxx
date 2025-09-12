@@ -148,77 +148,77 @@ PhotonsContainer<StructType>::compute_rhs(
 
   // Interpolate partial lapse
   const amrex::GpuArray<CCTK_REAL, 3> d_lapse_x = {
-      deriv_barycentric_cubic_3d<1, 2, 0>(lapse, i0, j0, k0, u[0], u[1], u[2],
+      deriv_barycentric_cubic_3d<2, 2, 0>(lapse, i0, j0, k0, u[0], u[1], u[2],
                                           dx, plo),
-      deriv_barycentric_cubic_3d<1, 2, 1>(lapse, i0, j0, k0, u[0], u[1], u[2],
+      deriv_barycentric_cubic_3d<2, 2, 1>(lapse, i0, j0, k0, u[0], u[1], u[2],
                                           dx, plo),
-      deriv_barycentric_cubic_3d<1, 2, 2>(lapse, i0, j0, k0, u[0], u[1], u[2],
+      deriv_barycentric_cubic_3d<2, 2, 2>(lapse, i0, j0, k0, u[0], u[1], u[2],
                                           dx, plo)};
 
   // Interpolate partial shift
   const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x = {
       {// first derivatives along x of shift
-       {deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
+       {deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 0),
-        deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 1),
-        deriv_barycentric_cubic_3d<1, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 2)},
        // first derivatives along y of shift
-       {deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
+       {deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 0),
-        deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 1),
-        deriv_barycentric_cubic_3d<1, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 2)},
        // first derivatives along z of shift
-       {deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
+       {deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 0),
-        deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 1),
-        deriv_barycentric_cubic_3d<1, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
+        deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
                                             dx, plo, 2)}}};
 
   // Interpolate partial metric
   const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x{{
       // first derivatives along x of metric
-      {deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+      {deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 0),
-       deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 1),
-       deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 2),
-       deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 3),
-       deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 4),
-       deriv_barycentric_cubic_3d<1, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 5)},
       // first derivatives along y of metric
-      {deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+      {deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 0),
-       deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 1),
-       deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 2),
-       deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 3),
-       deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 4),
-       deriv_barycentric_cubic_3d<1, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 5)},
       // first derivatives along z of metric
-      {deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+      {deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 0),
-       deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 1),
-       deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 2),
-       deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 3),
-       deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 4),
-       deriv_barycentric_cubic_3d<1, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
+       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
                                            dx, plo, 5)},
   }};
 
@@ -257,12 +257,12 @@ PhotonsContainer<StructType>::compute_rhs(
   for (int i = 0; i < 3; i++) {
     rhs[3 + i] =
         -d_lapse_x[i] +
-        (VecVecMul(d_lapse_x, V) -
+        (VecVecMul(d_lapse_x, SMatVecMul(gamma_inv_x, V)) -
          lapse_x * VecVecMul(SMatVecMul(curv_x, SMatVecMul(gamma_inv_x, V)),
                              SMatVecMul(gamma_inv_x, V))) *
             V[i] +
         0.5 * lapse_x *
-            VecVecMul(SMatVecMul(gamma_inv_x, SMatVecMul(d_gamma_x[i], V)),
+            VecVecMul(SMatVecMul(d_gamma_x[i], SMatVecMul(gamma_inv_x, V)),
                       SMatVecMul(gamma_inv_x, V)) +
         VecVecMul(V, d_shift_x[i]);
   }
@@ -354,6 +354,7 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
           particles[i].pos(2) > (phi0[2] - dx[2]) ||
           particles[i].pos(2) < (plo0[2] + dx[2])) {
         particles[i].id() = -1;
+        return;
       }
     });
   }

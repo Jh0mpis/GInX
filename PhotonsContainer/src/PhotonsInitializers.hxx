@@ -30,7 +30,6 @@ void random_photons_initializer(ParticleContainerClass &pc,
   // Get the lower and higher value over the ParticleContainer Geometry
   const auto p_lo = pc.Geom(lev).ProbLoArray();
   const auto p_hi = pc.Geom(lev).ProbHiArray();
-  std::cout <<"\n\n\n" << p_hi[0] << " " << p_hi[1] << " " << p_hi[2] << "\n\n\n";
 
   amrex::MFIter mfi = pc.MakeMFIter(lev);
 
