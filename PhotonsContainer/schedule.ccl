@@ -23,11 +23,13 @@ SCHEDULE test_setup AT CCTK_POSTINITIAL {
     OPTIONS: global
 } "setup"
 
-SCHEDULE print AT CCTK_POSTINITIAL AFTER test_setup
-{
-    LANG: C
-    OPTIONS: global
-} "print the particles"
+if ((particle_plot_every>0)||(particle_tsv_every>0) ){
+    SCHEDULE print AT CCTK_POSTINITIAL AFTER test_setup
+    {
+        LANG: C
+        OPTIONS: global
+    } "print the particles"
+}
 
 SCHEDULE test AT evol
 {
@@ -35,8 +37,10 @@ SCHEDULE test AT evol
     OPTIONS: global
 } "testing evolution"
 
-SCHEDULE print AT evol AFTER test
-{
-    LANG: C
-    OPTIONS: global
-} "print the particles"
+if ((particle_plot_every||particle_tsv_every) ) {
+    SCHEDULE print AT evol AFTER test
+    {
+        LANG: C
+        OPTIONS: global
+    } "print the particles"
+}
