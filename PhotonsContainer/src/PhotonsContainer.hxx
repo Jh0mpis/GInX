@@ -9,6 +9,7 @@
 #include "AMReX_Array.H"
 #include "AMReX_GpuLaunchFunctsC.H"
 #include "BaseParticleContainer.hxx"
+#include "Discretizer.hxx"
 #include "Interpolator.hxx"
 #include "Utilities.hxx"
 #include "cctk_Types.h"
@@ -23,6 +24,7 @@
 #include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
+#include <cmath>
 #include <iostream>
 
 namespace Containers {
@@ -33,6 +35,7 @@ namespace Containers {
 
 using namespace BaseContainer;
 using namespace Interpolator;
+using namespace Discretize;
 
 template <typename StructType>
 class PhotonsContainer
@@ -100,7 +103,8 @@ PhotonsContainer<StructType>::compute_rhs(
     const amrex::GpuArray<double, 3> &dx, const int lev,
     const amrex::GpuArray<double, 3> &plo) {
 
-  amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> rhs;
+  amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> rhs = {
+      0., 0., 0., 0., 0., 0., 0.};
 
   const int i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
   const int j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
@@ -147,80 +151,24 @@ PhotonsContainer<StructType>::compute_rhs(
                               5)}; // K_33
 
   // Interpolate partial lapse
-  const amrex::GpuArray<CCTK_REAL, 3> d_lapse_x = {
-      deriv_barycentric_cubic_3d<2, 2, 0>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx, plo),
-      deriv_barycentric_cubic_3d<2, 2, 1>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx, plo),
-      deriv_barycentric_cubic_3d<2, 2, 2>(lapse, i0, j0, k0, u[0], u[1], u[2],
-                                          dx, plo)};
+  amrex::GpuArray<CCTK_REAL, 3> d_lapse_x; //= {0, 0, 0};
+  scalar_barycentric_derivative<3, 2>(d_lapse_x, lapse, i0, j0, k0, u[0], u[1],
+                                      u[2], dx, plo);
 
   // Interpolate partial shift
-  const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x = {
-      {// first derivatives along x of shift
-       {deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 0),
-        deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 1),
-        deriv_barycentric_cubic_3d<2, 2, 0>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 2)},
-       // first derivatives along y of shift
-       {deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 0),
-        deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 1),
-        deriv_barycentric_cubic_3d<2, 2, 1>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 2)},
-       // first derivatives along z of shift
-       {deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 0),
-        deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 1),
-        deriv_barycentric_cubic_3d<2, 2, 2>(shift, i0, j0, k0, u[0], u[1], u[2],
-                                            dx, plo, 2)}}};
+  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3>
+      d_shift_x; // = {
+                 // {{0., 0., 0.}, {0., 0., 0.}, {0., 0., 0.}}};
+  vector_barycentric_derivative<3, 2>(d_shift_x, shift, i0, j0, k0, u[0], u[1],
+                                      u[2], dx, plo);
 
   // Interpolate partial metric
-  const amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x{{
-      // first derivatives along x of metric
-      {deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 0),
-       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 1),
-       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 2),
-       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 3),
-       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 4),
-       deriv_barycentric_cubic_3d<2, 2, 0>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 5)},
-      // first derivatives along y of metric
-      {deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 0),
-       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 1),
-       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 2),
-       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 3),
-       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 4),
-       deriv_barycentric_cubic_3d<2, 2, 1>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 5)},
-      // first derivatives along z of metric
-      {deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 0),
-       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 1),
-       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 2),
-       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 3),
-       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 4),
-       deriv_barycentric_cubic_3d<2, 2, 2>(metric, i0, j0, k0, u[0], u[1], u[2],
-                                           dx, plo, 5)},
-  }};
+  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x; //= {
+  /*{{0., 0., 0., 0., 0., 0.},
+   {0., 0., 0., 0., 0., 0.},
+   {0., 0., 0., 0., 0., 0.}}};*/
+  smatrix_barycentric_derivative<3, 2>(d_gamma_x, metric, i0, j0, k0, u[0],
+                                       u[1], u[2], dx, plo);
 
   const CCTK_REAL inv_det_gamma =
       1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
@@ -241,30 +189,29 @@ PhotonsContainer<StructType>::compute_rhs(
   const CCTK_REAL &V2 = u[4];
   const CCTK_REAL &V3 = u[5];
 
+  const amrex::GpuArray<CCTK_REAL, 3> V_up = {
+      gamma_inv_x[0] * V1 + gamma_inv_x[1] * V2 + gamma_inv_x[2] * V3,
+      gamma_inv_x[1] * V1 + gamma_inv_x[3] * V2 + gamma_inv_x[4] * V3,
+      gamma_inv_x[2] * V1 + gamma_inv_x[4] * V2 + gamma_inv_x[5] * V3};
+
   // Compute the rhs for position
-  rhs[0] = lapse_x * (gamma_inv_x[0] * V1 + gamma_inv_x[1] * V2 +
-                      gamma_inv_x[2] * V3) -
-           shift_x[0];
-  rhs[1] = lapse_x * (gamma_inv_x[1] * V1 + gamma_inv_x[3] * V2 +
-                      gamma_inv_x[4] * V3) -
-           shift_x[1];
-  rhs[2] = lapse_x * (gamma_inv_x[2] * V1 + gamma_inv_x[4] * V2 +
-                      gamma_inv_x[5] * V3) -
-           shift_x[2];
+  rhs[0] = lapse_x * V_up[0] - shift_x[0];
+  rhs[1] = lapse_x * V_up[1] - shift_x[1];
+  rhs[2] = lapse_x * V_up[2] - shift_x[2];
 
   const amrex::GpuArray<CCTK_REAL, 3> V = {V1, V2, V3};
+
   // Compute the rhs for velocity
   for (int i = 0; i < 3; i++) {
-    rhs[3 + i] =
-        -d_lapse_x[i] +
-        (VecVecMul(d_lapse_x, SMatVecMul(gamma_inv_x, V)) -
-         lapse_x * VecVecMul(SMatVecMul(curv_x, SMatVecMul(gamma_inv_x, V)),
-                             SMatVecMul(gamma_inv_x, V))) *
-            V[i] +
-        0.5 * lapse_x *
-            VecVecMul(SMatVecMul(d_gamma_x[i], SMatVecMul(gamma_inv_x, V)),
-                      SMatVecMul(gamma_inv_x, V)) +
-        VecVecMul(V, d_shift_x[i]);
+    CCTK_REAL t1 = -d_lapse_x[i];
+
+    CCTK_REAL t2 = (VecVecMul(d_lapse_x, V_up) -
+                    lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up)) *
+                   V[i];
+    CCTK_REAL t3 =
+        0.5 * lapse_x * VecVecMul(SMatVecMul(d_gamma_x[i], V_up), V_up);
+    CCTK_REAL t4 = VecVecMul(V, d_shift_x[i]);
+    rhs[3 + i] = t1 + t2 + t3 + t4;
   }
 
   // Compute the rhs for energy
@@ -399,6 +346,10 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
           attribs[StructType::vy][i], attribs[StructType::vz][i],
           attribs[StructType::E][i]};
 
+      CCTK_REAL pre_v_x = attribs[StructType::vx][i];
+      CCTK_REAL pre_v_y = attribs[StructType::vy][i];
+      CCTK_REAL pre_v_z = attribs[StructType::vz][i];
+
       // f1 = rhs(u , t) for the runge kutta 4 step
       auto rhs_1 =
           this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
@@ -498,6 +449,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
         particles[i].id() = -1;
         return;
       }
+
     });
   }
 

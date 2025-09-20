@@ -10,6 +10,7 @@
 #include <AMReX_Scan.H>
 #include <cctk.h>
 #include <cmath>
+#include <iostream>
 
 #include "Interpolator.hxx"
 
@@ -101,7 +102,9 @@ void random_photons_initializer(ParticleContainerClass &pc,
 
         // Create particles outside of an sphere of radius 0.5
         // Generate a random position
-        ratio[0] = (std::abs(p_hi[0] - p_lo[0])*0.5 - 0.7) * amrex::Random(engine) + 0.7;
+        ratio[0] =
+            (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7) * amrex::Random(engine) +
+            0.7;
         ratio[1] = amrex::Random(engine) * M_PI;
         ratio[2] = amrex::Random(engine) * 2. * M_PI;
 

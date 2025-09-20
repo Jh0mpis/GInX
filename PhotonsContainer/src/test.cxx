@@ -56,28 +56,26 @@ extern "C" void init_minkowski(CCTK_ARGUMENTS) {
   CCTK_INFO("Initializing Minkowski coordinates");
 
   // Initialize the metric, lapse, beta and K
-  grid.loop_all_device<0, 0, 0>(
-      grid.nghostzones,
-      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE
-      {
-
-        alp(p.I) = 1.0;
-        betax(p.I) = 0.0;
-        betay(p.I) = 0.0;
-        betaz(p.I) = 0.0;
-        gxx(p.I) = 1.0;
-        gxy(p.I) = 0.0;
-        gxz(p.I) = 0.0;
-        gyy(p.I) = 1.0;
-        gyz(p.I) = 0.0;
-        gzz(p.I) = 1.0;
-        kxx(p.I) = 0.0;
-        kxy(p.I) = 0.0;
-        kxz(p.I) = 0.0;
-        kyy(p.I) = 0.0;
-        kyz(p.I) = 0.0;
-        kzz(p.I) = 0.0;
-      });
+  grid.loop_all_device<0, 0, 0>(grid.nghostzones,
+                                [=] CCTK_DEVICE(const Loop::PointDesc &p)
+                                    CCTK_ATTRIBUTE_ALWAYS_INLINE {
+                                      alp(p.I) = 1.0;
+                                      betax(p.I) = 0.0;
+                                      betay(p.I) = 0.0;
+                                      betaz(p.I) = 0.0;
+                                      gxx(p.I) = 1.0;
+                                      gxy(p.I) = 0.0;
+                                      gxz(p.I) = 0.0;
+                                      gyy(p.I) = 1.0;
+                                      gyz(p.I) = 0.0;
+                                      gzz(p.I) = 1.0;
+                                      kxx(p.I) = 0.0;
+                                      kxy(p.I) = 0.0;
+                                      kxz(p.I) = 0.0;
+                                      kyy(p.I) = 0.0;
+                                      kyz(p.I) = 0.0;
+                                      kzz(p.I) = 0.0;
+                                    });
 
   CCTK_INFO("FIELDS INITIALIZED");
 }
@@ -92,30 +90,33 @@ extern "C" void init_iso_schwarzschild(CCTK_ARGUMENTS) {
   grid.loop_all_device<0, 0, 0>(
       grid.nghostzones,
       [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-        const auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+        auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+
         const auto psi = 1.0 + 2.0 * black_hole_mass / (4.0 * R);
         const auto psi_2 = psi * psi;
         const auto psi_4 = psi_2 * psi_2;
 
-        if (R > 0.5 * black_hole_mass) {
+        if (R >= 0.5) {
           alp(p.I) = (1.0 - 2.0 * black_hole_mass / (4.0 * R)) /
                      (1.0 + 2.0 * black_hole_mass / (4.0 * R));
           gxx(p.I) = psi_4;
-          gyy(p.I) = psi_4; 
-          gzz(p.I) = psi_4; 
+          gyy(p.I) = psi_4;
+          gzz(p.I) = psi_4;
         } else {
-          alp(p.I) = 0.0;
-          gxx(p.I) = 1.0;
-          gyy(p.I) = 1.0;
-          gzz(p.I) = 1.0;
+          alp(p.I) = 0.;
+          gxx(p.I) = 10e-12;
+          gyy(p.I) = 10e-12;
+          gzz(p.I) = 10e-12;
         }
 
         betax(p.I) = 0.0;
         betay(p.I) = 0.0;
         betaz(p.I) = 0.0;
+
         gxy(p.I) = 0.0;
         gxz(p.I) = 0.0;
         gyz(p.I) = 0.0;
+
         kxx(p.I) = 0.0;
         kxy(p.I) = 0.0;
         kxz(p.I) = 0.0;
