@@ -12,6 +12,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "AMReX_GpuDevice.H"
 #include "Interpolator.hxx"
 
 namespace photons_init {
@@ -179,6 +180,146 @@ void random_photons_initializer(ParticleContainerClass &pc,
         ++pidx;
       }
     });
+    CCTK_VINFO("%d particles created",
+               particle_tile.GetArrayOfStructs().size());
+  }
+
+} // random_photons_initializer
+
+template <typename StructType, typename ParticleContainerClass>
+void random_photons_per_container_initializer(
+    ParticleContainerClass &pc, const int &number_of_particles_per_container,
+    const amrex::MultiFab &metric) {
+
+  CCTK_INFO("Initializing particles using the "
+            "random_photons_per_container_initializer");
+  int lev = 0;
+
+  // Get the with of the discretization on each direction.
+  const auto dx = pc.Geom(lev).CellSizeArray();
+
+  // Get the lower and higher value over the ParticleContainer Geometry
+  const auto p_lo = pc.Geom(lev).ProbLoArray();
+  const auto p_hi = pc.Geom(lev).ProbHiArray();
+
+  amrex::MFIter mfi = pc.MakeMFIter(lev);
+
+  // Iterating over all the tiles of the particle data structure
+  for (; mfi.isValid(); ++mfi) {
+
+    // get each tile box
+    const amrex::Box &tile_box = mfi.tilebox();
+
+    // Get the tile bounds
+    const auto lo = amrex::lbound(tile_box);
+    const auto hi = amrex::ubound(tile_box);
+
+    // Get a reference to the particles
+    auto &particles = pc.GetParticles(lev);
+    auto &particle_tile =
+        particles[std::make_pair(mfi.index(), mfi.LocalTileIndex())];
+
+    // Determines the current size and the required new size
+    auto old_size = particle_tile.GetArrayOfStructs().size();
+    auto new_size = old_size + number_of_particles_per_container;
+
+    // Resize the container once, we do not need to do it one by one
+    particle_tile.resize(new_size);
+
+    // Gets raw pointers to the two different ways particle data is stored for
+    // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
+    typename ParticleContainerClass::ParticleType *p_struct =
+        particle_tile.GetArrayOfStructs()().data();
+    auto arrdata = particle_tile.GetStructOfArrays().realarray();
+
+    // get the current process id
+    int proc_id = amrex::ParallelDescriptor::MyProc();
+    auto const metric_array = metric.array(mfi);
+
+
+    for (int i = 0; i < number_of_particles_per_container; i++) {
+      // Start a for loop with Random Number evolution
+      int pidx = old_size + i;
+
+      amrex::Real ratio[AMREX_SPACEDIM];
+
+      // Create particles outside of an sphere of radius 0.5
+      // Generate a random position
+      ratio[0] =
+          (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7);
+      ratio[1] = amrex::Random() * M_PI;
+      ratio[2] = amrex::Random() * 2. * M_PI;
+
+      typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
+      p.id() = pidx + 1;
+      p.cpu() = proc_id;
+
+      p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
+      p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
+      p.pos(2) = ratio[0] * std::cos(ratio[1]);
+
+      const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
+      const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
+      const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
+
+      // Interpolate metric
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo,
+                                  0), // g_11
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo,
+                                  1), // g_12 & g_21
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo,
+                                  2), // g_13 & g_31
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo,
+                                  3), // g_22
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo,
+                                  4), // g_23, g_32
+          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 5)}; // g_33
+
+      const CCTK_REAL inv_det_gamma =
+          1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
+                 2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -
+                 gamma_x[2] * gamma_x[2] * gamma_x[3] -
+                 gamma_x[4] * gamma_x[4] * gamma_x[0] -
+                 gamma_x[1] * gamma_x[1] * gamma_x[5]);
+
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
+          (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,
+          (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,
+          (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
+
+      // Compute a random initial momentum taking care of more than one
+      // dimensions
+      ratio[0] = 2.0 * amrex::Random() - 1.0;
+      ratio[1] = 0.0 * amrex::Random() - 1.0;
+      ratio[2] = 0.0 * amrex::Random() - 1.0;
+
+      const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
+                                  ratio[1] * ratio[1] * gamma_inv_x[3] +
+                                  ratio[2] * ratio[2] * gamma_inv_x[5] +
+                                  2.0 * ratio[0] * ratio[1] * gamma_inv_x[1] +
+                                  2.0 * ratio[0] * ratio[2] * gamma_inv_x[2] +
+                                  2.0 * ratio[1] * ratio[2] * gamma_inv_x[4];
+      const CCTK_REAL v = std::sqrt(v_squared);
+
+      // Create the particle and add it to the container
+      arrdata[StructType::vx][pidx] = ratio[0] / v;
+      arrdata[StructType::vy][pidx] = ratio[1] / v;
+      arrdata[StructType::vz][pidx] = ratio[2] / v;
+
+      // Update the particles counter
+      ++pidx;
+    }
+
     CCTK_VINFO("%d particles created",
                particle_tile.GetArrayOfStructs().size());
   }
