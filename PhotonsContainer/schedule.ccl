@@ -44,3 +44,11 @@ if ((particle_plot_every||particle_tsv_every) ) {
         OPTIONS: global
     } "print the particles"
 }
+
+if ((particle_plot_every||particle_tsv_every) ) {
+    SCHEDULE check_velocities AT evol AFTER print
+    {
+        LANG: C
+        OPTIONS: global
+    } "print the particles"
+}

@@ -42,8 +42,13 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
       const auto &gd_metric = *ld.groupdata.at(gi_metric);
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
 
-      pc->initialize(photons_init::random_photons_initializer<ParticleData, PC>,
-                     photons_per_cell, metric, lev);
+      // pc->initialize(photons_init::random_photons_initializer<ParticleData,
+      // PC>,
+      //                photons_per_cell, metric, lev);
+      pc->initialize(
+          photons_init::random_photons_per_container_initializer<ParticleData,
+                                                                 PC>,
+          photons_per_cell, metric);
       pc->Redistribute();
     }
   }
@@ -173,5 +178,25 @@ extern "C" void print(CCTK_ARGUMENTS) {
                             std::string(out_dir));
     pc->outputParticlesAscii(CCTK_PASS_CTOC, particle_tsv_every,
                              std::string(out_dir));
+  }
+}
+
+extern "C" void check_velocities(CCTK_ARGUMENTS) {
+  DECLARE_CCTK_PARAMETERS;
+  DECLARE_CCTK_ARGUMENTS;
+
+  const int tl = 0;
+  const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
+  assert(gi_metric >= 0 && "Failed to get the metric group index");
+
+  for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
+    auto &pc = g_nupcs.at(patch);
+    auto &pd = CarpetX::ghext->patchdata.at(patch);
+    for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
+      const auto &ld = pd.leveldata.at(lev);
+      const auto &gd_metric = *ld.groupdata.at(gi_metric);
+      const amrex::MultiFab &metric = *gd_metric.mfab[tl];
+      pc->check_velocity(CCTK_PASS_CTOC, metric, lev);
+    }
   }
 }
