@@ -9,7 +9,7 @@
 #define PHOTONS_HXX
 
 namespace Photons {
-// Struct to managing null particles
+// Struct to managing null geodesic particles
 struct PhotonsData {
   static constexpr const char *name = "Photons";
   enum {

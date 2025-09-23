@@ -1,3 +1,9 @@
+/**
+ * @file PhotonsInitializer.hxx
+ *
+ * This File contains examples of how to create different initial conditions for
+ * photons, imposing the initial conditions on the velocity.
+ */
 #ifndef PHOTON_INITIALIZERS
 #define PHOTON_INITIALIZERS
 
@@ -236,7 +242,6 @@ void random_photons_per_container_initializer(
     int proc_id = amrex::ParallelDescriptor::MyProc();
     auto const metric_array = metric.array(mfi);
 
-
     for (int i = 0; i < number_of_particles_per_container; i++) {
       // Start a for loop with Random Number evolution
       int pidx = old_size + i;
@@ -245,8 +250,7 @@ void random_photons_per_container_initializer(
 
       // Create particles outside of an sphere of radius 0.5
       // Generate a random position
-      ratio[0] =
-          (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7);
+      ratio[0] = (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7);
       ratio[1] = amrex::Random() * M_PI;
       ratio[2] = amrex::Random() * 2. * M_PI;
 
