@@ -1,0 +1,45 @@
+\hypertarget{Interpolator_8hxx}{}\doxysection{Photon\+Solver\+Utilities/src/\+Interpolator.hxx File Reference}
+\label{Interpolator_8hxx}\index{PhotonSolverUtilities/src/Interpolator.hxx@{PhotonSolverUtilities/src/Interpolator.hxx}}
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Box.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Config.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+MFIter.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+REAL.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Random.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Random\+Engine.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Scan.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cctk\+\_\+\+Types.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$cctk.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+Include dependency graph for Interpolator.\+hxx\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{Interpolator_8hxx__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{Interpolator_8hxx__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceInterpolator}{Interpolator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$int N$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+DEVICE AMREX\+\_\+\+GPU\+\_\+\+HOST CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE CCTK\+\_\+\+REAL \mbox{\hyperlink{namespaceInterpolator_a299afacbe942e5dc09223426e068d17d}{Interpolator\+::barycentric\+\_\+cubic\+\_\+1d}} (const int(\&points)\mbox{[}N+1\mbox{]}, const CCTK\+\_\+\+REAL(\&weights)\mbox{[}N+1\mbox{]}, const CCTK\+\_\+\+REAL(\&values)\mbox{[}N+1\mbox{]}, const CCTK\+\_\+\+REAL \&x, const CCTK\+\_\+\+REAL \&plo, const CCTK\+\_\+\+REAL \&dx)
+\item 
+{\footnotesize template$<$int INTERPOLATION\+\_\+\+ORDER$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+HOST\+\_\+\+DEVICE CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE CCTK\+\_\+\+REAL \mbox{\hyperlink{namespaceInterpolator_aad2c111a5cf92c7187ae74b45e1b7eb7}{Interpolator\+::barycentric\+\_\+cubic\+\_\+3d}} (amrex\+::\+Array4$<$ CCTK\+\_\+\+REAL const $>$ const \&f, int const \&i0, int const \&j0, int const \&k0, CCTK\+\_\+\+REAL const \&x, CCTK\+\_\+\+REAL const \&y, CCTK\+\_\+\+REAL const \&z, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&dx, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&plo, const int \&comp)
+\item 
+{\footnotesize template$<$int INTERPOLATION\+\_\+\+ORDER$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+HOST\+\_\+\+DEVICE CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE CCTK\+\_\+\+REAL \mbox{\hyperlink{namespaceInterpolator_a57dd50cb38cbed0e89572d09b4a818e1}{Interpolator\+::barycentric\+\_\+cubic\+\_\+3d}} (amrex\+::\+Array4$<$ CCTK\+\_\+\+REAL const $>$ const \&f, int const \&i0, int const \&j0, int const \&k0, CCTK\+\_\+\+REAL const \&x, CCTK\+\_\+\+REAL const \&y, CCTK\+\_\+\+REAL const \&z, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&dx, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&plo)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file define the Barycentric interpolation in 1 and 3 dimensions. 

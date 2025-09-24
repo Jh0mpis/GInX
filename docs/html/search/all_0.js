@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['barycentric_5fcubic_5f1d_0',['barycentric_cubic_1d',['../namespaceInterpolator.html#a299afacbe942e5dc09223426e068d17d',1,'Interpolator']]],
+  ['barycentric_5fcubic_5f3d_1',['barycentric_cubic_3d',['../namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7',1,'Interpolator::barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)'],['../namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1',1,'Interpolator::barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)']]],
+  ['base_2',['Base',['../classContainers_1_1PhotonsContainer.html#aa0463738f45c8445189d89505fcfaab6',1,'Containers::PhotonsContainer']]]
+];

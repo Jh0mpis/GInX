@@ -1,0 +1,151 @@
+\label{index_md_README}%
+\Hypertarget{index_md_README}%
+ The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for photons in a generic GRMHD background using Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with CUDA support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-\/accelerated performance. The purpose of this tool is to serve as a post-\/processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.
+
+{\bfseries{Keywords\+: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.}}\hypertarget{index_autotoc_md1}{}\doxysection{Index}\label{index_autotoc_md1}
+
+\begin{DoxyItemize}
+\item Geodesics Integrator X
+\begin{DoxyItemize}
+\item Photons Container
+\item Photons Solver Utilities
+\end{DoxyItemize}
+\item Files Structure
+\item How to run it
+\begin{DoxyItemize}
+\item Installation with a compiled Einstein Toolkit
+\item Parameters file
+\item Create-\/run and running it
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md2}{}\doxysection{Geodesics Integrator X}\label{index_autotoc_md2}
+The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and running it on GPU. This thorn contains the following utilities\+:\hypertarget{index_autotoc_md3}{}\doxysubsection{Photons Container}\label{index_autotoc_md3}
+This folder contains the {\ttfamily \mbox{\hyperlink{PhotonsContainer_8hxx}{Photons\+Container.\+hxx}}} header file where the Particle container for photons class, that inherits from {\ttfamily Base\+Particle\+Container} abstract class (This class is implemented in \href{https://github.com/Jh0mpis/ParticlesUtilities/}{\texttt{ Particles\+Utilities}}), is defined. This class contains the method for compute the right hand side part for the Rung-\/\+Kutta method evolution.
+
+This also contains the {\ttfamily \mbox{\hyperlink{Photons_8hxx}{Photons.\+hxx}}} file that contains the definition of the struct used for the \mbox{\hyperlink{namespacePhotons}{Photons}} evolution.
+
+Finally, {\ttfamily \mbox{\hyperlink{PhotonsInitializers_8hxx}{Photons\+Initializers.\+hxx}}} contains different ways of initialize the system of photons, so far random initializations.
+
+\begin{quote}
+\mbox{[}!\+NOTE\mbox{]} Contains the {\ttfamily \mbox{\hyperlink{test_8cxx}{test.\+cxx}}} file, this files contain an example of how to use the Photons\+Container and its methods, can be used as an example in the future or has to be removed and included in the documentation. \end{quote}
+\hypertarget{index_autotoc_md4}{}\doxysubsection{Photons Solver Utilities}\label{index_autotoc_md4}
+This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily \mbox{\hyperlink{Discretizer_8hxx}{Discretizer.\+hxx}}}\+: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.
+\item {\ttfamily \mbox{\hyperlink{Interpolator_8hxx}{Interpolator.\+hxx}}}\+: This file contains different interpolators like barycentric interpolator.
+\item {\ttfamily \mbox{\hyperlink{Utilities_8hxx}{Utilities.\+hxx}}}\+: This file contains different product of symmetric 3x3 matrices and vectors.
+\end{DoxyItemize}\hypertarget{index_autotoc_md5}{}\doxysection{Files Structure}\label{index_autotoc_md5}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{GeodesicIntegratorX/}
+\DoxyCodeLine{├── PhotonsContainer}
+\DoxyCodeLine{│   ├── configuration.ccl}
+\DoxyCodeLine{│   ├── interface.ccl}
+\DoxyCodeLine{│   ├── par}
+\DoxyCodeLine{│   │   └── PhotonsContainer.par}
+\DoxyCodeLine{│   ├── param.ccl}
+\DoxyCodeLine{│   ├── schedule.ccl}
+\DoxyCodeLine{│   └── src}
+\DoxyCodeLine{│       ├── make.code.defn}
+\DoxyCodeLine{│       ├── PhotonsContainer.hxx}
+\DoxyCodeLine{│       ├── Photons.hxx}
+\DoxyCodeLine{│       ├── PhotonsInitializers.hxx}
+\DoxyCodeLine{│       └── test.cxx}
+\DoxyCodeLine{├── PhotonSolverUtilities}
+\DoxyCodeLine{│   ├── configuration.ccl}
+\DoxyCodeLine{│   ├── doc}
+\DoxyCodeLine{│   ├── interface.ccl}
+\DoxyCodeLine{│   ├── param.ccl}
+\DoxyCodeLine{│   ├── schedule.ccl}
+\DoxyCodeLine{│   └── src}
+\DoxyCodeLine{│       ├── include}
+\DoxyCodeLine{│       │   ├── Discretizer.hxx}
+\DoxyCodeLine{│       │   ├── Interpolator.hxx}
+\DoxyCodeLine{│       │   ├── make.code.defn}
+\DoxyCodeLine{│       │   └── Utilities.hxx}
+\DoxyCodeLine{│       └── make.code.defn}
+\DoxyCodeLine{└── README.md}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md6}{}\doxysection{How to run it}\label{index_autotoc_md6}
+\begin{quote}
+\mbox{[}!\+NOTE\mbox{]} This way of build and run the code is just provisional. This could change in further versions. \end{quote}
+\hypertarget{index_autotoc_md7}{}\doxysubsection{Installation with a compiled Einstein Toolkit}\label{index_autotoc_md7}
+In order to compile the new thorn into a Einstein Toolkit build we can use the same approach used in \href{https://github.com/EinsteinToolkit/jupyter-et/blob/master/tutorial-server/notebooks/CreatingANewThorn-HeatEqn.ipynb}{\texttt{ Creating\+ANew\+Thorn-\/\+Heat\+Eqn.\+ipynb}} at the {\ttfamily Einstein\+Toolkit\textbackslash{}jupyter-\/et} github repository. The first step is to clone the repository and its dependency into {\ttfamily Cactus/arrangements/}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git clone -\/b dev git@github.com:Jh0mpis/ParticlesUtilities.git}
+\DoxyCodeLine{git clone -\/b dev git@github.com:Jh0mpis/GeodesicIntegratorX.git}
+
+\end{DoxyCode}
+
+
+Next step is to include the Thorn and its utilities into the {\ttfamily Cactus/configs/sim/\+Thorn\+List} file and add the following lines\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\# Null GeodesicIntegratorX Utilities}
+\DoxyCodeLine{ParticlesUtilities/ParticlesContainer}
+\DoxyCodeLine{GeodesicIntegratorX/PhotonSolverUtilities}
+\DoxyCodeLine{GeodesicIntegratorX/PhotonsContainer}
+
+\end{DoxyCode}
+
+
+After this change we need to re-\/build {\ttfamily Cactus} by running
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./simfactory/bin/sim build -\/j2}
+
+\end{DoxyCode}
+
+
+This is going to compile the new thorns and all its dependencies.\hypertarget{index_autotoc_md8}{}\doxysubsection{Parameters file}\label{index_autotoc_md8}
+In order to run the {\ttfamily \mbox{\hyperlink{test_8cxx}{test.\+cxx}}} defined inside the {\ttfamily Geodesic\+IntegratorX} thorn we need to use a {\ttfamily param.\+par} file. The {\ttfamily param.\+ccl} file allows to define the following parameters\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{5}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Range   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default    }\\\cline{1-5}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Range   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default    }\\\cline{1-5}
+\endhead
+photons\+\_\+per\+\_\+cell   &INTEGER   &Number of photons per cell unit on the simulation.   &\mbox{[}1, \$\textbackslash{}infty\$)   &1    \\\cline{1-5}
+black\+\_\+hole\+\_\+mass   &REAL   &Schwarzschild metric black hole mass.   &\mbox{[}0, \$\textbackslash{}infty\$)   &1.\+0    \\\cline{1-5}
+initial\+\_\+metric   &KEYWORD   &Metric to be initialized.   &\char`\"{}none\char`\"{}, \char`\"{}minkowski\char`\"{}, \char`\"{}iso schwarzschild\char`\"{}   &\char`\"{}iso schwarzschild\char`\"{}   \\\cline{1-5}
+\end{longtabu}
+
+
+{\itshape {\bfseries{Shared with {\ttfamily Particles\+Container}\+:}}}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{5}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Range   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default    }\\\cline{1-5}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Type   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Range   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default    }\\\cline{1-5}
+\endhead
+particle\+\_\+plot\+\_\+every   &INTEGER   &The number of step where the simulation should print the particles data using amrex print utilities.   &\mbox{[}0, \$\textbackslash{}infty\$) 0 means no print   &0    \\\cline{1-5}
+particle\+\_\+tsv\+\_\+every   &INTEGER   &The number of step where the simulation should print the particles data using ascii.   &\mbox{[}0, \$\textbackslash{}infty\$) 0 means no print   &0   \\\cline{1-5}
+\end{longtabu}
+
+
+An example of how to define those parameters along with the CarpetX parameters can be seen into \href{./PhotonsContainer/par/PhotonsContainer.par}{\texttt{ ./\+Photons\+Container/par/\+Photons\+Container.par}}.\hypertarget{index_autotoc_md9}{}\doxysubsection{Create-\/run and running it}\label{index_autotoc_md9}
+Once we have everything setted up we can create and run the simulation using the simfactory {\ttfamily create-\/run} command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{rm -\/rf /simulations/folder/path/run-\/name \# If exists any previous run}
+\DoxyCodeLine{./simfactory/bin/sim create-\/run run-\/name -\/-\/parfile=/parfile/path/parfile-\/name.par}
+
+\end{DoxyCode}
+ 

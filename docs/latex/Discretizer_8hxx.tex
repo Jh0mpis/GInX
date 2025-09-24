@@ -1,0 +1,44 @@
+\hypertarget{Discretizer_8hxx}{}\doxysection{Photon\+Solver\+Utilities/src/\+Discretizer.hxx File Reference}
+\label{Discretizer_8hxx}\index{PhotonSolverUtilities/src/Discretizer.hxx@{PhotonSolverUtilities/src/Discretizer.hxx}}
+{\ttfamily \#include $<$cctk.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Array.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Box.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}AMRe\+X\+\_\+\+Config.\+H\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Interpolator.\+hxx\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cctk\+\_\+\+Types.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+Include dependency graph for Discretizer.\+hxx\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{Discretizer_8hxx__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{Discretizer_8hxx__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceDiscretize}{Discretize}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$int INTERPOLATION\+\_\+\+ORDER, int DERIVATIVE\+\_\+\+ORDER$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+HOST\+\_\+\+DEVICE CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE void \mbox{\hyperlink{namespaceDiscretize_a70e8b830d4ba5cba8fc09e8bb1173a98}{Discretize\+::scalar\+\_\+barycentric\+\_\+derivative}} (amrex\+::\+Gpu\+Array$<$ CCTK\+\_\+\+REAL, 3 $>$ \&df, amrex\+::\+Array4$<$ CCTK\+\_\+\+REAL const $>$ const \&f, int const \&i0, int const \&j0, int const \&k0, CCTK\+\_\+\+REAL const \&x, CCTK\+\_\+\+REAL const \&y, CCTK\+\_\+\+REAL const \&z, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&dx, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&plo)
+\item 
+{\footnotesize template$<$int INTERPOLATION\+\_\+\+ORDER, int DERIVATIVE\+\_\+\+ORDER$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+HOST\+\_\+\+DEVICE CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE void \mbox{\hyperlink{namespaceDiscretize_a287cc23d28bf219d4bdb1c3ecb147b31}{Discretize\+::vector\+\_\+barycentric\+\_\+derivative}} (amrex\+::\+Gpu\+Array$<$ amrex\+::\+Gpu\+Array$<$ CCTK\+\_\+\+REAL, 3 $>$, 3 $>$ \&df, amrex\+::\+Array4$<$ CCTK\+\_\+\+REAL const $>$ const \&f, int const \&i0, int const \&j0, int const \&k0, CCTK\+\_\+\+REAL const \&x, CCTK\+\_\+\+REAL const \&y, CCTK\+\_\+\+REAL const \&z, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&dx, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&plo)
+\item 
+{\footnotesize template$<$int INTERPOLATION\+\_\+\+ORDER, int DERIVATIVE\+\_\+\+ORDER$>$ }\\AMREX\+\_\+\+GPU\+\_\+\+HOST\+\_\+\+DEVICE CCTK\+\_\+\+ATTRIBUTE\+\_\+\+ALWAYS\+\_\+\+INLINE void \mbox{\hyperlink{namespaceDiscretize_a578da66dd5685dcbf3dc36bbc81374b6}{Discretize\+::smatrix\+\_\+barycentric\+\_\+derivative}} (amrex\+::\+Gpu\+Array$<$ amrex\+::\+Gpu\+Array$<$ CCTK\+\_\+\+REAL, 6 $>$, 3 $>$ \&df, amrex\+::\+Array4$<$ CCTK\+\_\+\+REAL const $>$ const \&f, int const \&i0, int const \&j0, int const \&k0, CCTK\+\_\+\+REAL const \&x, CCTK\+\_\+\+REAL const \&y, CCTK\+\_\+\+REAL const \&z, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&dx, const amrex\+::\+Gpu\+Array$<$ double, 3 $>$ \&plo)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains the interpolation of the first order derivative for scalar, vectorial and matrices functions. 
