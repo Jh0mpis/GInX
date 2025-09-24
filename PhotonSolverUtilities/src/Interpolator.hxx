@@ -1,3 +1,8 @@
+/**
+ * @file Interpolator.hxx
+ *
+ * This file define the Barycentric interpolation in 1 and 3 dimensions.
+ */
 #ifndef INTERPOLATOR_HXX
 #define INTERPOLATOR_HXX
 
@@ -16,67 +21,41 @@
 namespace Interpolator {
 
 // #############################################################################
-//                   Trilinear interpolator
-// #############################################################################
-template <typename T>
-AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline void
-trilinear_interpolator(amrex::Array4<T const> const &f,
-                       amrex::GpuArray<CCTK_REAL, AMREX_SPACEDIM> const &x,
-                       amrex::GpuArray<CCTK_REAL, AMREX_SPACEDIM> const &plo,
-                       amrex::GpuArray<CCTK_REAL, AMREX_SPACEDIM> const &dx,
-                       T &fx) {
-  // Trilinear interpolator
-
-  // Get the coordinates in terms of the grid
-  CCTK_REAL xp = (x[0] - plo[0]) / dx[0];
-  CCTK_REAL yp = (x[1] - plo[1]) / dx[1];
-  CCTK_REAL zp = (x[2] - plo[2]) / dx[2];
-
-  // Compute the closest points to the position x
-  // cell indexes
-  int i = amrex::Math::floor(xp);
-  int j = amrex::Math::floor(yp);
-  int k = amrex::Math::floor(zp);
-
-  // Compute the distances to the points
-  CCTK_REAL dist_x = xp - i;
-  CCTK_REAL dist_y = yp - j;
-  CCTK_REAL dist_z = zp - k;
-  CCTK_REAL sx[] = {CCTK_REAL(1) - dist_x, dist_x};
-  CCTK_REAL sy[] = {CCTK_REAL(1) - dist_y, dist_y};
-  CCTK_REAL sz[] = {CCTK_REAL(1) - dist_z, dist_z};
-
-  // Compute the result
-  fx = sx[0] * sy[0] * sz[0] * f(i, j, k) +
-       sx[0] * sy[0] * sz[1] * f(i, j, k + 1) +
-       sx[0] * sy[1] * sz[0] * f(i, j + 1, k) +
-       sx[0] * sy[1] * sz[1] * f(i, j + 1, k + 1) +
-       sx[1] * sy[0] * sz[0] * f(i + 1, j, k) +
-       sx[1] * sy[0] * sz[1] * f(i + 1, j, k + 1) +
-       sx[1] * sy[1] * sz[0] * f(i + 1, j + 1, k) +
-       sx[1] * sy[1] * sz[1] * f(i + 1, j + 1, k + 1);
-}
-
-// #############################################################################
 //                   Barycentric Lagrange Interpolator
 // #############################################################################
+
+/**
+ * Do a Barycentric interpolation in one direction.
+ *
+ * This function computes the interpolation of a function on just one direction
+ * using a barycentric Lagrange interpolation by doing:
+ *
+ * \f[
+ * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}f(x_i)}{\sum\limits_{i
+ * = 0}^N \frac{w_i}{x - x_i}}
+ * \f]
+ *
+ * where \f$N\f$ is the order of interpolation.
+ *
+ * @param points Vector containing the coordinates of each point.
+ * @param weights The weights of each datapoint.
+ * @param x The value where we are interpolating.
+ *
+ * @return The interpolated value.
+ */
 template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_1d(const int (&points)[N + 1],
                      const CCTK_REAL (&weights)[N + 1],
                      const CCTK_REAL (&values)[N + 1], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
+  CCTK_REAL num{0.0};
+  CCTK_REAL den{0.0};
 
   for (int i = 0; i <= N; i++) {
     if (x == plo + points[i] * dx) {
       return values[i];
     }
-  }
-
-  CCTK_REAL num{0.0};
-  CCTK_REAL den{0.0};
-
-  for (int i = 0; i <= N; i++) {
     CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
     num += term * values[i];
     den += term;
@@ -85,6 +64,40 @@ barycentric_cubic_1d(const int (&points)[N + 1],
   return num / den;
 }
 
+/**
+ * Do a Barycentric interpolation in three direction.
+ *
+ * This function computes the interpolation of a function on three directions
+ * using a barycentric Lagrange interpolation by doing:
+ *
+ * \f[
+ * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z - z_i}\frac{v_j}{y
+ * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
+ * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
+ * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
+ * z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
+ * \frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
+ * x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
+ * y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
+ * \f]
+ *
+ * where \f$N\f$ is the order of interpolation.
+ *
+ * @see barycentric_cubic_1d
+ *
+ * @param f Array containing the function values.
+ * @param i0 Basis cell index accordingly to x.
+ * @param j0 Basis cell index accordingly to y.
+ * @param k0 Basis cell index accordingly to z.
+ * @param x Coordinate x value to interpolate.
+ * @param y Coordinate y value to interpolate.
+ * @param z Coordinate z value to interpolate.
+ * @param dx Vector \f$\Delta x\f$  with the space steps value.
+ * @param plo Lower values of the entire domain.
+ * @param comp Function's component to compute.
+ *
+ * @return The interpolated value.
+ */
 template <int INTERPOLATION_ORDER>
 AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
@@ -178,6 +191,39 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                                                    dx[2]);
 } // barycentric_cubic_3d with component
 
+/**
+ * Do a Barycentric interpolation in three direction for a scalar function.
+ *
+ * This function computes the interpolation of a function on three directions
+ * using a barycentric Lagrange interpolation by doing:
+ *
+ * \f[
+ * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z - z_i}\frac{v_j}{y
+ * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
+ * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
+ * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
+ * z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
+ * \frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
+ * x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
+ * y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
+ * \f]
+ *
+ * where \f$N\f$ is the order of interpolation.
+ *
+ * @see barycentric_cubic_1d
+ *
+ * @param f Array containing the function values.
+ * @param i0 Basis cell index accordingly to x.
+ * @param j0 Basis cell index accordingly to y.
+ * @param k0 Basis cell index accordingly to z.
+ * @param x Coordinate x value to interpolate.
+ * @param y Coordinate y value to interpolate.
+ * @param z Coordinate z value to interpolate.
+ * @param dx Vector \f$\Delta x\f$  with the space steps value.
+ * @param plo Lower values of the entire domain.
+ *
+ * @return The interpolated value.
+ */
 template <int INTERPOLATION_ORDER>
 AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,

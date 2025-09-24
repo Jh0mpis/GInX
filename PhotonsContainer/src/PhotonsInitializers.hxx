@@ -25,6 +25,16 @@ namespace photons_init {
 
 using namespace Interpolator;
 
+/**
+ * This function random initializes a custom number of particles on each grid
+ * cell
+ *
+ * @param pc The particle container that is going to be initialized.
+ * @param number_of_particles_per_cell The number of particles contained on each
+ * cell.
+ * @param metric The 3 dimensional ADM metric.
+ * @param lev AMR discretization level.
+ */
 template <typename StructType, typename ParticleContainerClass>
 void random_photons_initializer(ParticleContainerClass &pc,
                                 const int &number_of_particles_per_cell,
@@ -163,12 +173,12 @@ void random_photons_initializer(ParticleContainerClass &pc,
             (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) *
                 inv_det_gamma};
 
-        // Compute a random initial momentum taking care of more than one
-        // dimensions
-        ratio[0] = 2.0 * amrex::Random(engine) - 1.0;
+        // Compute a random initial velocity
         ratio[1] = 2.0 * amrex::Random(engine) - 1.0;
         ratio[2] = 2.0 * amrex::Random(engine) - 1.0;
+        ratio[3] = 2.0 * amrex::Random(engine) - 1.0;
 
+        // Normalizing the velocity.
         const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
                                     ratio[1] * ratio[1] * gamma_inv_x[3] +
                                     ratio[2] * ratio[2] * gamma_inv_x[5] +
@@ -192,6 +202,15 @@ void random_photons_initializer(ParticleContainerClass &pc,
 
 } // random_photons_initializer
 
+/**
+ * This function random initializes a custom number of particles on each
+ * particle container.
+ *
+ * @param pc The particle container that is going to be initialized.
+ * @param number_of_particles_per_container The number of particles contained on
+ * each particle container.
+ * @param metric The 3 dimensional ADM metric.
+ */
 template <typename StructType, typename ParticleContainerClass>
 void random_photons_per_container_initializer(
     ParticleContainerClass &pc, const int &number_of_particles_per_container,
@@ -301,12 +320,12 @@ void random_photons_per_container_initializer(
           (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
           (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
 
-      // Compute a random initial momentum taking care of more than one
-      // dimensions
+      // Compute a random initial Velocity
       ratio[0] = 2.0 * amrex::Random() - 1.0;
       ratio[1] = 0.0 * amrex::Random() - 1.0;
       ratio[2] = 0.0 * amrex::Random() - 1.0;
 
+      // Normalizing the velocity.
       const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
                                   ratio[1] * ratio[1] * gamma_inv_x[3] +
                                   ratio[2] * ratio[2] * gamma_inv_x[5] +

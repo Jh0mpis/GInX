@@ -47,14 +47,17 @@ using namespace Discretize;
 /**
  * PhotonsContainer class definition.
  *
- * The following class define the needed functions to evolve the position and velocity of the photons in the simmulation.
+ * The following class define the needed functions to evolve the position and
+ * velocity of the photons in the simmulation.
  */
 template <typename StructType>
 class PhotonsContainer
     : public BaseParticleContainer<PhotonsContainer<StructType>, StructType> {
 
 public:
-  // Using BaseParticlesContainer constructor
+  /**
+   * Using BaseParticlesContainer constructor
+   */
   using Base = BaseParticleContainer<PhotonsContainer<StructType>, StructType>;
   using Base::Base;
 
@@ -92,26 +95,31 @@ public:
 // ##############################################################################
 
 /**
- * Given differential equation dU/dt = f(U, dU/dx; t) computes f(U, dU/dx;t)
+ * Given differential equation \f[\frac{d}{dt}U = f\left(U, \frac{dU}{dx};
+ * t\right)\f] computes
+ * \f[f\left(U, \frac{dU}{dx}; t\right)\f]
  *
- * I'm assuming an equation dU/dt = F(u, t), where U is a vector that contains
- * (x_u, y_u, z_u, vx_d, vy_d, vz_d). That's why each rhs depends on the other
- * components of the vector U. For the position the differential equation  is:
+ * where \f$U\f$ is a vector that contains \f$(x_u, y_u, z_u, vx_d, vy_d, vz_d,
+ * E)\f$. That's why each rhs depends on the other components of the vector
+ * \f$U\f$. For the position the differential equation  is:
  *
- * dU[i] / dt = alpha * gamma[i][j] *  U[3 + j] - beta_u[i];
+ * \f[\frac{d}{dt} U[i] = \alpha \gamma^{ij} U[3 + j] - \beta^i\f]
  *
- * Where i,j = 0, 1, 2, gamma is the induced metric with the two indices
- * up, alpha is the lapse function and beta is the shift vector.
+ * Where \f$i,j = 0, 1, 2\f$, \f$\gamma\f$ is the induced metric, \f$\alpha\f$
+ * is the lapse function and \f$\beta\f$ is the shift vector.
  *
  * For the Velocity_d the differential equation is:
  *
- * dU[i + 3] /dt = - first_derivative<i>(alpha) +
- * (first_derivative<j>(alpha) * gamma[j][k] * U[3 + k] - alpha * K[j][k] *
- * gamma[j][l] * gamma[k][m] * U[3 + l] * U[3 + m]) * U[i + 3]
- *  + first_derivative<i>(beta[k]) * U[3 + k]
- *  - 0.5 * alpha * first_derivative<i>(gamma[j][k]) * U[j + 3] * U[k + 3]
+ * \f{eqnarray*}{
+ * \frac{d}{dt}U[3 + i] &= -\partial_i\alpha + \left(\gamma^{kj} U[3 + k]
+ * \partial_j\alpha - \alpha K_{jk}\gamma^{jl}\gamma^{km}U[3+l]U[3+m]\right) U[3
+ * + i]\\ & +
+ * \frac{1}{2}\alpha\gamma^{jl}\gamma^{km}U[3+l]U[3+m]\partial_i\gamma{jk} + U[3
+ * + j] \partial_i\beta^j
+ * \f}
  *
- *  Where i, j, k, l, m = 0, 1, 2.
+ *  Where \f$i, j, k, l, m = 0, 1, 2\f$ and we have been using Einstein
+ * notation.
  *
  *  @param u A GpuArray of size n_attributes + the coordinates that contains the
  * varaibles needed to evolve.
@@ -253,14 +261,15 @@ PhotonsContainer<StructType>::compute_rhs(
 
 /**
  *  Evolving using Runge-Kutta 2.
- * 
- *  For the Runge-Kutta 2 we are solving the differential equation dU/dt = f(U,
- *  dU/dt, t) using:
- * 
- *  U_{n+1} = U_n + dt * f(U_n + 0.5 * dt * f(U_n, t), t + 0.5 * dt)
- * 
+ *
+ *  For the Runge-Kutta 2 we are solving the differential equation
+ * \f$\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\f$ using:
+ *
+ *  \f[U_{n+1} = U_n + \Delta t f\left(U_n + \frac{1}{2}\Delta t f(U_n, t), t +
+ * \frac{1}{2} \Delta t\right)\f]
+ *
  *  And checking if it goes outside of the grid boundaries.
- * 
+ *
  *  @see compute_rhs()
  *  @param lapse ADM lapse function.
  *  @param shift ADM shift vector.
@@ -362,21 +371,25 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
 
 /**
  *  Evolving using Runge-Kutta 4.
- * 
- *  For the Runge-Kutta 4 we are solving the differential equation dU/dt = f(U,
- *  dU/dt, t) using:
- * 
- *  U_{n+1} = U_n + (1.0 / 6.0) * dt * (f_1 + f_2 + f_3 + f_4)
- * 
+ *
+ *  For the Runge-Kutta 4 we are solving the differential equation
+ * \f$\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\f$ using:
+ *
+ *  \f[
+ *  U_{n+1} = U_n + \frac{1}{6}\Delta t \left(f_1 + 2f_2 + 2f_3 + f_4\right)
+ *  \f]
+ *
  *  where:
- * 
- *  f_1 = f(U_n, t),
- *  f_2 = f(U_n + 0.5 * dt * f_1, t * 0.5 * dt),
- *  f_3 = f(U_n + 0.5 * dt * f_2, t * 0.5 * dt),
- *  f_2 = f(U_n + dt * f_3, t * dt),
- * 
+ *
+ *  * \f$f_1 = f(U_n, t),\f$
+ *  * \f$f_2 = f\left(U_n + \frac{\Delta t}{2} f_1, t + \frac{\Delta
+ * t}{2}\right),\f$
+ *  * \f$f_3 = f\left(U_n + \frac{\Delta t}{2} f_2, t + \frac{\Delta
+ * t}{2}\right),\f$
+ *  * \f$f_4 = f(U_n + \Delta t f_3, t + \Delta t),\f$
+ *
  *  And checking if it goes outside of the grid boundaries.
- * 
+ *
  *  @see compute_rhs()
  *  @param lapse ADM lapse function.
  *  @param shift ADM shift vector.
