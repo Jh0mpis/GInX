@@ -1,5 +1,6 @@
 /**
- * @file PhotonsContainer.hxx
+ * \file PhotonsContainer.hxx
+ * \brief PhotonsContainer class definition.
  *
  * The following file contains the definition of the PhotonsContainer class and
  * its methods, the class inherits from the abstract BaseContainer class. On
@@ -45,7 +46,7 @@ using namespace Interpolator;
 using namespace Discretize;
 
 /**
- * PhotonsContainer class definition.
+ * \brief PhotonsContainer class definition.
  *
  * The following class define the needed functions to evolve the position and
  * velocity of the photons in the simmulation.
@@ -56,7 +57,7 @@ class PhotonsContainer
 
 public:
   /**
-   * Using BaseParticlesContainer constructor
+   * \brief Using BaseParticlesContainer constructor
    */
   using Base = BaseParticleContainer<PhotonsContainer<StructType>, StructType>;
   using Base::Base;
@@ -95,6 +96,8 @@ public:
 // ##############################################################################
 
 /**
+ * \brief Computes the right hind side of the geodesic differential equation.
+ *
  * Given differential equation \f[\frac{d}{dt}U = f\left(U, \frac{dU}{dx};
  * t\right)\f] computes
  * \f[f\left(U, \frac{dU}{dx}; t\right)\f]
@@ -260,7 +263,7 @@ PhotonsContainer<StructType>::compute_rhs(
 } // PhotonsContainer::compute_rhs
 
 /**
- *  Evolving using Runge-Kutta 2.
+ *  \brief Evolving using Runge-Kutta 2.
  *
  *  For the Runge-Kutta 2 we are solving the differential equation
  * \f$\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\f$ using:
@@ -370,7 +373,7 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
 } // PhotonsContainer::evolveRK2
 
 /**
- *  Evolving using Runge-Kutta 4.
+ *  \brief Evolving using Runge-Kutta 4.
  *
  *  For the Runge-Kutta 4 we are solving the differential equation
  * \f$\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\f$ using:
@@ -542,7 +545,8 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
   this->Redistribute();
 } // PhotonsContainer::evolveRK4
 
-/** Computes and print all photons velocities.
+/** 
+ * \brief Computes and print all photons velocities.
  *
  * This function is for checking the photons velocities and distance between 1.0
  * and v^2.

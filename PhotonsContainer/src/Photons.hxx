@@ -1,5 +1,6 @@
 /**
- * @file Particles.hxx
+ * \file Photons.hxx
+ * \brief Photons struct.
  *
  * This file contains some predefined structs that defines the parameters
  * needed for a particle in order to be used on a <Particles>Container instance.
@@ -9,7 +10,9 @@
 #define PHOTONS_HXX
 
 namespace Photons {
-// Struct to managing null geodesic particles
+/** 
+ * \brief Struct to managing null geodesic particles.
+ */
 struct PhotonsData {
   /** Name of the particle type. */
   static constexpr const char *name = "Photons";

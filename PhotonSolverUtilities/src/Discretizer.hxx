@@ -1,5 +1,6 @@
 /**
- * @file Discretizer.hxx
+ * \file Discretizer.hxx
+ * \brief First derivatives computations.
  *
  * This file contains the interpolation of the first order derivative for
  * scalar, vectorial and matrices functions.
@@ -19,6 +20,9 @@
 #include <iostream>
 #include <stdexcept>
 
+/**
+ * \brief Partial derivatives namespace.
+ */
 namespace Discretize {
 
 using namespace Interpolator;

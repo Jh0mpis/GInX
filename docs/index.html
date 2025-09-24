@@ -77,6 +77,7 @@ $(function() {
 <p ><b>Keywords: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.</b></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Index</h1>
+<p >The following readme presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GeodesicIntegratorX/index.html">GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
 <ul>
 <li>Geodesics Integrator X<ul>
 <li>Photons Container</li>
@@ -96,9 +97,9 @@ Geodesics Integrator X</h1>
 <p >The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and running it on GPU. This thorn contains the following utilities:</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 Photons Container</h2>
-<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>), is defined. This class contains the method for compute the right hand side part for the Rung-Kutta method evolution.</p>
-<p >This also contains the <code><a class="el" href="Photons_8hxx.html">Photons.hxx</a></code> file that contains the definition of the struct used for the <a class="el" href="namespacePhotons.html">Photons</a> evolution.</p>
-<p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
+<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>), is defined. This class contains the method for compute the right hand side part for the Rung-Kutta method evolution.</p>
+<p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the <a class="el" href="namespacePhotons.html">Photons</a> evolution.</p>
+<p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions.">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
 <blockquote class="doxtable">
 <p >&zwj;[!NOTE] Contains the <code><a class="el" href="test_8cxx.html">test.cxx</a></code> file, this files contain an example of how to use the PhotonsContainer and its methods, can be used as an example in the future or has to be removed and included in the documentation. </p>
 </blockquote>
@@ -106,9 +107,9 @@ Photons Container</h2>
 Photons Solver Utilities</h2>
 <p >This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:</p>
 <ul>
-<li><code><a class="el" href="Discretizer_8hxx.html">Discretizer.hxx</a></code>: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.</li>
-<li><code><a class="el" href="Interpolator_8hxx.html">Interpolator.hxx</a></code>: This file contains different interpolators like barycentric interpolator.</li>
-<li><code><a class="el" href="Utilities_8hxx.html">Utilities.hxx</a></code>: This file contains different product of symmetric 3x3 matrices and vectors.</li>
+<li><code><a class="el" href="Discretizer_8hxx.html" title="First derivatives computations.">Discretizer.hxx</a></code>: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.</li>
+<li><code><a class="el" href="Interpolator_8hxx.html" title="Interpolators definitions.">Interpolator.hxx</a></code>: This file contains different interpolators like barycentric interpolator.</li>
+<li><code><a class="el" href="Utilities_8hxx.html" title="Code utilities such as matrix and vector multiplications.">Utilities.hxx</a></code>: This file contains different product of symmetric 3x3 matrices and vectors.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Files Structure</h1>

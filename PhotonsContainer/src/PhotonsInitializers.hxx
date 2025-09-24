@@ -1,5 +1,6 @@
 /**
- * @file PhotonsInitializer.hxx
+ * \file PhotonsInitializers.hxx
+ * \brief PhotonsContainer initialization functions.
  *
  * This File contains examples of how to create different initial conditions for
  * photons, imposing the initial conditions on the velocity.
@@ -26,7 +27,7 @@ namespace photons_init {
 using namespace Interpolator;
 
 /**
- * This function random initializes a custom number of particles on each grid
+ * \brief This function random initializes a custom number of particles on each grid
  * cell
  *
  * @param pc The particle container that is going to be initialized.
@@ -203,7 +204,7 @@ void random_photons_initializer(ParticleContainerClass &pc,
 } // random_photons_initializer
 
 /**
- * This function random initializes a custom number of particles on each
+ * \brief This function random initializes a custom number of particles on each
  * particle container.
  *
  * @param pc The particle container that is going to be initialized.

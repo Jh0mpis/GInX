@@ -78,37 +78,37 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="Utilities_8hxx.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifndef UTILITIES_HXX</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define UTILITIES_HXX</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;AMReX_REAL.H&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;AMReX_Scan.H&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;cctk_Types.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;cctk.h&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>AMREX_GPU_DEVICE AMREX_GPU_HOST</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">   29</a></span>    <a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(amrex::GpuArray&lt;CCTK_REAL, 6&gt; A,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>               amrex::GpuArray&lt;CCTK_REAL, 3&gt; V) {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; result = {</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      A[0] * V[0] + A[1] * V[1] + A[2] * V[2],</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      A[1] * V[0] + A[3] * V[1] + A[4] * V[2],</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      A[2] * V[0] + A[4] * V[1] + A[5] * V[2]};</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>} <span class="comment">// SMatVecMul</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>AMREX_GPU_DEVICE</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keyword">const</span> CCTK_REAL</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">   50</a></span><a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(amrex::GpuArray&lt;CCTK_REAL, 3&gt; U, amrex::GpuArray&lt;CCTK_REAL, 3&gt; V) {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keywordflow">return</span> U[0] * V[0] + U[1] * V[1] + U[2] * V[2];</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>} <span class="comment">// SMatVecMul</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#endif </span><span class="comment">// !UTILITIES_HXX</span></div>
-<div class="ttc" id="aUtilities_8hxx_html_a9422f8c771699b58ed5467ed1c64c378"><div class="ttname"><a href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL VecVecMul(amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:50</div></div>
-<div class="ttc" id="aUtilities_8hxx_html_aacdff6aa83092d12a265d0d1b8f92e70"><div class="ttname"><a href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul(amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:29</div></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#ifndef UTILITIES_HXX</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#define UTILITIES_HXX</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;AMReX_REAL.H&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;AMReX_Scan.H&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;cctk_Types.h&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;cctk.h&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>AMREX_GPU_DEVICE AMREX_GPU_HOST</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">   30</a></span>    <a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(amrex::GpuArray&lt;CCTK_REAL, 6&gt; A,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>               amrex::GpuArray&lt;CCTK_REAL, 3&gt; V) {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; result = {</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      A[0] * V[0] + A[1] * V[1] + A[2] * V[2],</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      A[1] * V[0] + A[3] * V[1] + A[4] * V[2],</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      A[2] * V[0] + A[4] * V[1] + A[5] * V[2]};</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>} <span class="comment">// SMatVecMul</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>AMREX_GPU_DEVICE</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keyword">const</span> CCTK_REAL</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">   51</a></span><a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(amrex::GpuArray&lt;CCTK_REAL, 3&gt; U, amrex::GpuArray&lt;CCTK_REAL, 3&gt; V) {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keywordflow">return</span> U[0] * V[0] + U[1] * V[1] + U[2] * V[2];</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>} <span class="comment">// SMatVecMul</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="preprocessor">#endif </span><span class="comment">// !UTILITIES_HXX</span></div>
+<div class="ttc" id="aUtilities_8hxx_html_a9422f8c771699b58ed5467ed1c64c378"><div class="ttname"><a href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL VecVecMul(amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:51</div></div>
+<div class="ttc" id="aUtilities_8hxx_html_aacdff6aa83092d12a265d0d1b8f92e70"><div class="ttname"><a href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul(amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:30</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

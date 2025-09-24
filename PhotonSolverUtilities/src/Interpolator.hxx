@@ -1,5 +1,6 @@
 /**
- * @file Interpolator.hxx
+ * \file Interpolator.hxx
+ * \brief Interpolators definitions.
  *
  * This file define the Barycentric interpolation in 1 and 3 dimensions.
  */
@@ -18,6 +19,9 @@
 #include <cctk.h>
 #include <iostream>
 
+/**
+ * \brief Interpolators namespace. 
+ */
 namespace Interpolator {
 
 // #############################################################################

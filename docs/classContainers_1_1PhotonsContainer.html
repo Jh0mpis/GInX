@@ -82,6 +82,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="classContainers_1_1PhotonsContainer.html" title="PhotonsContainer class definition.">PhotonsContainer</a> class definition.  
+ <a href="classContainers_1_1PhotonsContainer.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="PhotonsContainer_8hxx_source.html">PhotonsContainer.hxx</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Containers::PhotonsContainer&lt; StructType &gt;:</div>
@@ -90,7 +93,7 @@ $(function() {
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classContainers_1_1PhotonsContainer__inherit__graph.png" border="0" usemap="#aContainers_1_1PhotonsContainer_3_01StructType_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="aContainers_1_1PhotonsContainer_3_01StructType_01_4_inherit__map" id="aContainers_1_1PhotonsContainer_3_01StructType_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="15,109,230,151"/>
+<area shape="rect" title="PhotonsContainer class definition." alt="" coords="15,109,230,151"/>
 <area shape="rect" title=" " alt="" coords="5,5,240,61"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -101,7 +104,7 @@ $(function() {
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classContainers_1_1PhotonsContainer__coll__graph.png" border="0" usemap="#aContainers_1_1PhotonsContainer_3_01StructType_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="aContainers_1_1PhotonsContainer_3_01StructType_01_4_coll__map" id="aContainers_1_1PhotonsContainer_3_01StructType_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="15,109,230,151"/>
+<area shape="rect" title="PhotonsContainer class definition." alt="" coords="15,109,230,151"/>
 <area shape="rect" title=" " alt="" coords="5,5,240,61"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
@@ -109,6 +112,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aa0463738f45c8445189d89505fcfaab6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#aa0463738f45c8445189d89505fcfaab6">Base</a> = BaseParticleContainer&lt; <a class="el" href="classContainers_1_1PhotonsContainer.html">PhotonsContainer</a>&lt; StructType &gt;, StructType &gt;</td></tr>
+<tr class="memdesc:aa0463738f45c8445189d89505fcfaab6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using BaseParticlesContainer constructor.  <a href="classContainers_1_1PhotonsContainer.html#aa0463738f45c8445189d89505fcfaab6">More...</a><br /></td></tr>
 <tr class="separator:aa0463738f45c8445189d89505fcfaab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -116,19 +120,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a92f836869a3714cf17214dc895332813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a92f836869a3714cf17214dc895332813">evolve</a> () override</td></tr>
 <tr class="separator:a92f836869a3714cf17214dc895332813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">evolveRK2</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)</td></tr>
+<tr class="memdesc:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 2.  <a href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">More...</a><br /></td></tr>
 <tr class="separator:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c5a6dad12d9c2263061108557460425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a1c5a6dad12d9c2263061108557460425">evolveRK4</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)</td></tr>
+<tr class="memdesc:a1c5a6dad12d9c2263061108557460425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 4.  <a href="classContainers_1_1PhotonsContainer.html#a1c5a6dad12d9c2263061108557460425">More...</a><br /></td></tr>
 <tr class="separator:a1c5a6dad12d9c2263061108557460425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memItemLeft" align="right" valign="top">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:ac82e8ecf5f20496c96089f5ccc13759b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">More...</a><br /></td></tr>
 <tr class="separator:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad484c06bb6f48a0a5e76e8124727b635"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635">check_velocity</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const int &amp;lev)</td></tr>
+<tr class="memdesc:ad484c06bb6f48a0a5e76e8124727b635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635">More...</a><br /></td></tr>
 <tr class="separator:ad484c06bb6f48a0a5e76e8124727b635"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebba2fa6ea568b7cce9b46af5976d650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a> ()</td></tr>
 <tr class="separator:aebba2fa6ea568b7cce9b46af5976d650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename StructType&gt;<br />
-class Containers::PhotonsContainer&lt; StructType &gt;</div><p ><a class="el" href="classContainers_1_1PhotonsContainer.html">PhotonsContainer</a> class definition.</p>
+class Containers::PhotonsContainer&lt; StructType &gt;</div><p ><a class="el" href="classContainers_1_1PhotonsContainer.html" title="PhotonsContainer class definition.">PhotonsContainer</a> class definition. </p>
 <p >The following class define the needed functions to evolve the position and velocity of the photons in the simmulation. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aa0463738f45c8445189d89505fcfaab6" name="aa0463738f45c8445189d89505fcfaab6"></a>
@@ -144,7 +152,8 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Using BaseParticlesContainer constructor </p>
+
+<p>Using BaseParticlesContainer constructor. </p>
 
 </div>
 </div>
@@ -182,7 +191,8 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Computes and print all photons velocities.</p>
+
+<p>Computes and print all photons velocities. </p>
 <p >This function is for checking the photons velocities and distance between 1.0 and v^2.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -269,6 +279,8 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Computes the right hind side of the geodesic differential equation. </p>
 <p >Given differential equation </p><p class="formulaDsp">
 \[\frac{d}{dt}U = f\left(U, \frac{dU}{dx};
 t\right)\]
@@ -387,14 +399,15 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Evolving using Runge-Kutta 2.</p>
+
+<p>Evolving using Runge-Kutta 2. </p>
 <p >For the Runge-Kutta 2 we are solving the differential equation \(\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\) using:</p>
 <p class="formulaDsp">
 \[U_{n+1} = U_n + \Delta t f\left(U_n + \frac{1}{2}\Delta t f(U_n, t), t +
 \frac{1}{2} \Delta t\right)\]
 </p>
 <p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
@@ -460,7 +473,8 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Evolving using Runge-Kutta 4.</p>
+
+<p>Evolving using Runge-Kutta 4. </p>
 <p >For the Runge-Kutta 4 we are solving the differential equation \(\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\) using:</p>
 <p class="formulaDsp">
 \[
@@ -477,7 +491,7 @@ t}{2}\right),\)</li>
 <li>\(f_4 = f(U_n + \Delta t f_3, t + \Delta t),\)</li>
 </ul>
 <p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>

@@ -1,5 +1,6 @@
 /**
- * @file Utilities.hxx
+ * \file Utilities.hxx
+ * \brief Code utilities such as matrix and vector multiplications.
  *
  * This file contains the definition of some functions that could be helpful at
  * the developing stage.
