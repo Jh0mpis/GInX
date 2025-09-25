@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vector_5fbarycentric_5fderivative_0',['vector_barycentric_derivative',['../namespaceDiscretize.html#a287cc23d28bf219d4bdb1c3ecb147b31',1,'Discretize']]],
-  ['vecvecmul_1',['VecVecMul',['../Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378',1,'Utilities.hxx']]]
+  ['test_0',['test',['../test_8cxx.html#ac6b8d634d3b676079a5427278a6af968',1,'test.cxx']]],
+  ['test_5fsetup_1',['test_setup',['../test_8cxx.html#afa092afc357722f7210654bb867a8bff',1,'test.cxx']]]
 ];

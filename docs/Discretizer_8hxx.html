@@ -118,18 +118,6 @@ $(function() {
 <area shape="rect" title=" " alt="" coords="597,169,718,196"/>
 </map>
 </div>
-</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="Discretizer_8hxx__dep__incl.png" border="0" usemap="#aPhotonSolverUtilities_2src_2Discretizer_8hxxdep" alt=""/></div>
-<map name="aPhotonSolverUtilities_2src_2Discretizer_8hxxdep" id="aPhotonSolverUtilities_2src_2Discretizer_8hxxdep">
-<area shape="rect" title="First derivatives computations." alt="" coords="10,5,169,47"/>
-<area shape="rect" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition." alt="" coords="5,95,173,136"/>
-<area shape="rect" href="test_8cxx.html" title=" " alt="" coords="9,184,169,225"/>
-</map>
-</div>
 </div>
 <p><a href="Discretizer_8hxx_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -141,15 +129,15 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a70e8b830d4ba5cba8fc09e8bb1173a98"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER, int DERIVATIVE_ORDER&gt; </td></tr>
-<tr class="memitem:a70e8b830d4ba5cba8fc09e8bb1173a98"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#a70e8b830d4ba5cba8fc09e8bb1173a98">Discretize::scalar_barycentric_derivative</a> (amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
-<tr class="separator:a70e8b830d4ba5cba8fc09e8bb1173a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287cc23d28bf219d4bdb1c3ecb147b31"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER, int DERIVATIVE_ORDER&gt; </td></tr>
-<tr class="memitem:a287cc23d28bf219d4bdb1c3ecb147b31"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#a287cc23d28bf219d4bdb1c3ecb147b31">Discretize::vector_barycentric_derivative</a> (amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 3 &gt;, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
-<tr class="separator:a287cc23d28bf219d4bdb1c3ecb147b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a578da66dd5685dcbf3dc36bbc81374b6"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER, int DERIVATIVE_ORDER&gt; </td></tr>
-<tr class="memitem:a578da66dd5685dcbf3dc36bbc81374b6"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#a578da66dd5685dcbf3dc36bbc81374b6">Discretize::smatrix_barycentric_derivative</a> (amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 6 &gt;, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
-<tr class="separator:a578da66dd5685dcbf3dc36bbc81374b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533e3a331d148c8ff03b99b6e798c8b1"><td class="memTemplParams" colspan="2">template&lt;int DERIVATIVE_ORDER&gt; </td></tr>
+<tr class="memitem:a533e3a331d148c8ff03b99b6e798c8b1"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#a533e3a331d148c8ff03b99b6e798c8b1">Discretize::scalar_barycentric_derivative</a> (amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="separator:a533e3a331d148c8ff03b99b6e798c8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af39bd7addf153682044a6f0438554091"><td class="memTemplParams" colspan="2">template&lt;int DERIVATIVE_ORDER&gt; </td></tr>
+<tr class="memitem:af39bd7addf153682044a6f0438554091"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#af39bd7addf153682044a6f0438554091">Discretize::vector_barycentric_derivative</a> (amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 3 &gt;, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="separator:af39bd7addf153682044a6f0438554091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac15f6204c5f9ce47114f0d33ad4fbe6c"><td class="memTemplParams" colspan="2">template&lt;int DERIVATIVE_ORDER&gt; </td></tr>
+<tr class="memitem:ac15f6204c5f9ce47114f0d33ad4fbe6c"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceDiscretize.html#ac15f6204c5f9ce47114f0d33ad4fbe6c">Discretize::smatrix_barycentric_derivative</a> (amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 6 &gt;, 3 &gt; &amp;df, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="separator:ac15f6204c5f9ce47114f0d33ad4fbe6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >First derivatives computations. </p>

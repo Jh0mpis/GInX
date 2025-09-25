@@ -122,11 +122,11 @@ $(function() {
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Interpolator_8hxx__dep__incl.png" border="0" usemap="#aPhotonSolverUtilities_2src_2Interpolator_8hxxdep" alt=""/></div>
 <map name="aPhotonSolverUtilities_2src_2Interpolator_8hxxdep" id="aPhotonSolverUtilities_2src_2Interpolator_8hxxdep">
-<area shape="rect" title="Interpolators definitions." alt="" coords="127,5,286,47"/>
-<area shape="rect" href="Discretizer_8hxx.html" title="First derivatives computations." alt="" coords="10,95,169,136"/>
-<area shape="rect" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition." alt="" coords="5,184,173,225"/>
-<area shape="rect" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions." alt="" coords="198,184,373,225"/>
-<area shape="rect" href="test_8cxx.html" title=" " alt="" coords="107,273,267,315"/>
+<area shape="rect" title="Interpolators definitions." alt="" coords="193,5,352,47"/>
+<area shape="rect" href="Discretizer_8hxx.html" title="First derivatives computations." alt="" coords="5,95,164,136"/>
+<area shape="rect" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition." alt="" coords="189,95,357,136"/>
+<area shape="rect" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions." alt="" coords="381,95,556,136"/>
+<area shape="rect" href="test_8cxx.html" title=" " alt="" coords="290,184,450,225"/>
 </map>
 </div>
 </div>
@@ -142,13 +142,24 @@ Namespaces</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a299afacbe942e5dc09223426e068d17d"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
 <tr class="memitem:a299afacbe942e5dc09223426e068d17d"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a299afacbe942e5dc09223426e068d17d">Interpolator::barycentric_cubic_1d</a> (const int(&amp;points)[N+1], const CCTK_REAL(&amp;weights)[N+1], const CCTK_REAL(&amp;values)[N+1], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
+<tr class="memdesc:a299afacbe942e5dc09223426e068d17d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in one direction.  <a href="namespaceInterpolator.html#a299afacbe942e5dc09223426e068d17d">More...</a><br /></td></tr>
 <tr class="separator:a299afacbe942e5dc09223426e068d17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad2c111a5cf92c7187ae74b45e1b7eb7"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:aad2c111a5cf92c7187ae74b45e1b7eb7"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">Interpolator::barycentric_cubic_3d</a> (amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
+<tr class="memdesc:aad2c111a5cf92c7187ae74b45e1b7eb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction.  <a href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">More...</a><br /></td></tr>
 <tr class="separator:aad2c111a5cf92c7187ae74b45e1b7eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57dd50cb38cbed0e89572d09b4a818e1"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:a57dd50cb38cbed0e89572d09b4a818e1"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1">Interpolator::barycentric_cubic_3d</a> (amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a57dd50cb38cbed0e89572d09b4a818e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction for a scalar function.  <a href="namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1">More...</a><br /></td></tr>
 <tr class="separator:a57dd50cb38cbed0e89572d09b4a818e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1333a1b2448b73fbaf400c98440b2552"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:a1333a1b2448b73fbaf400c98440b2552"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a1333a1b2448b73fbaf400c98440b2552">Interpolator::der_barycentric_cubic_1d</a> (CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x, const int(&amp;points)[N+1], const CCTK_REAL(&amp;weights)[N+1], const CCTK_REAL(&amp;values)[N+1], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
+<tr class="memdesc:a1333a1b2448b73fbaf400c98440b2552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation and its derivative in one direction.  <a href="namespaceInterpolator.html#a1333a1b2448b73fbaf400c98440b2552">More...</a><br /></td></tr>
+<tr class="separator:a1333a1b2448b73fbaf400c98440b2552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ff5bdc82f32db47fab2fefa1b626a93"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:a3ff5bdc82f32db47fab2fefa1b626a93"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">Interpolator::barycentric_derivative_and_interpolate</a> (CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1, CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
+<tr class="memdesc:a3ff5bdc82f32db47fab2fefa1b626a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation and its derivatives in three directions.  <a href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">More...</a><br /></td></tr>
+<tr class="separator:a3ff5bdc82f32db47fab2fefa1b626a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Interpolators definitions. </p>
