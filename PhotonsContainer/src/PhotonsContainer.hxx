@@ -17,7 +17,6 @@
 #include "AMReX_Array.H"
 #include "AMReX_GpuLaunchFunctsC.H"
 #include "BaseParticleContainer.hxx"
-#include "Discretizer.hxx"
 #include "Interpolator.hxx"
 #include "Utilities.hxx"
 #include "cctk_Types.h"
@@ -32,6 +31,7 @@
 #include <cctk_Parameters.h>
 #include <cmath>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -43,7 +43,6 @@ namespace Containers {
 
 using namespace BaseContainer;
 using namespace Interpolator;
-using namespace Discretize;
 
 /**
  * \brief PhotonsContainer class definition.
@@ -158,29 +157,49 @@ PhotonsContainer<StructType>::compute_rhs(
   const int k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
 
   // Interpolate lapse
-  const CCTK_REAL lapse_x =
-      barycentric_cubic_3d<3>(lapse, i0, j0, k0, u[0], u[1], u[2], dx, plo);
+  CCTK_REAL lapse_x;
+  // Interpolate partial lapse
+  amrex::GpuArray<CCTK_REAL, 3> d_lapse_x;
+  barycentric_derivative_and_interpolate<3>(lapse_x, d_lapse_x[0], d_lapse_x[1],
+                                            d_lapse_x[2], lapse, i0, j0, k0,
+                                            u[0], u[1], u[2], dx, plo, 0);
 
   // Interpolate shift
-  const amrex::GpuArray<CCTK_REAL, 3> shift_x = {
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 0),
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 1),
-      barycentric_cubic_3d<3>(shift, i0, j0, k0, u[0], u[1], u[2], dx, plo, 2)};
+  // Interpolate partial shift
+  amrex::GpuArray<CCTK_REAL, 3> shift_x;
+  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
+  barycentric_derivative_and_interpolate<3>(
+      shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 0);
+  barycentric_derivative_and_interpolate<3>(
+      shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 1);
+  barycentric_derivative_and_interpolate<3>(
+      shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 2);
 
   // Interpolate metric
-  const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              0), // g_11
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              1), // g_12 & g_21
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              2), // g_13 & g_31
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              3), // g_22
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              4), // g_23, g_32
-      barycentric_cubic_3d<3>(metric, i0, j0, k0, u[0], u[1], u[2], dx, plo,
-                              5)}; // g_33
+  amrex::GpuArray<CCTK_REAL, 6> gamma_x;
+  // Interpolate partial metric
+  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 0);
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 1);
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 2);
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 3);
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 4);
+  barycentric_derivative_and_interpolate<3>(
+      gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,
+      j0, k0, u[0], u[1], u[2], dx, plo, 5);
 
   // Interpolate Curvature
   const amrex::GpuArray<CCTK_REAL, 6> curv_x = {
@@ -196,21 +215,6 @@ PhotonsContainer<StructType>::compute_rhs(
                               4), // K_23, K_32
       barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               5)}; // K_33
-
-  // Interpolate partial lapse
-  amrex::GpuArray<CCTK_REAL, 3> d_lapse_x; //= {0, 0, 0};
-  scalar_barycentric_derivative<3, 2>(d_lapse_x, lapse, i0, j0, k0, u[0], u[1],
-                                      u[2], dx, plo);
-
-  // Interpolate partial shift
-  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
-  vector_barycentric_derivative<3, 2>(d_shift_x, shift, i0, j0, k0, u[0], u[1],
-                                      u[2], dx, plo);
-
-  // Interpolate partial metric
-  amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
-  smatrix_barycentric_derivative<3, 2>(d_gamma_x, metric, i0, j0, k0, u[0],
-                                       u[1], u[2], dx, plo);
 
   // Compute the inverse of the metric.
   const CCTK_REAL inv_det_gamma =
@@ -545,7 +549,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
   this->Redistribute();
 } // PhotonsContainer::evolveRK4
 
-/** 
+/**
  * \brief Computes and print all photons velocities.
  *
  * This function is for checking the photons velocities and distance between 1.0

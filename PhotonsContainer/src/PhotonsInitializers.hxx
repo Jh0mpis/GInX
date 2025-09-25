@@ -27,8 +27,8 @@ namespace photons_init {
 using namespace Interpolator;
 
 /**
- * \brief This function random initializes a custom number of particles on each grid
- * cell
+ * \brief This function random initializes a custom number of particles on each
+ * grid cell
  *
  * @param pc The particle container that is going to be initialized.
  * @param number_of_particles_per_cell The number of particles contained on each
@@ -305,6 +305,17 @@ void random_photons_per_container_initializer(
                                   4), // g_23, g_32
           barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
+
+      // auto R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
+      //                    p.pos(2) * p.pos(2));
+      //
+      // const auto psi = 1.0 + 2.0 / (4.0 * R);
+      // const auto psi_2 = psi * psi;
+      // const auto psi_4 = psi_2 * psi_2;
+      //
+      // std::cout << gamma_x[0] - psi_4 << "\t" << gamma_x[3] - psi_4 << "\t"
+      //           << gamma_x[5] - psi_4 << "\t" << gamma_x[1] - 0.0 << "\t"
+      //           << gamma_x[2] - 0.0 << "\t" << gamma_x[4] - 0.0 << "\n";
 
       const CCTK_REAL inv_det_gamma =
           1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
