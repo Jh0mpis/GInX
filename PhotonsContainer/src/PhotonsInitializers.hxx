@@ -140,22 +140,22 @@ void random_photons_initializer(ParticleContainerClass &pc,
 
         // Interpolate metric
         const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo,
                                     0), // g_11
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo,
                                     1), // g_12 & g_21
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo,
                                     2), // g_13 & g_31
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo,
                                     3), // g_22
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo,
                                     4), // g_23, g_32
-            barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0),
+            barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0),
                                     p.pos(1), p.pos(2), dx, p_lo, 5)}; // g_33
 
         const CCTK_REAL inv_det_gamma =
@@ -288,22 +288,22 @@ void random_photons_per_container_initializer(
 
       // Interpolate metric
       const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   0), // g_11
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   1), // g_12 & g_21
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   2), // g_13 & g_31
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   3), // g_22
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   4), // g_23, g_32
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
 
       // auto R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +

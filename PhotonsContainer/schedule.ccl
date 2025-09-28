@@ -31,6 +31,14 @@ if ((particle_plot_every>0)||(particle_tsv_every>0) ){
     } "print the particles"
 }
 
+if ((particle_plot_every||particle_tsv_every) ) {
+    SCHEDULE check_velocities AT CCTK_POSTINITIAL AFTER test_setup
+    {
+        LANG: C
+        OPTIONS: global
+    } "Checking the velocities"
+}
+
 SCHEDULE test AT evol
 {
     LANG: C
@@ -50,5 +58,5 @@ if ((particle_plot_every||particle_tsv_every) ) {
     {
         LANG: C
         OPTIONS: global
-    } "print the particles"
+    } "Checking the velocities"
 }

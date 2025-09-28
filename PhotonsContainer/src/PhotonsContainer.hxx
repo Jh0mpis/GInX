@@ -160,7 +160,7 @@ PhotonsContainer<StructType>::compute_rhs(
   CCTK_REAL lapse_x;
   // Interpolate partial lapse
   amrex::GpuArray<CCTK_REAL, 3> d_lapse_x;
-  barycentric_derivative_and_interpolate<3>(lapse_x, d_lapse_x[0], d_lapse_x[1],
+  barycentric_derivative_and_interpolate<4>(lapse_x, d_lapse_x[0], d_lapse_x[1],
                                             d_lapse_x[2], lapse, i0, j0, k0,
                                             u[0], u[1], u[2], dx, plo, 0);
 
@@ -168,13 +168,13 @@ PhotonsContainer<StructType>::compute_rhs(
   // Interpolate partial shift
   amrex::GpuArray<CCTK_REAL, 3> shift_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 2);
 
@@ -182,38 +182,38 @@ PhotonsContainer<StructType>::compute_rhs(
   amrex::GpuArray<CCTK_REAL, 6> gamma_x;
   // Interpolate partial metric
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 2);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 3);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 4);
-  barycentric_derivative_and_interpolate<3>(
+  barycentric_derivative_and_interpolate<4>(
       gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 5);
 
   // Interpolate Curvature
   const amrex::GpuArray<CCTK_REAL, 6> curv_x = {
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               0), // K_11
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               1), // K_12 & g_21
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               2), // K_13 & K_31
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               3), // K_22
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               4), // K_23, K_32
-      barycentric_cubic_3d<3>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               5)}; // K_33
 
   // Compute the inverse of the metric.
@@ -258,6 +258,119 @@ PhotonsContainer<StructType>::compute_rhs(
         0.5 * lapse_x * VecVecMul(SMatVecMul(d_gamma_x[i], V_up), V_up) +
         VecVecMul(V_down, d_shift_x[i]);
   }
+
+  // auto R = std::sqrt(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]);
+  // const auto psi = 1.0 + 2.0 / (4.0 * R);
+  // const auto psi_2 = psi * psi;
+  // const auto psi_4 = psi_2 * psi_2;
+  // const amrex::GpuArray<CCTK_REAL, 6> real_gamma_x = {psi_4, 0.0, 0.0,
+  //                                                     psi_4, 0.0, psi_4};
+  // const amrex::GpuArray<CCTK_REAL, 6> real_gamma_inv_x = {
+  //     1.0 / psi_4, 0.0, 0.0, 1.0 / psi_4, 0.0, 1.0 / psi_4};
+  //
+  // const CCTK_REAL dx_psi_4 = -u[0] * (2. * R + 1) * (2. * R + 1) *
+  //                            (2. * R + 1) / (4.0 * R * R * R * R * R * R);
+  // const CCTK_REAL dy_psi_4 = -u[1] * (2. * R + 1) * (2. * R + 1) *
+  //                            (2. * R + 1) / (4.0 * R * R * R * R * R * R);
+  // const CCTK_REAL dz_psi_4 = -u[2] * (2. * R + 1) * (2. * R + 1) *
+  //                            (2. * R + 1) / (4.0 * R * R * R * R * R * R);
+  // const amrex::GpuArray<CCTK_REAL, 6> real_dx_gamma = {dx_psi_4, 0, 0,
+  //                                                      dx_psi_4, 0,
+  //                                                      dx_psi_4};
+  // const amrex::GpuArray<CCTK_REAL, 6> real_dy_gamma = {dy_psi_4, 0, 0,
+  //                                                      dy_psi_4, 0,
+  //                                                      dy_psi_4};
+  // const amrex::GpuArray<CCTK_REAL, 6> real_dz_gamma = {dz_psi_4, 0, 0,
+  //                                                      dz_psi_4, 0,
+  //                                                      dz_psi_4};
+  //
+  // const CCTK_REAL real_lapse = (1.0 - 2.0 / (4. * R)) / (1.0 + 2.0 / (4. *
+  // R)); const CCTK_REAL real_dx_lapse =
+  //     4. * u[0] / (R * (2. * R + 1.) * (2. * R + 1.));
+  // const CCTK_REAL real_dy_lapse =
+  //     4. * u[1] / (R * (2. * R + 1.) * (2. * R + 1.));
+  // const CCTK_REAL real_dz_lapse =
+  //     4. * u[2] / (R * (2. * R + 1.) * (2. * R + 1.));
+  //
+  // const amrex::GpuArray<CCTK_REAL, 3> real_V_up = {
+  //     real_gamma_inv_x[0] * V_down[0] + real_gamma_inv_x[1] * V_down[1] +
+  //         real_gamma_inv_x[2] * V_down[2],
+  //     real_gamma_inv_x[1] * V_down[0] + real_gamma_inv_x[3] * V_down[1] +
+  //         real_gamma_inv_x[4] * V_down[2],
+  //     real_gamma_inv_x[2] * V_down[0] + real_gamma_inv_x[4] * V_down[1] +
+  //         real_gamma_inv_x[5] * V_down[2]};
+  //
+  // auto term_1 = d_lapse_x[0];
+  // auto term_2_1 = VecVecMul(d_lapse_x, V_up);
+  // auto real_term_2_1 =
+  //     (real_gamma_inv_x[0] * u[3] + real_gamma_inv_x[1] * u[4] +
+  //      real_gamma_inv_x[2] * u[5]) *
+  //         real_dx_lapse +
+  //     (real_gamma_inv_x[1] * u[3] + real_gamma_inv_x[3] * u[4] +
+  //      real_gamma_inv_x[4] * u[5]) *
+  //         real_dy_lapse +
+  //     (real_gamma_inv_x[2] * u[3] + real_gamma_inv_x[4] * u[4] +
+  //      real_gamma_inv_x[5] * u[5]) *
+  //         real_dz_lapse;
+  // auto term_2_2 = lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up);
+  // auto term_3 = lapse_x * VecVecMul(SMatVecMul(d_gamma_x[0], V_up), V_up);
+  // auto real_term_3 = (real_V_up[0] * real_V_up[0] * real_dx_gamma[0] +
+  //                     real_V_up[1] * real_V_up[0] * real_dx_gamma[1] +
+  //                     real_V_up[2] * real_V_up[0] * real_dx_gamma[2]) +
+  //                    (real_V_up[0] * real_V_up[1] * real_dx_gamma[1] +
+  //                     real_V_up[1] * real_V_up[1] * real_dx_gamma[3] +
+  //                     real_V_up[2] * real_V_up[1] * real_dx_gamma[4]) +
+  //                    (real_V_up[0] * real_V_up[2] * real_dx_gamma[2] +
+  //                     real_V_up[1] * real_V_up[2] * real_dx_gamma[4] +
+  //                     real_V_up[2] * real_V_up[2] * real_dx_gamma[5]);
+  // auto term_4 = VecVecMul(V_down, d_shift_x[0]);
+  //
+  // std::cout << 0 << "\t" << term_1 - real_dx_lapse << "\t"
+  //           << term_2_1 - real_term_2_1 << "\t" << term_2_2 << "\t"
+  //           << term_3 - real_lapse * real_term_3 << "\t" << term_4 << "\t"
+  //           << rhs[3] - (-real_dx_lapse + (real_term_2_1)*u[3] +
+  //                        0.5 * real_lapse * real_term_3)
+  //           << "\n";
+  //
+  // term_1 = d_lapse_x[1] - real_dy_lapse;
+  // term_2_1 = VecVecMul(d_lapse_x, V_up) -
+  //            (real_dx_lapse * real_V_up[0] + real_dy_lapse * real_V_up[1] +
+  //             real_dz_lapse * real_V_up[2]);
+  // term_2_2 = lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up);
+  // term_3 = lapse_x * VecVecMul(SMatVecMul(d_gamma_x[1], V_up), V_up) -
+  //          real_lapse * (real_V_up[0] * (real_dy_gamma[0] * real_V_up[0] +
+  //                                        real_dy_gamma[1] * real_V_up[1] +
+  //                                        real_dy_gamma[2] * real_V_up[2]) +
+  //                        real_V_up[1] * (real_dy_gamma[1] * real_V_up[0] +
+  //                                        real_dy_gamma[3] * real_V_up[1] +
+  //                                        real_dy_gamma[4] * real_V_up[2]) +
+  //                        real_V_up[2] * (real_dy_gamma[2] * real_V_up[0] +
+  //                                        real_dy_gamma[4] * real_V_up[1] +
+  //                                        real_dy_gamma[5] * real_V_up[2]));
+  // term_4 = VecVecMul(V_down, d_shift_x[1]);
+  //
+  // std::cout << 1 << "\t" << term_1 << "\t" << term_2_1 << "\t" << term_2_2
+  //           << "\t" << term_3 << "\t" << term_4 << "\n";
+  //
+  // term_1 = d_lapse_x[2] - real_dz_lapse;
+  // term_2_1 = VecVecMul(d_lapse_x, V_up) -
+  //            (real_dx_lapse * real_V_up[0] + real_dy_lapse * real_V_up[1] +
+  //             real_dz_lapse * real_V_up[2]);
+  // term_2_2 = lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up);
+  // term_3 = lapse_x * VecVecMul(SMatVecMul(d_gamma_x[2], V_up), V_up) -
+  //          real_lapse * (real_V_up[0] * (real_dz_gamma[0] * real_V_up[0] +
+  //                                        real_dz_gamma[1] * real_V_up[1] +
+  //                                        real_dz_gamma[2] * real_V_up[2]) +
+  //                        real_V_up[1] * (real_dz_gamma[1] * real_V_up[0] +
+  //                                        real_dz_gamma[3] * real_V_up[1] +
+  //                                        real_dz_gamma[4] * real_V_up[2]) +
+  //                        real_V_up[2] * (real_dz_gamma[2] * real_V_up[0] +
+  //                                        real_dz_gamma[4] * real_V_up[1] +
+  //                                        real_dz_gamma[5] * real_V_up[2]));
+  // term_4 = VecVecMul(V_down, d_shift_x[2]);
+  //
+  // std::cout << 2 << "\t" << term_1 << "\t" << term_2_1 << "\t" << term_2_2
+  //           << "\t" << term_3 << "\t" << term_4 << "\n";
 
   // Compute the rhs for energy
   rhs[3 + StructType::E] = 0;
@@ -438,100 +551,109 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
     auto const curv_array = curv.array(pti);
 
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
-      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
+      const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
           particles[i].pos(0),        particles[i].pos(1),
           particles[i].pos(2),        attribs[StructType::vx][i],
           attribs[StructType::vy][i], attribs[StructType::vz][i],
           attribs[StructType::E][i]};
 
+      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
+      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
+
       // f1 = rhs(u , t) for the runge kutta 4 step
-      auto rhs_1 =
+      auto k_odd =
           this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
-                            curv_array, dt, dx, lev, plo);
+                            curv_array, dt, dx, lev, plo0);
 
-      U[0] += 0.5 * dt * rhs_1[0];
-      U[1] += 0.5 * dt * rhs_1[1];
-      U[2] += 0.5 * dt * rhs_1[2];
-      U[3] += 0.5 * dt * rhs_1[3];
-      U[4] += 0.5 * dt * rhs_1[4];
-      U[5] += 0.5 * dt * rhs_1[5];
-      U[6] += 0.5 * dt * rhs_1[6];
+      U_tmp[0] = U[0] + 0.5 * dt * k_odd[0];
+      U_tmp[1] = U[1] + 0.5 * dt * k_odd[1];
+      U_tmp[2] = U[2] + 0.5 * dt * k_odd[2];
+      U_tmp[3] = U[3] + 0.5 * dt * k_odd[3];
+      U_tmp[4] = U[4] + 0.5 * dt * k_odd[4];
+      U_tmp[5] = U[5] + 0.5 * dt * k_odd[5];
+      U_tmp[6] = U[6] + 0.5 * dt * k_odd[6];
 
-      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
-          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
-          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+      if (U_tmp[0] > (phi0[0] - 0.5 * dx[0]) ||
+          U_tmp[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U_tmp[1] > (phi0[1] - 0.5 * dx[1]) ||
+          U_tmp[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U_tmp[2] > (phi0[2] - 0.5 * dx[2]) ||
+          U_tmp[2] < (plo0[2] + 0.5 * dx[2])) {
         particles[i].id() = -1;
         return;
       }
 
       // f2 = rhs(u + 0.5 * dt * f1, t) for the runge kutta 4 step
-      auto rhs_2 =
-          this->compute_rhs(U, 0.0 + 0.5 * dt, lapse_array, shift_array,
-                            metric_array, curv_array, dt, dx, lev, plo);
+      auto k_even =
+          this->compute_rhs(U_tmp, 0.5 * dt, lapse_array, shift_array,
+                            metric_array, curv_array, dt, dx, lev, plo0);
 
       // Update particles with the f1 and f2 from RK4
-      particles[i].pos(0) += (1. / 6.) * dt * (rhs_1[0] + 2. * rhs_2[0]);
-      particles[i].pos(1) += (1. / 6.) * dt * (rhs_1[1] + 2. * rhs_2[1]);
-      particles[i].pos(2) += (1. / 6.) * dt * (rhs_1[2] + 2. * rhs_2[2]);
-      vels_x[i] += (1. / 6.) * dt * (rhs_1[3] + 2. * rhs_2[3]);
-      vels_y[i] += (1. / 6.) * dt * (rhs_1[4] + 2. * rhs_2[4]);
-      vels_z[i] += (1. / 6.) * dt * (rhs_1[5] + 2. * rhs_2[5]);
+      U_tmp[0] = U[0] + 0.5 * dt * k_even[0];
+      U_tmp[1] = U[1] + 0.5 * dt * k_even[1];
+      U_tmp[2] = U[2] + 0.5 * dt * k_even[2];
+      U_tmp[3] = U[3] + 0.5 * dt * k_even[3];
+      U_tmp[4] = U[4] + 0.5 * dt * k_even[4];
+      U_tmp[5] = U[5] + 0.5 * dt * k_even[5];
+      U_tmp[6] = U[6] + 0.5 * dt * k_even[6];
 
-      U[0] += 0.5 * dt * rhs_2[0];
-      U[1] += 0.5 * dt * rhs_2[1];
-      U[2] += 0.5 * dt * rhs_2[2];
-      U[3] += 0.5 * dt * rhs_2[3];
-      U[4] += 0.5 * dt * rhs_2[4];
-      U[5] += 0.5 * dt * rhs_2[5];
-      U[6] += 0.5 * dt * rhs_2[6];
+      partial_sum[0] = k_odd[0] + 2. * k_even[0];
+      partial_sum[1] = k_odd[1] + 2. * k_even[1];
+      partial_sum[2] = k_odd[2] + 2. * k_even[2];
+      partial_sum[3] = k_odd[3] + 2. * k_even[3];
+      partial_sum[4] = k_odd[4] + 2. * k_even[4];
+      partial_sum[5] = k_odd[5] + 2. * k_even[5];
+      partial_sum[6] = k_odd[6] + 2. * k_even[6];
 
-      if (particles[i].pos(0) > (phi0[0] - 0.5 * dx[0]) ||
-          particles[i].pos(0) < (plo0[0] + 0.5 * dx[0]) ||
-          particles[i].pos(1) > (phi0[1] - 0.5 * dx[1]) ||
-          particles[i].pos(1) < (plo0[1] + 0.5 * dx[1]) ||
-          particles[i].pos(2) > (phi0[2] - 0.5 * dx[2]) ||
-          particles[i].pos(2) < (plo0[2] + 0.5 * dx[2])) {
-        particles[i].id() = -1;
-        return;
-      }
-
-      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
-          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
-          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+      if (U_tmp[0] > (phi0[0] - 0.5 * dx[0]) ||
+          U_tmp[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U_tmp[1] > (phi0[1] - 0.5 * dx[1]) ||
+          U_tmp[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U_tmp[2] > (phi0[2] - 0.5 * dx[2]) ||
+          U_tmp[2] < (plo0[2] + 0.5 * dx[2])) {
         particles[i].id() = -1;
         return;
       }
 
       // f3 = rhs(u + 0.5 * dt * f2, t) for the runge kutta 4 step
-      rhs_1 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
-                                curv_array, dt, dx, lev, plo);
+      k_odd = this->compute_rhs(U_tmp, 0.0, lapse_array, shift_array,
+                                metric_array, curv_array, dt, dx, lev, plo0);
 
-      U[0] += dt * rhs_1[0];
-      U[1] += dt * rhs_1[1];
-      U[2] += dt * rhs_1[2];
-      U[3] += dt * rhs_1[3];
-      U[4] += dt * rhs_1[4];
-      U[5] += dt * rhs_1[5];
-      U[6] += dt * rhs_1[6];
+      U_tmp[0] = U[0] + dt * k_odd[0];
+      U_tmp[1] = U[1] + dt * k_odd[1];
+      U_tmp[2] = U[2] + dt * k_odd[2];
+      U_tmp[3] = U[3] + dt * k_odd[3];
+      U_tmp[4] = U[4] + dt * k_odd[4];
+      U_tmp[5] = U[5] + dt * k_odd[5];
+      U_tmp[6] = U[6] + dt * k_odd[6];
 
-      if (U[0] > (phi0[0] - 0.5 * dx[0]) || U[0] < (plo0[0] + 0.5 * dx[0]) ||
-          U[1] > (phi0[1] - 0.5 * dx[1]) || U[1] < (plo0[1] + 0.5 * dx[1]) ||
-          U[2] > (phi0[2] - 0.5 * dx[2]) || U[2] < (plo0[2] + 0.5 * dx[2])) {
+      if (U_tmp[0] > (phi0[0] - 0.5 * dx[0]) ||
+          U_tmp[0] < (plo0[0] + 0.5 * dx[0]) ||
+          U_tmp[1] > (phi0[1] - 0.5 * dx[1]) ||
+          U_tmp[1] < (plo0[1] + 0.5 * dx[1]) ||
+          U_tmp[2] > (phi0[2] - 0.5 * dx[2]) ||
+          U_tmp[2] < (plo0[2] + 0.5 * dx[2])) {
         particles[i].id() = -1;
         return;
       }
 
       // f4 = rhs(u + dt * f3, t) for the runge kutta 4 step
-      rhs_2 = this->compute_rhs(U, 0.0, lapse_array, shift_array, metric_array,
-                                curv_array, dt, dx, lev, plo);
+      k_even = this->compute_rhs(U_tmp, 0.0, lapse_array, shift_array,
+                                 metric_array, curv_array, dt, dx, lev, plo0);
 
       // Update particles with the f3 and f4 from RK4
-      particles[i].pos(0) += (1. / 6.) * dt * (2. * rhs_1[0] + rhs_2[0]);
-      particles[i].pos(1) += (1. / 6.) * dt * (2. * rhs_1[1] + rhs_2[1]);
-      particles[i].pos(2) += (1. / 6.) * dt * (2. * rhs_1[2] + rhs_2[2]);
-      vels_x[i] += (1. / 6.) * dt * (2. * rhs_1[3] + rhs_2[3]);
-      vels_y[i] += (1. / 6.) * dt * (2. * rhs_1[4] + rhs_2[4]);
-      vels_z[i] += (1. / 6.) * dt * (2. * rhs_1[5] + rhs_2[5]);
+      particles[i].pos(0) +=
+          (1. / 6.) * dt * (2. * k_odd[0] + k_even[0] + partial_sum[0]);
+      particles[i].pos(1) +=
+          (1. / 6.) * dt * (2. * k_odd[1] + k_even[1] + partial_sum[1]);
+      particles[i].pos(2) +=
+          (1. / 6.) * dt * (2. * k_odd[2] + k_even[2] + partial_sum[2]);
+      vels_x[i] +=
+          (1. / 6.) * dt * (2. * k_odd[3] + k_even[3] + partial_sum[3]);
+      vels_y[i] +=
+          (1. / 6.) * dt * (2. * k_odd[4] + k_even[4] + partial_sum[4]);
+      vels_z[i] +=
+          (1. / 6.) * dt * (2. * k_odd[5] + k_even[5] + partial_sum[5]);
 
       // Check if is outside of the grid
       if (particles[i].pos(0) > (phi0[0] - 0.5 * dx[0]) ||
@@ -602,22 +724,22 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
 
       // Interpolate metric
       const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   0), // g_11
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   1), // g_12 & g_21
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   2), // g_13 & g_31
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   3), // g_22
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   4), // g_23, g_32
-          barycentric_cubic_3d<3>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
 
       // Get the inverse metric.
@@ -636,16 +758,15 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
           (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
           (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
 
-      // Get the V^2 of each photon
       const CCTK_REAL v_squared = vels_x[i] * vels_x[i] * gamma_inv_x[0] +
                                   vels_y[i] * vels_y[i] * gamma_inv_x[3] +
                                   vels_z[i] * vels_z[i] * gamma_inv_x[5] +
-                                  2.0 * vels_x[i] * vels_y[i] * gamma_inv_x[1] +
+                                  2.0 * vels_x[i] * vels_x[i] * gamma_inv_x[1] +
                                   2.0 * vels_x[i] * vels_z[i] * gamma_inv_x[2] +
                                   2.0 * vels_y[i] * vels_z[i] * gamma_inv_x[4];
 
       // Write it into a file.
-      vel_file << p.id() << "\t" << std::abs(v_squared - 1.0) << "\n";
+      vel_file << p.id() << "\t" << v_squared - 1.0 << "\n";
     });
   }
 

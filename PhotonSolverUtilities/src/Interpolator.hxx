@@ -140,6 +140,17 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
     w[1] = 0.5;
     w[2] = -0.5;
     w[3] = (1.0 / 6.0);
+  } else if constexpr (INTERPOLATION_ORDER == 4) {
+    nodes[0] = -2;
+    nodes[1] = -1;
+    nodes[2] = 0;
+    nodes[3] = 1;
+    nodes[4] = 2;
+    w[0] = (1.0 / 24.0);
+    w[1] = (-1.0 / 6.0);
+    w[2] = 0.25;
+    w[3] = (-1.0 / 6.0);
+    w[4] = (1.0 / 24.0);
   } else {
     CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
               "implemented. Available orders: 1, 2, 3.");
@@ -294,6 +305,7 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
       d_f_x = 0.0;
       return;
     }
+
     // Compute the weights for the interpolation and the derivative.
     CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
     num += term * values[i];
@@ -415,6 +427,17 @@ barycentric_derivative_and_interpolate(
     w[1] = 0.5;
     w[2] = -0.5;
     w[3] = (1.0 / 6.0);
+  } else if constexpr (INTERPOLATION_ORDER == 4) {
+    nodes[0] = -2;
+    nodes[1] = -1;
+    nodes[2] = 0;
+    nodes[3] = 1;
+    nodes[4] = 2;
+    w[0] = (1.0 / 24.0);
+    w[1] = (-1.0 / 6.0);
+    w[2] = 0.25;
+    w[3] = (-1.0 / 6.0);
+    w[4] = (1.0 / 24.0);
   } else {
     CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
               "implemented. Available orders: 1, 2, 3.");
