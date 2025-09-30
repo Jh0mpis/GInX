@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['check_5fvelocities_0',['check_velocities',['../test_8cxx.html#a3fd91489488651ab3ec4d3522edc99a7',1,'test.cxx']]],
-  ['check_5fvelocity_1',['check_velocity',['../classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635',1,'Containers::PhotonsContainer']]],
-  ['compute_5frhs_2',['compute_rhs',['../classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b',1,'Containers::PhotonsContainer']]],
-  ['containers_3',['Containers',['../namespaceContainers.html',1,'']]]
+  ['barycentric_5fcubic_5f1d_0',['barycentric_cubic_1d',['../namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b',1,'Interpolator']]],
+  ['barycentric_5fcubic_5f3d_1',['barycentric_cubic_3d',['../namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7',1,'Interpolator::barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)'],['../namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1',1,'Interpolator::barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)']]],
+  ['barycentric_5fderivative_5fand_5finterpolate_2',['barycentric_derivative_and_interpolate',['../namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93',1,'Interpolator']]],
+  ['base_3',['Base',['../classContainers_1_1PhotonsContainer.html#aa0463738f45c8445189d89505fcfaab6',1,'Containers::PhotonsContainer']]]
 ];

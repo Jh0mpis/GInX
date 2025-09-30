@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['n_5fattributes_0',['n_attributes',['../structPhotons_1_1PhotonsData.html#a5669ed80053e9b3dd9f623c58bdb2068a71811f2950934546e77774f1694bdf4e',1,'Photons::PhotonsData']]],
-  ['name_1',['name',['../structPhotons_1_1PhotonsData.html#af78332f4696533d9df12337118e0fbf2',1,'Photons::PhotonsData']]]
+  ['init_5fiso_5fschwarzschild_0',['init_iso_schwarzschild',['../test_8cxx.html#ae63532e74128d631a56e68d48c591307',1,'test.cxx']]],
+  ['init_5fminkowski_1',['init_minkowski',['../test_8cxx.html#a9e655296d0a50b66482edb7c7c6bf72c',1,'test.cxx']]],
+  ['interpolator_2',['Interpolator',['../namespaceInterpolator.html',1,'']]],
+  ['interpolator_2ehxx_3',['Interpolator.hxx',['../Interpolator_8hxx.html',1,'']]]
 ];

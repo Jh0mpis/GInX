@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['der_5fbarycentric_5fcubic_5f1d_0',['der_barycentric_cubic_1d',['../namespaceInterpolator.html#a1333a1b2448b73fbaf400c98440b2552',1,'Interpolator']]],
-  ['discretize_1',['Discretize',['../namespaceDiscretize.html',1,'']]],
-  ['discretizer_2ehxx_2',['Discretizer.hxx',['../Discretizer_8hxx.html',1,'']]]
+  ['check_5fvelocities_0',['check_velocities',['../test_8cxx.html#a3fd91489488651ab3ec4d3522edc99a7',1,'test.cxx']]],
+  ['check_5fvelocity_1',['check_velocity',['../classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635',1,'Containers::PhotonsContainer']]],
+  ['compute_5frhs_2',['compute_rhs',['../classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b',1,'Containers::PhotonsContainer']]],
+  ['containers_3',['Containers',['../namespaceContainers.html',1,'']]]
 ];
