@@ -24,6 +24,10 @@
  */
 namespace Interpolator {
 
+const int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
+
+const CCTK_REAL all_weights[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
+
 // #############################################################################
 //                   Barycentric Lagrange Interpolator
 // #############################################################################
@@ -31,12 +35,12 @@ namespace Interpolator {
 /**
  * \brief Do a Barycentric interpolation in one direction.
  *
- * This function computes the interpolation of a function on just one direction
- * using a barycentric Lagrange interpolation by doing:
+ * This function computes the interpolation of a function on just one
+ * direction using a barycentric Lagrange interpolation by doing:
  *
  * \f[
- * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}f(x_i)}{\sum\limits_{i
- * = 0}^N \frac{w_i}{x - x_i}}
+ * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
+ * x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
  * \f]
  *
  * where \f$N\f$ is the order of interpolation.
@@ -51,20 +55,22 @@ namespace Interpolator {
  */
 template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
-barycentric_cubic_1d(const int (&points)[N + 1],
-                     const CCTK_REAL (&weights)[N + 1],
-                     const CCTK_REAL (&values)[N + 1], const CCTK_REAL &x,
+barycentric_cubic_1d(const int (&points)[N],
+                     const CCTK_REAL *weights,
+                     const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
   CCTK_REAL den{0.0};
 
-  for (int i = 0; i <= N; i++) {
+  for (int i = 0; i < N; i++) {
     // Check if the point belongs to the consulted points.
-    if (x == plo + points[i] * dx) {
+    CCTK_REAL diff = x - (plo + points[i] * dx);
+    const CCTK_REAL tolerance = 1e-12;
+    if (diff < tolerance && diff > -tolerance) {
       return values[i];
     }
     // Compute the weights and values
-    CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
+    CCTK_REAL term = weights[i] / diff;
     num += term * values[i];
     den += term;
   }
@@ -80,7 +86,8 @@ barycentric_cubic_1d(const int (&points)[N + 1],
  * using a barycentric Lagrange interpolation by doing:
  *
  * \f[
- * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z - z_i}\frac{v_j}{y
+ * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+ * z_i}\frac{v_j}{y
  * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
  * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
  * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
@@ -114,44 +121,12 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      CCTK_REAL const &y, CCTK_REAL const &z,
                      const amrex::GpuArray<double, 3> &dx,
                      const amrex::GpuArray<double, 3> &plo, const int &comp) {
+    const int order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+    const CCTK_INT *nodes = &all_nodes[order];
+    const CCTK_REAL *w = &all_weights[order];
 
   // Setting the pre-computed weights.
-  int nodes[INTERPOLATION_ORDER + 1];
-  CCTK_REAL w[INTERPOLATION_ORDER + 1];
-
-  if constexpr (INTERPOLATION_ORDER == 1) {
-    nodes[0] = 0;
-    nodes[1] = 1;
-    w[0] = -1.;
-    w[1] = 1.;
-  } else if constexpr (INTERPOLATION_ORDER == 2) {
-    nodes[0] = -1;
-    nodes[1] = 0;
-    nodes[2] = 1;
-    w[0] = 0.5;
-    w[1] = 1.;
-    w[2] = 0.5;
-  } else if constexpr (INTERPOLATION_ORDER == 3) {
-    nodes[0] = -1;
-    nodes[1] = 0;
-    nodes[2] = 1;
-    nodes[3] = 2;
-    w[0] = (-1.0 / 6.0);
-    w[1] = 0.5;
-    w[2] = -0.5;
-    w[3] = (1.0 / 6.0);
-  } else if constexpr (INTERPOLATION_ORDER == 4) {
-    nodes[0] = -2;
-    nodes[1] = -1;
-    nodes[2] = 0;
-    nodes[3] = 1;
-    nodes[4] = 2;
-    w[0] = (1.0 / 24.0);
-    w[1] = (-1.0 / 6.0);
-    w[2] = 0.25;
-    w[3] = (-1.0 / 6.0);
-    w[4] = (1.0 / 24.0);
-  } else {
+  if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
     CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
               "implemented. Available orders: 1, 2, 3.");
     throw std::invalid_argument(
@@ -159,12 +134,12 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   }
 
   // Do the interpolation on x
-  CCTK_REAL G[INTERPOLATION_ORDER + 1][INTERPOLATION_ORDER + 1];
-  for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
-    for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
-      CCTK_REAL values[INTERPOLATION_ORDER + 1];
-      CCTK_INT points[INTERPOLATION_ORDER + 1];
-      for (int i = 0; i <= INTERPOLATION_ORDER; i++) {
+  CCTK_REAL G[INTERPOLATION_ORDER][INTERPOLATION_ORDER];
+  for (int j = 0; j < INTERPOLATION_ORDER; j++) {
+    for (int k = 0; k < INTERPOLATION_ORDER; k++) {
+      CCTK_REAL values[INTERPOLATION_ORDER];
+      CCTK_INT points[INTERPOLATION_ORDER];
+      for (int i = 0; i < INTERPOLATION_ORDER; i++) {
         values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);
         points[i] = i0 + nodes[i];
       }
@@ -174,11 +149,11 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   }
 
   // Do the interpolation on y
-  CCTK_REAL H[INTERPOLATION_ORDER + 1];
-  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
-    CCTK_REAL values[INTERPOLATION_ORDER + 1];
-    CCTK_INT points[INTERPOLATION_ORDER + 1];
-    for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
+  CCTK_REAL H[INTERPOLATION_ORDER];
+  for (int k = 0; k < INTERPOLATION_ORDER; k++) {
+    CCTK_REAL values[INTERPOLATION_ORDER];
+    CCTK_INT points[INTERPOLATION_ORDER];
+    for (int j = 0; j < INTERPOLATION_ORDER; j++) {
       values[j] = G[j][k];
       points[j] = j0 + nodes[j];
     }
@@ -187,8 +162,8 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   }
 
   // Do the interpolation on z
-  CCTK_INT points[INTERPOLATION_ORDER + 1];
-  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
+  CCTK_INT points[INTERPOLATION_ORDER];
+  for (int k = 0; k < INTERPOLATION_ORDER; k++) {
     points[k] = k0 + nodes[k];
   }
   return barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, H, z, plo[2],
@@ -203,7 +178,8 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * using a barycentric Lagrange interpolation by doing:
  *
  * \f[
- * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z - z_i}\frac{v_j}{y
+ * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+ * z_i}\frac{v_j}{y
  * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
  * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
  * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
@@ -244,12 +220,12 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
 /**
  * \brief Do a Barycentric interpolation and its derivative in one direction.
  *
- * This function computes the interpolation of a function on just one direction
- * using a barycentric Lagrange interpolation by doing:
+ * This function computes the interpolation of a function on just one
+ * direction using a barycentric Lagrange interpolation by doing:
  *
  * \f[
- * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}f(x_i)}{\sum\limits_{i
- * = 0}^N \frac{w_i}{x - x_i}}
+ * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
+ * x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
  * \f]
  *
  * where \f$N\f$ is the order of interpolation.
@@ -280,9 +256,9 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
 template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline void
 der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
-                         const int (&points)[N + 1],
-                         const CCTK_REAL (&weights)[N + 1],
-                         const CCTK_REAL (&values)[N + 1], const CCTK_REAL &x,
+                         const int (&points)[N],
+                         const CCTK_REAL *weights,
+                         const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                          const CCTK_REAL &plo, const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
   CCTK_REAL den{0.0};
@@ -290,31 +266,34 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
   CCTK_REAL der_num{0.0};
 
   // Compute the interpolation
-  for (int i = 0; i <= N; i++) {
-    if (x == plo + points[i] * dx) {
-      // Check if the point makes part of the points used on the interpolation.
+  for (int i = 0; i < N; i++) {
+    CCTK_REAL diff = x - (plo + points[i] * dx);
+    const CCTK_REAL tolerance = 1e-12;
+    if (diff < tolerance && diff > -tolerance) {
+      // Check if the point makes part of the points used on the
+      // interpolation.
       for (int j = 0; j <= N; j++) {
         if (i == j) {
           continue;
-          d_f_x +=
-              weights[j] * (values[i] - values[j]) / (x - plo + points[j] * dx);
         }
+        const auto x_j = points[j] * dx;
+        const auto x_i = points[i] * dx;
+        d_f_x += weights[j] * (values[i] - values[j]) / (x_j - x_i);
       }
       d_f_x /= weights[i];
       f_x = values[i];
-      d_f_x = 0.0;
       return;
     }
 
     // Compute the weights for the interpolation and the derivative.
-    CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
+    CCTK_REAL term = weights[i] / diff;
     num += term * values[i];
     den += term;
-    den_sqr += term / (x - (plo + points[i] * dx));
+    den_sqr += term / diff;
   }
 
   // Compute the weights for the derivative.
-  for (int i = 0; i <= N; i++) {
+  for (int i = 0; i < N; i++) {
     CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));
     der_num += (-term * den / (x - (plo + points[i] * dx)) + term * den_sqr) *
                values[i];
@@ -333,7 +312,8 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
  * using a barycentric Lagrange interpolation by doing:
  *
  * \f[
- * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z - z_i}\frac{v_j}{y
+ * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+ * z_i}\frac{v_j}{y
  * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
  * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
  * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
@@ -402,43 +382,11 @@ barycentric_derivative_and_interpolate(
     CCTK_REAL const &z, const amrex::GpuArray<double, 3> &dx,
     const amrex::GpuArray<double, 3> &plo, const int &comp) {
 
-  // Setting the pre-computed weights.
-  int nodes[INTERPOLATION_ORDER + 1];
-  CCTK_REAL w[INTERPOLATION_ORDER + 1];
+    const int order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+    const CCTK_INT *nodes = &all_nodes[order];
+    const CCTK_REAL *w = &all_weights[order];
 
-  if constexpr (INTERPOLATION_ORDER == 1) {
-    nodes[0] = 0;
-    nodes[1] = 1;
-    w[0] = -1.;
-    w[1] = 1.;
-  } else if constexpr (INTERPOLATION_ORDER == 2) {
-    nodes[0] = -1;
-    nodes[1] = 0;
-    nodes[2] = 1;
-    w[0] = 0.5;
-    w[1] = 1.;
-    w[2] = 0.5;
-  } else if constexpr (INTERPOLATION_ORDER == 3) {
-    nodes[0] = -1;
-    nodes[1] = 0;
-    nodes[2] = 1;
-    nodes[3] = 2;
-    w[0] = (-1.0 / 6.0);
-    w[1] = 0.5;
-    w[2] = -0.5;
-    w[3] = (1.0 / 6.0);
-  } else if constexpr (INTERPOLATION_ORDER == 4) {
-    nodes[0] = -2;
-    nodes[1] = -1;
-    nodes[2] = 0;
-    nodes[3] = 1;
-    nodes[4] = 2;
-    w[0] = (1.0 / 24.0);
-    w[1] = (-1.0 / 6.0);
-    w[2] = 0.25;
-    w[3] = (-1.0 / 6.0);
-    w[4] = (1.0 / 24.0);
-  } else {
+  if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
     CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
               "implemented. Available orders: 1, 2, 3.");
     throw std::invalid_argument(
@@ -446,14 +394,14 @@ barycentric_derivative_and_interpolate(
   }
 
   // Computing f(x, y_i, z_i)
-  CCTK_REAL G_xyz[INTERPOLATION_ORDER + 1][INTERPOLATION_ORDER + 1];
+  CCTK_REAL G_xyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];
   // Computing d/dx f(x, y_i, z_i)
-  CCTK_REAL G_dxyz[INTERPOLATION_ORDER + 1][INTERPOLATION_ORDER + 1];
-  for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
-    for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
-      CCTK_REAL values[INTERPOLATION_ORDER + 1];
-      CCTK_INT points[INTERPOLATION_ORDER + 1];
-      for (int i = 0; i <= INTERPOLATION_ORDER; i++) {
+  CCTK_REAL G_dxyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];
+  for (int j = 0; j < INTERPOLATION_ORDER; j++) {
+    for (int k = 0; k < INTERPOLATION_ORDER; k++) {
+      CCTK_REAL values[INTERPOLATION_ORDER];
+      CCTK_INT points[INTERPOLATION_ORDER];
+      for (int i = 0; i < INTERPOLATION_ORDER; i++) {
         values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);
         points[i] = i0 + nodes[i];
       }
@@ -463,16 +411,16 @@ barycentric_derivative_and_interpolate(
   }
 
   // Computing f(x, y, z_i)
-  CCTK_REAL H_xyz[INTERPOLATION_ORDER + 1];
+  CCTK_REAL H_xyz[INTERPOLATION_ORDER];
   // Computing d/dx f(x, y, z_i)
-  CCTK_REAL H_dxyz[INTERPOLATION_ORDER + 1];
+  CCTK_REAL H_dxyz[INTERPOLATION_ORDER];
   // Computing d/dy f(x, y, z_i)
-  CCTK_REAL H_xdyz[INTERPOLATION_ORDER + 1];
-  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
-    CCTK_REAL values[INTERPOLATION_ORDER + 1];
-    CCTK_REAL d_values[INTERPOLATION_ORDER + 1];
-    CCTK_INT points[INTERPOLATION_ORDER + 1];
-    for (int j = 0; j <= INTERPOLATION_ORDER; j++) {
+  CCTK_REAL H_xdyz[INTERPOLATION_ORDER];
+  for (int k = 0; k < INTERPOLATION_ORDER; k++) {
+    CCTK_REAL values[INTERPOLATION_ORDER];
+    CCTK_REAL d_values[INTERPOLATION_ORDER];
+    CCTK_INT points[INTERPOLATION_ORDER];
+    for (int j = 0; j < INTERPOLATION_ORDER; j++) {
       values[j] = G_xyz[j][k];
       d_values[j] = G_dxyz[j][k];
       points[j] = j0 + nodes[j];
@@ -483,8 +431,8 @@ barycentric_derivative_and_interpolate(
                                                           y, plo[1], dx[1]);
   }
 
-  CCTK_INT points[INTERPOLATION_ORDER + 1];
-  for (int k = 0; k <= INTERPOLATION_ORDER; k++) {
+  CCTK_INT points[INTERPOLATION_ORDER];
+  for (int k = 0; k < INTERPOLATION_ORDER; k++) {
     points[k] = k0 + nodes[k];
   }
   // Computing f(x, y, z)
