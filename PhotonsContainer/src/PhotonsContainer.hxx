@@ -160,7 +160,7 @@ PhotonsContainer<StructType>::compute_rhs(
   CCTK_REAL lapse_x;
   // Interpolate partial lapse
   amrex::GpuArray<CCTK_REAL, 3> d_lapse_x;
-  barycentric_derivative_and_interpolate<4>(lapse_x, d_lapse_x[0], d_lapse_x[1],
+  barycentric_derivative_and_interpolate<5>(lapse_x, d_lapse_x[0], d_lapse_x[1],
                                             d_lapse_x[2], lapse, i0, j0, k0,
                                             u[0], u[1], u[2], dx, plo, 0);
 
@@ -168,13 +168,13 @@ PhotonsContainer<StructType>::compute_rhs(
   // Interpolate partial shift
   amrex::GpuArray<CCTK_REAL, 3> shift_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 2);
 
@@ -182,38 +182,38 @@ PhotonsContainer<StructType>::compute_rhs(
   amrex::GpuArray<CCTK_REAL, 6> gamma_x;
   // Interpolate partial metric
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 2);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 3);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 4);
-  barycentric_derivative_and_interpolate<4>(
+  barycentric_derivative_and_interpolate<5>(
       gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,
       j0, k0, u[0], u[1], u[2], dx, plo, 5);
 
   // Interpolate Curvature
   const amrex::GpuArray<CCTK_REAL, 6> curv_x = {
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               0), // K_11
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               1), // K_12 & g_21
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               2), // K_13 & K_31
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               3), // K_22
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               4), // K_23, K_32
-      barycentric_cubic_3d<4>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
+      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo,
                               5)}; // K_33
 
   // Compute the inverse of the metric.
@@ -369,11 +369,13 @@ PhotonsContainer<StructType>::compute_rhs(
   //                                        real_dz_gamma[5] * real_V_up[2]));
   // term_4 = VecVecMul(V_down, d_shift_x[2]);
   //
-  // std::cout << 2 << "\t" << term_1 << "\t" << term_2_1 << "\t" << term_2_2
-  //           << "\t" << term_3 << "\t" << term_4 << "\n";
+  // std::cout << "rhs " << "\t" << rhs[3] << "\t" << rhs[4] << "\t" << rhs[5]
+  //           << "\n";
 
   // Compute the rhs for energy
-  rhs[3 + StructType::E] = 0;
+  rhs[3 + StructType::E] =
+      u[6] * (lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up) -
+              VecVecMul(V_up, d_lapse_x));
 
   return rhs;
 
@@ -542,6 +544,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
     CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
     CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
     CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();
+    CCTK_REAL *AMREX_RESTRICT energy = attribs[StructType::E].data();
     auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
     // Get the array of each parameters.
@@ -654,6 +657,8 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
           (1. / 6.) * dt * (2. * k_odd[4] + k_even[4] + partial_sum[4]);
       vels_z[i] +=
           (1. / 6.) * dt * (2. * k_odd[5] + k_even[5] + partial_sum[5]);
+      energy[i] +=
+          (1. / 6.) * dt * (2. * k_odd[6] + k_even[6] + partial_sum[6]);
 
       // Check if is outside of the grid
       if (particles[i].pos(0) > (phi0[0] - 0.5 * dx[0]) ||
@@ -724,22 +729,22 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
 
       // Interpolate metric
       const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   0), // g_11
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   1), // g_12 & g_21
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   2), // g_13 & g_31
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   3), // g_22
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   4), // g_23, g_32
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
 
       // Get the inverse metric.
@@ -761,7 +766,7 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
       const CCTK_REAL v_squared = vels_x[i] * vels_x[i] * gamma_inv_x[0] +
                                   vels_y[i] * vels_y[i] * gamma_inv_x[3] +
                                   vels_z[i] * vels_z[i] * gamma_inv_x[5] +
-                                  2.0 * vels_x[i] * vels_x[i] * gamma_inv_x[1] +
+                                  2.0 * vels_x[i] * vels_y[i] * gamma_inv_x[1] +
                                   2.0 * vels_x[i] * vels_z[i] * gamma_inv_x[2] +
                                   2.0 * vels_y[i] * vels_z[i] * gamma_inv_x[4];
 

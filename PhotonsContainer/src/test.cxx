@@ -97,13 +97,13 @@ extern "C" void init_iso_schwarzschild(CCTK_ARGUMENTS) {
       [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
         auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
 
-        const auto psi = 1.0 + 2.0 * black_hole_mass / (4.0 * R);
+        const auto psi = 1.0 + black_hole_mass / (2.0 * R);
         const auto psi_2 = psi * psi;
         const auto psi_4 = psi_2 * psi_2;
 
         if (R >= 0.5) {
-          alp(p.I) = (1.0 - 2.0 * black_hole_mass / (4.0 * R)) /
-                     (1.0 + 2.0 * black_hole_mass / (4.0 * R));
+          alp(p.I) = (1.0 - black_hole_mass / (2.0 * R)) /
+                     (1.0 + black_hole_mass / (2.0 * R));
           gxx(p.I) = psi_4;
           gyy(p.I) = psi_4;
           gzz(p.I) = psi_4;

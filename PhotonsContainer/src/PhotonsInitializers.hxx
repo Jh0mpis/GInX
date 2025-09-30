@@ -177,7 +177,7 @@ void random_photons_initializer(ParticleContainerClass &pc,
         // Compute a random initial velocity
         ratio[1] = 2.0 * amrex::Random(engine) - 1.0;
         ratio[2] = 2.0 * amrex::Random(engine) - 1.0;
-        ratio[3] = 2.0 * amrex::Random(engine) - 1.0;
+        ratio[0] = 2.0 * amrex::Random(engine) - 1.0;
 
         // Normalizing the velocity.
         const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
@@ -278,9 +278,9 @@ void random_photons_per_container_initializer(
       p.id() = pidx + 1;
       p.cpu() = proc_id;
 
-      p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
-      p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
-      p.pos(2) = ratio[0] * std::cos(ratio[1]);
+      p.pos(0) = 0.7 * std::sin(ratio[1]) * std::cos(ratio[2]);
+      p.pos(1) = 0.7 * std::sin(ratio[1]) * std::sin(ratio[2]);
+      p.pos(2) = 0.7 * std::cos(ratio[1]);
 
       const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
       const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
@@ -288,22 +288,22 @@ void random_photons_per_container_initializer(
 
       // Interpolate metric
       const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   0), // g_11
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   1), // g_12 & g_21
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   2), // g_13 & g_31
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   3), // g_22
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo,
                                   4), // g_23, g_32
-          barycentric_cubic_3d<4>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
 
       // auto R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
@@ -333,9 +333,9 @@ void random_photons_per_container_initializer(
           (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
 
       // Compute a random initial Velocity
-      ratio[0] = 2.0 * amrex::Random() - 1.0;
-      ratio[1] = 0.0 * amrex::Random() - 1.0;
-      ratio[2] = 0.0 * amrex::Random() - 1.0;
+      ratio[0] = p.pos(0); //2.0 * amrex::Random() - 1.0;
+      ratio[1] = p.pos(1); //0.0 * amrex::Random() - 1.0;
+      ratio[2] = p.pos(2); //0.0 * amrex::Random() - 1.0;
 
       // Normalizing the velocity.
       const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
@@ -350,6 +350,7 @@ void random_photons_per_container_initializer(
       arrdata[StructType::vx][pidx] = ratio[0] / v;
       arrdata[StructType::vy][pidx] = ratio[1] / v;
       arrdata[StructType::vz][pidx] = ratio[2] / v;
+      arrdata[StructType::E][pidx] = 0.5;
 
       // Update the particles counter
       ++pidx;
