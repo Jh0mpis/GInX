@@ -26,7 +26,7 @@ struct PhotonsData {
     vx = 0,       /**< Velocity's lower index on the x direction.*/
     vy,           /**< Velocity's lower index on the y direction.*/
     vz,           /**< Velocity's lower index on the z direction.*/
-    E,            /**< Energy value.*/
+    ln_E,            /**< Ln Energy value.*/
     n_attributes, /**< Total number of attributes*/
   }; // enum
 }; // struct PhotonsData

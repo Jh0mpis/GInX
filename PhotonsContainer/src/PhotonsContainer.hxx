@@ -85,7 +85,8 @@ public:
 
   // Computes and print all photons velocities
   void check_velocity(CCTK_ARGUMENTS, const amrex::MultiFab &metric,
-                      const int &lev);
+                      const amrex::MultiFab &lapse,
+                      const amrex::MultiFab &shift, const int &lev);
 
   void redistribute_particles();
 }; // PhotonsContainer class
@@ -119,6 +120,10 @@ public:
  * \frac{1}{2}\alpha\gamma^{jl}\gamma^{km}U[3+l]U[3+m]\partial_i\gamma{jk} + U[3
  * + j] \partial_i\beta^j
  * \f}
+ *
+ * and finally, for the \f$ ln E \f$ the differential equation is:
+ *
+ * \f[ \dfrac{d}{dt} U[6] = \alpha K_{jk}U[3 + l]U[3 + m]\gamma^{lj}\gamma^{mk} - U[3+l]\gamma^{lj}\partial_j\alpha\f]
  *
  *  Where \f$i, j, k, l, m = 0, 1, 2\f$ and we have been using Einstein
  * notation.
@@ -373,9 +378,9 @@ PhotonsContainer<StructType>::compute_rhs(
   //           << "\n";
 
   // Compute the rhs for energy
-  rhs[3 + StructType::E] =
-      u[6] * (lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up) -
-              VecVecMul(V_up, d_lapse_x));
+  rhs[3 + StructType::ln_E] =
+      lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up) -
+      VecVecMul(V_up, d_lapse_x);
 
   return rhs;
 
@@ -425,6 +430,7 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
     CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
     CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
     CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();
+    CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();
     auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
     // Get the arrays of the parameters.
@@ -437,10 +443,10 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
       // Store the coordinates U to evolve into an array.
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
-          particles[i].pos(0),        particles[i].pos(1),
-          particles[i].pos(2),        attribs[StructType::vx][i],
-          attribs[StructType::vy][i], attribs[StructType::vz][i],
-          attribs[StructType::E][i]};
+          particles[i].pos(0),         particles[i].pos(1),
+          particles[i].pos(2),         attribs[StructType::vx][i],
+          attribs[StructType::vy][i],  attribs[StructType::vz][i],
+          attribs[StructType::ln_E][i]};
 
       // rhs(u , t) for the runge kutta 2 step
       auto rhs_1 =
@@ -474,6 +480,7 @@ void PhotonsContainer<StructType>::evolveRK2(const amrex::MultiFab &lapse,
       vels_x[i] += dt * rhs_1[3];
       vels_y[i] += dt * rhs_1[4];
       vels_z[i] += dt * rhs_1[5];
+      ln_energy[i] += dt * rhs_1[6];
 
       // Check if is outside of the grid
       if (particles[i].pos(0) > (phi0[0] - dx[0]) ||
@@ -544,7 +551,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
     CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
     CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
     CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();
-    CCTK_REAL *AMREX_RESTRICT energy = attribs[StructType::E].data();
+    CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();
     auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
     // Get the array of each parameters.
@@ -555,10 +562,10 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
 
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
       const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
-          particles[i].pos(0),        particles[i].pos(1),
-          particles[i].pos(2),        attribs[StructType::vx][i],
-          attribs[StructType::vy][i], attribs[StructType::vz][i],
-          attribs[StructType::E][i]};
+          particles[i].pos(0),         particles[i].pos(1),
+          particles[i].pos(2),         attribs[StructType::vx][i],
+          attribs[StructType::vy][i],  attribs[StructType::vz][i],
+          attribs[StructType::ln_E][i]};
 
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
@@ -657,7 +664,7 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
           (1. / 6.) * dt * (2. * k_odd[4] + k_even[4] + partial_sum[4]);
       vels_z[i] +=
           (1. / 6.) * dt * (2. * k_odd[5] + k_even[5] + partial_sum[5]);
-      energy[i] +=
+      ln_energy[i] +=
           (1. / 6.) * dt * (2. * k_odd[6] + k_even[6] + partial_sum[6]);
 
       // Check if is outside of the grid
@@ -688,14 +695,17 @@ void PhotonsContainer<StructType>::evolveRK4(const amrex::MultiFab &lapse,
 template <typename StructType>
 void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
                                                   const amrex::MultiFab &metric,
+                                                  const amrex::MultiFab &lapse,
+                                                  const amrex::MultiFab &shift,
                                                   const int &lev) {
   // Get the current iteration number.
   const int iteration = cctkGH->cctk_iteration;
-  CCTK_VINFO("Checking the velocity error at iteration %d.", iteration);
+  CCTK_VINFO("Checking the constants and the velocity error at iteration %d.",
+             iteration);
 
   // Initializing the files.
   std::ostringstream file_name;
-  file_name << "Velocity_" << iteration << ".dat";
+  file_name << "Constants_" << iteration << ".dat";
   std::ofstream vel_file;
   vel_file.open(file_name.str());
 
@@ -714,9 +724,12 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
     CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
     CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
     CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();
+    CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();
     auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
     auto const metric_array = metric.array(pti);
+    auto const lapse_array = lapse.array(pti);
+    auto const shift_array = shift.array(pti);
 
     // foreach particle
     amrex::ParallelFor(np, [=, &vel_file] AMREX_GPU_DEVICE(int i) noexcept {
@@ -747,6 +760,16 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
           barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
                                   p.pos(2), dx, p_lo, 5)}; // g_33
 
+      const CCTK_REAL lapse_x = barycentric_cubic_3d<5>(
+          lapse_array, i0, j0, k0, p.pos(0), p.pos(1), p.pos(2), dx, p_lo);
+      amrex::GpuArray<CCTK_REAL, 3> shift_x = {
+          barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 0),
+          barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 1),
+          barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 2)};
+
       // Get the inverse metric.
       const CCTK_REAL inv_det_gamma =
           1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
@@ -770,8 +793,25 @@ void PhotonsContainer<StructType>::check_velocity(CCTK_ARGUMENTS,
                                   2.0 * vels_x[i] * vels_z[i] * gamma_inv_x[2] +
                                   2.0 * vels_y[i] * vels_z[i] * gamma_inv_x[4];
 
+      const CCTK_REAL E = std::exp(ln_energy[i]);
+      const amrex::GpuArray<CCTK_REAL, 3> shift_down =
+          SMatVecMul(gamma_x, shift_x);
+      const amrex::GpuArray<CCTK_REAL, 3> P_i = {E * vels_x[i], E * vels_y[i],
+                                                 E * vels_z[i]};
+      const amrex::GpuArray<CCTK_REAL, 3> P_i_up = SMatVecMul(gamma_inv_x, P_i);
+      const amrex::GpuArray<CCTK_REAL, 4> P_mu = {
+          (-lapse_x * lapse_x + VecVecMul(shift_x, shift_down)) *
+                  (E / lapse_x) +
+              VecVecMul(shift_down, P_i_up),
+          P_i[0], P_i[1], P_i[2]};
       // Write it into a file.
-      vel_file << p.id() << "\t" << v_squared - 1.0 << "\n";
+      vel_file << p.id() << "\t" << v_squared - 1.0 << "\t"
+               << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"
+               << P_mu[0] << "\t" << p.pos(0) * P_i[1] - p.pos(1) * P_i[0]
+               << "\t"
+               << p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
+                      p.pos(2) * p.pos(2)
+               << "\n";
     });
   }
 
