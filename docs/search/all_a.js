@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['scalar_5fbarycentric_5fderivative_0',['scalar_barycentric_derivative',['../namespaceDiscretize.html#a533e3a331d148c8ff03b99b6e798c8b1',1,'Discretize']]],
-  ['smatrix_5fbarycentric_5fderivative_1',['smatrix_barycentric_derivative',['../namespaceDiscretize.html#ac15f6204c5f9ce47114f0d33ad4fbe6c',1,'Discretize']]],
-  ['smatvecmul_2',['SMatVecMul',['../Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70',1,'Utilities.hxx']]]
+  ['random_5fphotons_5finitializer_0',['random_photons_initializer',['../namespacephotons__init.html#ab22cea706a52c2ab8487b4bed4b94f2d',1,'photons_init']]],
+  ['random_5fphotons_5fper_5fcontainer_5finitializer_1',['random_photons_per_container_initializer',['../namespacephotons__init.html#ab9da5feed990e95182291eb403fe3848',1,'photons_init']]],
+  ['readme_2emd_2',['README.md',['../README_8md.html',1,'']]],
+  ['redistribute_5fparticles_3',['redistribute_particles',['../classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650',1,'Containers::PhotonsContainer']]]
 ];

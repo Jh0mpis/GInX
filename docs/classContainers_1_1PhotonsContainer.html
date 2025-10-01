@@ -128,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memItemLeft" align="right" valign="top">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
 <tr class="memdesc:ac82e8ecf5f20496c96089f5ccc13759b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">More...</a><br /></td></tr>
 <tr class="separator:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad484c06bb6f48a0a5e76e8124727b635"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635">check_velocity</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const int &amp;lev)</td></tr>
-<tr class="memdesc:ad484c06bb6f48a0a5e76e8124727b635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#ad484c06bb6f48a0a5e76e8124727b635">More...</a><br /></td></tr>
-<tr class="separator:ad484c06bb6f48a0a5e76e8124727b635"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a7c1b98e53c13f69ac808fc8571a2a4a4">check_velocity</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</td></tr>
+<tr class="memdesc:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#a7c1b98e53c13f69ac808fc8571a2a4a4">More...</a><br /></td></tr>
+<tr class="separator:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebba2fa6ea568b7cce9b46af5976d650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a> ()</td></tr>
 <tr class="separator:aebba2fa6ea568b7cce9b46af5976d650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -158,8 +158,8 @@ template&lt;typename StructType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad484c06bb6f48a0a5e76e8124727b635" name="ad484c06bb6f48a0a5e76e8124727b635"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad484c06bb6f48a0a5e76e8124727b635">&#9670;&nbsp;</a></span>check_velocity()</h2>
+<a id="a7c1b98e53c13f69ac808fc8571a2a4a4" name="a7c1b98e53c13f69ac808fc8571a2a4a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c1b98e53c13f69ac808fc8571a2a4a4">&#9670;&nbsp;</a></span>check_velocity()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,6 +177,18 @@ template&lt;typename StructType &gt; </div>
           <td></td>
           <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
           <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>lapse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>shift</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -303,6 +315,10 @@ E)\). That's why each rhs depends on the other components of the vector \(U\). F
 \frac{1}{2}\alpha\gamma^{jl}\gamma^{km}U[3+l]U[3+m]\partial_i\gamma{jk} + U[3
 + j] \partial_i\beta^j
 \end{eqnarray*}
+</p>
+<p >and finally, for the \( ln E \) the differential equation is:</p>
+<p class="formulaDsp">
+\[ \dfrac{d}{dt} U[6] = \alpha K_{jk}U[3 + l]U[3 + m]\gamma^{lj}\gamma^{mk} - U[3+l]\gamma^{lj}\partial_j\alpha\]
 </p>
 <p >Where \(i, j, k, l, m = 0, 1, 2\) and we have been using Einstein notation.</p>
 <dl class="params"><dt>Parameters</dt><dd>

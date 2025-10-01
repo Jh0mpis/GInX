@@ -324,7 +324,7 @@ $(function() {
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>      <span class="comment">// Create particles outside of an sphere of radius 0.5</span></div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>      <span class="comment">// Generate a random position</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>      ratio[0] = (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7);</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>      ratio[0] = (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7) * amrex::Random() + 0.7;</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>      ratio[1] = amrex::Random() * M_PI;</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>      ratio[2] = amrex::Random() * 2. * M_PI;</div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
@@ -332,9 +332,9 @@ $(function() {
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>      p.id() = pidx + 1;</div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>      p.cpu() = proc_id;</div>
 <div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>      p.pos(0) = 0.7 * std::sin(ratio[1]) * std::cos(ratio[2]);</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      p.pos(1) = 0.7 * std::sin(ratio[1]) * std::sin(ratio[2]);</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>      p.pos(2) = 0.7 * std::cos(ratio[1]);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>      p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>      p.pos(2) = ratio[0] * std::cos(ratio[1]);</div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>      <span class="keyword">const</span> <span class="keywordtype">int</span> i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>      <span class="keyword">const</span> <span class="keywordtype">int</span> j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);</div>
@@ -387,9 +387,9 @@ $(function() {
 <div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>          (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};</div>
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>      <span class="comment">// Compute a random initial Velocity</span></div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>      ratio[0] = p.pos(0); <span class="comment">//2.0 * amrex::Random() - 1.0;</span></div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>      ratio[1] = p.pos(1); <span class="comment">//0.0 * amrex::Random() - 1.0;</span></div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>      ratio[2] = p.pos(2); <span class="comment">//0.0 * amrex::Random() - 1.0;</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>      ratio[0] = 2.0 * amrex::Random() - 1.0;</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>      ratio[1] = 2.0 * amrex::Random() - 1.0;</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>      ratio[2] = 2.0 * amrex::Random() - 1.0;</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>      <span class="comment">// Normalizing the velocity.</span></div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>      <span class="keyword">const</span> CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +</div>
@@ -404,7 +404,7 @@ $(function() {
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>      arrdata[StructType::vx][pidx] = ratio[0] / v;</div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>      arrdata[StructType::vy][pidx] = ratio[1] / v;</div>
 <div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>      arrdata[StructType::vz][pidx] = ratio[2] / v;</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>      arrdata[StructType::E][pidx] = 0.5;</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>      arrdata[StructType::ln_E][pidx] = 0;</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>      <span class="comment">// Update the particles counter</span></div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>      ++pidx;</div>

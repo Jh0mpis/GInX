@@ -95,243 +95,243 @@ $(function() {
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html">   25</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceInterpolator.html">Interpolator</a> {</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">   27</a></span><span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">   29</a></span><span class="keyword">const</span> CCTK_REAL <a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// #############################################################################</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">//                   Barycentric Lagrange Interpolator</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">// #############################################################################</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> N&gt;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">   58</a></span><a class="code hl_function" href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">barycentric_cubic_1d</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> (&amp;points)[N],</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                     <span class="keyword">const</span> CCTK_REAL *weights,</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                     <span class="keyword">const</span> CCTK_REAL (&amp;values)[N], <span class="keyword">const</span> CCTK_REAL &amp;x,</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                     <span class="keyword">const</span> CCTK_REAL &amp;plo, <span class="keyword">const</span> CCTK_REAL &amp;dx) {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  CCTK_REAL num{0.0};</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  CCTK_REAL den{0.0};</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="comment">// Check if the point belongs to the consulted points.</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    CCTK_REAL diff = x - (plo + points[i] * dx);</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">const</span> CCTK_REAL tolerance = 1e-12;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">if</span> (diff &lt; tolerance &amp;&amp; diff &gt; -tolerance) {</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>      <span class="keywordflow">return</span> values[i];</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="comment">// Compute the weights and values</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    CCTK_REAL term = weights[i] / diff;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    num += term * values[i];</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    den += term;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  }</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="comment">// Return the interpolation</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <span class="keywordflow">return</span> num / den;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>}</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">  119</a></span><a class="code hl_function" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">barycentric_cubic_3d</a>(amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                     <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x,</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>                     CCTK_REAL <span class="keyword">const</span> &amp;y, CCTK_REAL <span class="keyword">const</span> &amp;z,</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;comp) {</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) &gt;&gt; 1) - 1;</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keyword">const</span> CCTK_INT *nodes = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[order];</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keyword">const</span> CCTK_REAL *w = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[order];</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  <span class="comment">// Setting the pre-computed weights.</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (INTERPOLATION_ORDER &gt; 5 || INTERPOLATION_ORDER &lt; 2) {</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    CCTK_INFO(<span class="stringliteral">&quot;Barycentric Lagrange interpolation of desired order is not yet &quot;</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>              <span class="stringliteral">&quot;implemented. Available orders: 1, 2, 3.&quot;</span>);</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordflow">throw</span> std::invalid_argument(</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        <span class="stringliteral">&quot;Wrong order of barycentric Lagrange interpolation&quot;</span>);</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  }</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  <span class="comment">// Do the interpolation on x</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  CCTK_REAL G[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>      CCTK_REAL values[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>      CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; INTERPOLATION_ORDER; i++) {</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        points[i] = i0 + nodes[i];</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>      }</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>      G[j][k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, values, x,</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                                                          plo[0], dx[0]);</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    }</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  }</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="comment">// Do the interpolation on y</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  CCTK_REAL H[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    CCTK_REAL values[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>      values[j] = G[j][k];</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>      points[j] = j0 + nodes[j];</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    }</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    H[k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, values, y,</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                                                     plo[1], dx[1]);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  }</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="comment">// Do the interpolation on z</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    points[k] = k0 + nodes[k];</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  }</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  <span class="keywordflow">return</span> barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H, z, plo[2],</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                                                   dx[2]);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>} <span class="comment">// barycentric_cubic_3d with component</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1">  210</a></span><a class="code hl_function" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">barycentric_cubic_3d</a>(amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>                     <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x,</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                     CCTK_REAL <span class="keyword">const</span> &amp;y, CCTK_REAL <span class="keyword">const</span> &amp;z,</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo) {</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>  <span class="keywordflow">return</span> barycentric_cubic_3d&lt;INTERPOLATION_ORDER&gt;(f, i0, j0, k0, x, y, z, dx,</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                                                   plo, 0);</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>} <span class="comment">// barycentric_cubic_3d No component</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> N&gt;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">  258</a></span><a class="code hl_function" href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">der_barycentric_cubic_1d</a>(CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x,</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                         <span class="keyword">const</span> <span class="keywordtype">int</span> (&amp;points)[N],</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>                         <span class="keyword">const</span> CCTK_REAL *weights,</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                         <span class="keyword">const</span> CCTK_REAL (&amp;values)[N], <span class="keyword">const</span> CCTK_REAL &amp;x,</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                         <span class="keyword">const</span> CCTK_REAL &amp;plo, <span class="keyword">const</span> CCTK_REAL &amp;dx) {</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  CCTK_REAL num{0.0};</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  CCTK_REAL den{0.0};</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  CCTK_REAL den_sqr{0.0};</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  CCTK_REAL der_num{0.0};</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  <span class="comment">// Compute the interpolation</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    CCTK_REAL diff = x - (plo + points[i] * dx);</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    <span class="keyword">const</span> CCTK_REAL tolerance = 1e-12;</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    <span class="keywordflow">if</span> (diff &lt; tolerance &amp;&amp; diff &gt; -tolerance) {</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>      <span class="comment">// Check if the point makes part of the points used on the</span></div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>      <span class="comment">// interpolation.</span></div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt;= N; j++) {</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        <span class="keywordflow">if</span> (i == j) {</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>          <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        }</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        <span class="keyword">const</span> <span class="keyword">auto</span> x_j = points[j] * dx;</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <span class="keyword">const</span> <span class="keyword">auto</span> x_i = points[i] * dx;</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        d_f_x += weights[j] * (values[i] - values[j]) / (x_j - x_i);</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      }</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>      d_f_x /= weights[i];</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>      f_x = values[i];</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>      <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    }</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="comment">// Compute the weights for the interpolation and the derivative.</span></div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    CCTK_REAL term = weights[i] / diff;</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    num += term * values[i];</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    den += term;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    den_sqr += term / diff;</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>  }</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>  <span class="comment">// Compute the weights for the derivative.</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    der_num += (-term * den / (x - (plo + points[i] * dx)) + term * den_sqr) *</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>               values[i];</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>  }</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  <span class="comment">// Fill the values</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>  f_x = num / den;</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>  d_f_x = der_num / (den * den);</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>} <span class="comment">// der_barycentric_cubic_1d</span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">  378</a></span><a class="code hl_function" href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">barycentric_derivative_and_interpolate</a>(</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1,</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>    <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x, CCTK_REAL <span class="keyword">const</span> &amp;y,</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    CCTK_REAL <span class="keyword">const</span> &amp;z, <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;comp) {</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) &gt;&gt; 1) - 1;</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <span class="keyword">const</span> CCTK_INT *nodes = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[order];</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    <span class="keyword">const</span> CCTK_REAL *w = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[order];</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (INTERPOLATION_ORDER &gt; 5 || INTERPOLATION_ORDER &lt; 2) {</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    CCTK_INFO(<span class="stringliteral">&quot;Barycentric Lagrange interpolation of desired order is not yet &quot;</span></div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>              <span class="stringliteral">&quot;implemented. Available orders: 1, 2, 3.&quot;</span>);</div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    <span class="keywordflow">throw</span> std::invalid_argument(</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="stringliteral">&quot;Wrong order of barycentric Lagrange interpolation&quot;</span>);</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>  }</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>  <span class="comment">// Computing f(x, y_i, z_i)</span></div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>  CCTK_REAL G_xyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>  <span class="comment">// Computing d/dx f(x, y_i, z_i)</span></div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>  CCTK_REAL G_dxyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>      CCTK_REAL values[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>      CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; INTERPOLATION_ORDER; i++) {</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        points[i] = i0 + nodes[i];</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>      }</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>      der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>          G_xyz[j][k], G_dxyz[j][k], points, w, values, x, plo[0], dx[0]);</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    }</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>  }</div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>  <span class="comment">// Computing f(x, y, z_i)</span></div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>  CCTK_REAL H_xyz[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>  <span class="comment">// Computing d/dx f(x, y, z_i)</span></div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>  CCTK_REAL H_dxyz[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>  <span class="comment">// Computing d/dy f(x, y, z_i)</span></div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>  CCTK_REAL H_xdyz[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    CCTK_REAL values[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>    CCTK_REAL d_values[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>      values[j] = G_xyz[j][k];</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>      d_values[j] = G_dxyz[j][k];</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>      points[j] = j0 + nodes[j];</div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>    }</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(H_xyz[k], H_xdyz[k], points,</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>                                                  w, values, y, plo[1], dx[1]);</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    H_dxyz[k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, d_values,</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>                                                          y, plo[1], dx[1]);</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>  }</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span> </div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>  CCTK_INT points[INTERPOLATION_ORDER];</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    points[k] = k0 + nodes[k];</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>  }</div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>  <span class="comment">// Computing f(x, y, z)</span></div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>  <span class="comment">// Computing d/dz f(x, y, z)</span></div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>  der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(f_xyz, df_xyz_2, points, w,</div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>                                                H_xyz, z, plo[2], dx[2]);</div>
-<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>  <span class="comment">// Computing d/dx f(x, y, z)</span></div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>  df_xyz_0 = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H_dxyz, z,</div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>                                                       plo[2], dx[2]);</div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>  <span class="comment">// Computing d/dy f(x, y, z)</span></div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>  df_xyz_1 = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H_xdyz, z,</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>                                                       plo[2], dx[2]);</div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>} <span class="comment">// barycentric_derivative_and_interpolate</span></div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span> </div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>} <span class="comment">// namespace Interpolator</span></div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span> </div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span><span class="preprocessor">#endif </span><span class="comment">// !INTERPOLATOR_HXX</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">   32</a></span><span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">   39</a></span><span class="keyword">const</span> CCTK_REAL <a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">// #############################################################################</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">//                   Barycentric Lagrange Interpolator</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">// #############################################################################</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> N&gt;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">   68</a></span><a class="code hl_function" href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">barycentric_cubic_1d</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> (&amp;points)[N],</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                     <span class="keyword">const</span> CCTK_REAL *weights,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                     <span class="keyword">const</span> CCTK_REAL (&amp;values)[N], <span class="keyword">const</span> CCTK_REAL &amp;x,</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                     <span class="keyword">const</span> CCTK_REAL &amp;plo, <span class="keyword">const</span> CCTK_REAL &amp;dx) {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  CCTK_REAL num{0.0};</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  CCTK_REAL den{0.0};</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="comment">// Check if the point belongs to the consulted points.</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    CCTK_REAL diff = x - (plo + points[i] * dx);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">const</span> CCTK_REAL tolerance = 1e-12;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordflow">if</span> (diff &lt; tolerance &amp;&amp; diff &gt; -tolerance) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>      <span class="keywordflow">return</span> values[i];</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="comment">// Compute the weights and values</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    CCTK_REAL term = weights[i] / diff;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    num += term * values[i];</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    den += term;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  }</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="comment">// Return the interpolation</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  <span class="keywordflow">return</span> num / den;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">  129</a></span><a class="code hl_function" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">barycentric_cubic_3d</a>(amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>                     <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x,</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>                     CCTK_REAL <span class="keyword">const</span> &amp;y, CCTK_REAL <span class="keyword">const</span> &amp;z,</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;comp) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) &gt;&gt; 1) - 1;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keyword">const</span> CCTK_INT *nodes = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[order];</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keyword">const</span> CCTK_REAL *w = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[order];</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="comment">// Setting the pre-computed weights.</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (INTERPOLATION_ORDER &gt; 5 || INTERPOLATION_ORDER &lt; 2) {</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    CCTK_INFO(<span class="stringliteral">&quot;Barycentric Lagrange interpolation of desired order is not yet &quot;</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>              <span class="stringliteral">&quot;implemented. Available orders: 1, 2, 3.&quot;</span>);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keywordflow">throw</span> std::invalid_argument(</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="stringliteral">&quot;Wrong order of barycentric Lagrange interpolation&quot;</span>);</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  }</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <span class="comment">// Do the interpolation on x</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  CCTK_REAL G[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>      CCTK_REAL values[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>      CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; INTERPOLATION_ORDER; i++) {</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        points[i] = i0 + nodes[i];</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>      }</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>      G[j][k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, values, x,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                                                          plo[0], dx[0]);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    }</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  }</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  <span class="comment">// Do the interpolation on y</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  CCTK_REAL H[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    CCTK_REAL values[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>      values[j] = G[j][k];</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>      points[j] = j0 + nodes[j];</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    }</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    H[k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, values, y,</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                                                     plo[1], dx[1]);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  }</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  <span class="comment">// Do the interpolation on z</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    points[k] = k0 + nodes[k];</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  }</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <span class="keywordflow">return</span> barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H, z, plo[2],</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                                                   dx[2]);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>} <span class="comment">// barycentric_cubic_3d with component</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> CCTK_REAL</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a57dd50cb38cbed0e89572d09b4a818e1">  220</a></span><a class="code hl_function" href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">barycentric_cubic_3d</a>(amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>                     <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>                     CCTK_REAL <span class="keyword">const</span> &amp;y, CCTK_REAL <span class="keyword">const</span> &amp;z,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>                     <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo) {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  <span class="keywordflow">return</span> barycentric_cubic_3d&lt;INTERPOLATION_ORDER&gt;(f, i0, j0, k0, x, y, z, dx,</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                                                   plo, 0);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>} <span class="comment">// barycentric_cubic_3d No component</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> N&gt;</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">  268</a></span><a class="code hl_function" href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">der_barycentric_cubic_1d</a>(CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x,</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                         <span class="keyword">const</span> <span class="keywordtype">int</span> (&amp;points)[N],</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                         <span class="keyword">const</span> CCTK_REAL *weights,</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                         <span class="keyword">const</span> CCTK_REAL (&amp;values)[N], <span class="keyword">const</span> CCTK_REAL &amp;x,</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                         <span class="keyword">const</span> CCTK_REAL &amp;plo, <span class="keyword">const</span> CCTK_REAL &amp;dx) {</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>  CCTK_REAL num{0.0};</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>  CCTK_REAL den{0.0};</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  CCTK_REAL den_sqr{0.0};</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  CCTK_REAL der_num{0.0};</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>  <span class="comment">// Compute the interpolation</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    CCTK_REAL diff = x - (plo + points[i] * dx);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="keyword">const</span> CCTK_REAL tolerance = 1e-12;</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordflow">if</span> (diff &lt; tolerance &amp;&amp; diff &gt; -tolerance) {</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>      <span class="comment">// Check if the point makes part of the points used on the</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>      <span class="comment">// interpolation.</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt;= N; j++) {</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        <span class="keywordflow">if</span> (i == j) {</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>          <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        }</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        <span class="keyword">const</span> <span class="keyword">auto</span> x_j = points[j] * dx;</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        <span class="keyword">const</span> <span class="keyword">auto</span> x_i = points[i] * dx;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>        d_f_x += weights[j] * (values[i] - values[j]) / (x_j - x_i);</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>      }</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>      d_f_x /= weights[i];</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>      f_x = values[i];</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>      <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    }</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="comment">// Compute the weights for the interpolation and the derivative.</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    CCTK_REAL term = weights[i] / diff;</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    num += term * values[i];</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    den += term;</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    den_sqr += term / diff;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>  }</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span> </div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>  <span class="comment">// Compute the weights for the derivative.</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; N; i++) {</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    CCTK_REAL term = weights[i] / (x - (plo + points[i] * dx));</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    der_num += (-term * den / (x - (plo + points[i] * dx)) + term * den_sqr) *</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>               values[i];</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>  }</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="comment">// Fill the values</span></div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>  f_x = num / den;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>  d_f_x = der_num / (den * den);</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>} <span class="comment">// der_barycentric_cubic_1d</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span><span class="keyword">template</span> &lt;<span class="keywordtype">int</span> INTERPOLATION_ORDER&gt;</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE <span class="keyword">inline</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno"><a class="line" href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">  388</a></span><a class="code hl_function" href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">barycentric_derivative_and_interpolate</a>(</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1,</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;f, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;i0,</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;j0, <span class="keywordtype">int</span> <span class="keyword">const</span> &amp;k0, CCTK_REAL <span class="keyword">const</span> &amp;x, CCTK_REAL <span class="keyword">const</span> &amp;y,</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    CCTK_REAL <span class="keyword">const</span> &amp;z, <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx,</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;comp) {</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) &gt;&gt; 1) - 1;</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="keyword">const</span> CCTK_INT *nodes = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a>[order];</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    <span class="keyword">const</span> CCTK_REAL *w = &amp;<a class="code hl_variable" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a>[order];</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (INTERPOLATION_ORDER &gt; 5 || INTERPOLATION_ORDER &lt; 2) {</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    CCTK_INFO(<span class="stringliteral">&quot;Barycentric Lagrange interpolation of desired order is not yet &quot;</span></div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>              <span class="stringliteral">&quot;implemented. Available orders: 1, 2, 3.&quot;</span>);</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    <span class="keywordflow">throw</span> std::invalid_argument(</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        <span class="stringliteral">&quot;Wrong order of barycentric Lagrange interpolation&quot;</span>);</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>  }</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  <span class="comment">// Computing f(x, y_i, z_i)</span></div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>  CCTK_REAL G_xyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>  <span class="comment">// Computing d/dx f(x, y_i, z_i)</span></div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>  CCTK_REAL G_dxyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>      CCTK_REAL values[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>      CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; INTERPOLATION_ORDER; i++) {</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        points[i] = i0 + nodes[i];</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>      }</div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>      der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>          G_xyz[j][k], G_dxyz[j][k], points, w, values, x, plo[0], dx[0]);</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    }</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>  }</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>  <span class="comment">// Computing f(x, y, z_i)</span></div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>  CCTK_REAL H_xyz[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>  <span class="comment">// Computing d/dx f(x, y, z_i)</span></div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>  CCTK_REAL H_dxyz[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>  <span class="comment">// Computing d/dy f(x, y, z_i)</span></div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>  CCTK_REAL H_xdyz[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    CCTK_REAL values[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    CCTK_REAL d_values[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; INTERPOLATION_ORDER; j++) {</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>      values[j] = G_xyz[j][k];</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>      d_values[j] = G_dxyz[j][k];</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>      points[j] = j0 + nodes[j];</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>    }</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(H_xyz[k], H_xdyz[k], points,</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>                                                  w, values, y, plo[1], dx[1]);</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>    H_dxyz[k] = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, d_values,</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>                                                          y, plo[1], dx[1]);</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>  }</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span> </div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>  CCTK_INT points[INTERPOLATION_ORDER];</div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; INTERPOLATION_ORDER; k++) {</div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>    points[k] = k0 + nodes[k];</div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>  }</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>  <span class="comment">// Computing f(x, y, z)</span></div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>  <span class="comment">// Computing d/dz f(x, y, z)</span></div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>  der_barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(f_xyz, df_xyz_2, points, w,</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>                                                H_xyz, z, plo[2], dx[2]);</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>  <span class="comment">// Computing d/dx f(x, y, z)</span></div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>  df_xyz_0 = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H_dxyz, z,</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>                                                       plo[2], dx[2]);</div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>  <span class="comment">// Computing d/dy f(x, y, z)</span></div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>  df_xyz_1 = barycentric_cubic_1d&lt;INTERPOLATION_ORDER&gt;(points, w, H_xdyz, z,</div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>                                                       plo[2], dx[2]);</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>} <span class="comment">// barycentric_derivative_and_interpolate</span></div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span> </div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>} <span class="comment">// namespace Interpolator</span></div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span> </div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span><span class="preprocessor">#endif </span><span class="comment">// !INTERPOLATOR_HXX</span></div>
 <div class="ttc" id="anamespaceInterpolator_html"><div class="ttname"><a href="namespaceInterpolator.html">Interpolator</a></div><div class="ttdoc">Interpolators namespace.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:25</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_a2bdaedf8dcad6a971d8ccb866028f0c2"><div class="ttname"><a href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">Interpolator::all_nodes</a></div><div class="ttdeci">const int all_nodes[14]</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:27</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_a3ef713bfd5da0f741eb1448ac5a2926d"><div class="ttname"><a href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">Interpolator::all_weights</a></div><div class="ttdeci">const CCTK_REAL all_weights[14]</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:29</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_a3ff5bdc82f32db47fab2fefa1b626a93"><div class="ttname"><a href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">Interpolator::barycentric_derivative_and_interpolate</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void barycentric_derivative_and_interpolate(CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1, CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</div><div class="ttdoc">Do a Barycentric interpolation and its derivatives in three directions.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:378</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_a9a59899414a2616d8ebcf038b4f8fe8a"><div class="ttname"><a href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">Interpolator::der_barycentric_cubic_1d</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE void der_barycentric_cubic_1d(CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x, const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</div><div class="ttdoc">Do a Barycentric interpolation and its derivative in one direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:258</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_aad2c111a5cf92c7187ae74b45e1b7eb7"><div class="ttname"><a href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">Interpolator::barycentric_cubic_3d</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</div><div class="ttdoc">Do a Barycentric interpolation in three direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:119</div></div>
-<div class="ttc" id="anamespaceInterpolator_html_ab256099a9408b779dae55395f44f9e2b"><div class="ttname"><a href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">Interpolator::barycentric_cubic_1d</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL barycentric_cubic_1d(const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</div><div class="ttdoc">Do a Barycentric interpolation in one direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:58</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_a2bdaedf8dcad6a971d8ccb866028f0c2"><div class="ttname"><a href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">Interpolator::all_nodes</a></div><div class="ttdeci">const int all_nodes[14]</div><div class="ttdoc">Nodes interpolator's array.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:32</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_a3ef713bfd5da0f741eb1448ac5a2926d"><div class="ttname"><a href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">Interpolator::all_weights</a></div><div class="ttdeci">const CCTK_REAL all_weights[14]</div><div class="ttdoc">Weights interpolator's array.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:39</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_a3ff5bdc82f32db47fab2fefa1b626a93"><div class="ttname"><a href="namespaceInterpolator.html#a3ff5bdc82f32db47fab2fefa1b626a93">Interpolator::barycentric_derivative_and_interpolate</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void barycentric_derivative_and_interpolate(CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1, CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</div><div class="ttdoc">Do a Barycentric interpolation and its derivatives in three directions.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:388</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_a9a59899414a2616d8ebcf038b4f8fe8a"><div class="ttname"><a href="namespaceInterpolator.html#a9a59899414a2616d8ebcf038b4f8fe8a">Interpolator::der_barycentric_cubic_1d</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE void der_barycentric_cubic_1d(CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x, const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</div><div class="ttdoc">Do a Barycentric interpolation and its derivative in one direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:268</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_aad2c111a5cf92c7187ae74b45e1b7eb7"><div class="ttname"><a href="namespaceInterpolator.html#aad2c111a5cf92c7187ae74b45e1b7eb7">Interpolator::barycentric_cubic_3d</a></div><div class="ttdeci">AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL barycentric_cubic_3d(amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</div><div class="ttdoc">Do a Barycentric interpolation in three direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:129</div></div>
+<div class="ttc" id="anamespaceInterpolator_html_ab256099a9408b779dae55395f44f9e2b"><div class="ttname"><a href="namespaceInterpolator.html#ab256099a9408b779dae55395f44f9e2b">Interpolator::barycentric_cubic_1d</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL barycentric_cubic_1d(const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</div><div class="ttdoc">Do a Barycentric interpolation in one direction.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:68</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
