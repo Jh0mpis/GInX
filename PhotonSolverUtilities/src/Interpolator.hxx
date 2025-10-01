@@ -24,8 +24,18 @@
  */
 namespace Interpolator {
 
+/**
+ * \brief Nodes interpolator's array. 
+ *
+ * Contains the nodes that we are going to use for the orders from 2 to 5.
+ */
 const int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
+/**
+ * \brief Weights interpolator's array. 
+ *
+ * Contains the weights that we are going to use for the orders from 2 to 5.
+ */
 const CCTK_REAL all_weights[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
 
 // #############################################################################
