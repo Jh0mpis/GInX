@@ -117,20 +117,17 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a92f836869a3714cf17214dc895332813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a92f836869a3714cf17214dc895332813">evolve</a> () override</td></tr>
-<tr class="separator:a92f836869a3714cf17214dc895332813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a238395b0e861a0be9e4daab1aba8d2d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">evolve</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</td></tr>
+<tr class="memdesc:a238395b0e861a0be9e4daab1aba8d2d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 4.  <a href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">More...</a><br /></td></tr>
+<tr class="separator:a238395b0e861a0be9e4daab1aba8d2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">evolveRK2</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)</td></tr>
-<tr class="memdesc:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 2.  <a href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">More...</a><br /></td></tr>
 <tr class="separator:a0fa46b76c61baeb64e8d8f0a3a59237d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c5a6dad12d9c2263061108557460425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a1c5a6dad12d9c2263061108557460425">evolveRK4</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)</td></tr>
-<tr class="memdesc:a1c5a6dad12d9c2263061108557460425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 4.  <a href="classContainers_1_1PhotonsContainer.html#a1c5a6dad12d9c2263061108557460425">More...</a><br /></td></tr>
-<tr class="separator:a1c5a6dad12d9c2263061108557460425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memItemLeft" align="right" valign="top">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
 <tr class="memdesc:ac82e8ecf5f20496c96089f5ccc13759b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">More...</a><br /></td></tr>
 <tr class="separator:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a7c1b98e53c13f69ac808fc8571a2a4a4">check_velocity</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</td></tr>
-<tr class="memdesc:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#a7c1b98e53c13f69ac808fc8571a2a4a4">More...</a><br /></td></tr>
-<tr class="separator:a7c1b98e53c13f69ac808fc8571a2a4a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">check_constants</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</td></tr>
+<tr class="memdesc:a3dbd4c2aace62ed55d86c0e722d82268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">More...</a><br /></td></tr>
+<tr class="separator:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebba2fa6ea568b7cce9b46af5976d650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a> ()</td></tr>
 <tr class="separator:aebba2fa6ea568b7cce9b46af5976d650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -158,8 +155,8 @@ template&lt;typename StructType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7c1b98e53c13f69ac808fc8571a2a4a4" name="a7c1b98e53c13f69ac808fc8571a2a4a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c1b98e53c13f69ac808fc8571a2a4a4">&#9670;&nbsp;</a></span>check_velocity()</h2>
+<a id="a3dbd4c2aace62ed55d86c0e722d82268" name="a3dbd4c2aace62ed55d86c0e722d82268"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dbd4c2aace62ed55d86c0e722d82268">&#9670;&nbsp;</a></span>check_constants()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -167,7 +164,7 @@ template&lt;typename StructType &gt; </div>
 template&lt;typename StructType &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::check_velocity </td>
+          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::check_constants </td>
           <td>(</td>
           <td class="paramtype">CCTK_ARGUMENTS&#160;</td>
           <td class="paramname">, </td>
@@ -258,7 +255,7 @@ template&lt;typename StructType &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">amrex::Array4&lt; CCTK_REAL const &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>curv</em>, </td>
+          <td class="paramname"><em>K</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -318,7 +315,8 @@ E)\). That's why each rhs depends on the other components of the vector \(U\). F
 </p>
 <p >and finally, for the \( ln E \) the differential equation is:</p>
 <p class="formulaDsp">
-\[ \dfrac{d}{dt} U[6] = \alpha K_{jk}U[3 + l]U[3 + m]\gamma^{lj}\gamma^{mk} - U[3+l]\gamma^{lj}\partial_j\alpha\]
+\[ \dfrac{d}{dt} U[6] = \alpha K_{jk}U[3 + l]U[3 + m]\gamma^{lj}\gamma^{mk}
+- U[3+l]\gamma^{lj}\partial_j\alpha\]
 </p>
 <p >Where \(i, j, k, l, m = 0, 1, 2\) and we have been using Einstein notation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -340,8 +338,8 @@ E)\). That's why each rhs depends on the other components of the vector \(U\). F
 
 </div>
 </div>
-<a id="a92f836869a3714cf17214dc895332813" name="a92f836869a3714cf17214dc895332813"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92f836869a3714cf17214dc895332813">&#9670;&nbsp;</a></span>evolve()</h2>
+<a id="a238395b0e861a0be9e4daab1aba8d2d9" name="a238395b0e861a0be9e4daab1aba8d2d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a238395b0e861a0be9e4daab1aba8d2d9">&#9670;&nbsp;</a></span>evolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -352,7 +350,45 @@ template&lt;typename StructType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::evolve</td>
+          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::evolve </td>
+          <td>(</td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>lapse</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>shift</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>curv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>dt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>lev</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -361,6 +397,36 @@ template&lt;typename StructType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Evolving using Runge-Kutta 4. </p>
+<p >For the Runge-Kutta 4 we are solving the differential equation \(\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\) using:</p>
+<p class="formulaDsp">
+\[
+ U_{n+1} = U_n + \frac{1}{6}\Delta t \left(f_1 + 2f_2 + 2f_3 + f_4\right)
+ \]
+</p>
+<p >where:</p>
+<ul>
+<li>\(f_1 = f(U_n, t),\)</li>
+<li>\(f_2 = f\left(U_n + \frac{\Delta t}{2} f_1, t + \frac{\Delta
+t}{2}\right),\)</li>
+<li>\(f_3 = f\left(U_n + \frac{\Delta t}{2} f_2, t + \frac{\Delta
+t}{2}\right),\)</li>
+<li>\(f_4 = f(U_n + \Delta t f_3, t + \Delta t),\)</li>
+</ul>
+<p >And checking if it goes outside of the grid boundaries.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
+    <tr><td class="paramname">shift</td><td>ADM shift vector. </td></tr>
+    <tr><td class="paramname">metric</td><td>ADM 3 dimension metric. </td></tr>
+    <tr><td class="paramname">curv</td><td>Extrinsic curvature. </td></tr>
+    <tr><td class="paramname">dt</td><td>Timestep. </td></tr>
+    <tr><td class="paramname">lev</td><td>AMR Level of discretization. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -415,110 +481,6 @@ template&lt;typename StructType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Evolving using Runge-Kutta 2. </p>
-<p >For the Runge-Kutta 2 we are solving the differential equation \(\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\) using:</p>
-<p class="formulaDsp">
-\[U_{n+1} = U_n + \Delta t f\left(U_n + \frac{1}{2}\Delta t f(U_n, t), t +
-\frac{1}{2} \Delta t\right)\]
-</p>
-<p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
-    <tr><td class="paramname">shift</td><td>ADM shift vector. </td></tr>
-    <tr><td class="paramname">metric</td><td>ADM 3 dimension metric. </td></tr>
-    <tr><td class="paramname">curv</td><td>Extrinsic curvature. </td></tr>
-    <tr><td class="paramname">dt</td><td>Timestep. </td></tr>
-    <tr><td class="paramname">lev</td><td>AMR Level of discretization. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1c5a6dad12d9c2263061108557460425" name="a1c5a6dad12d9c2263061108557460425"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c5a6dad12d9c2263061108557460425">&#9670;&nbsp;</a></span>evolveRK4()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename StructType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::evolveRK4 </td>
-          <td>(</td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>lapse</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>shift</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>curv</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
-          <td class="paramname"><em>dt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>lev</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Evolving using Runge-Kutta 4. </p>
-<p >For the Runge-Kutta 4 we are solving the differential equation \(\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\) using:</p>
-<p class="formulaDsp">
-\[
- U_{n+1} = U_n + \frac{1}{6}\Delta t \left(f_1 + 2f_2 + 2f_3 + f_4\right)
- \]
-</p>
-<p >where:</p>
-<ul>
-<li>\(f_1 = f(U_n, t),\)</li>
-<li>\(f_2 = f\left(U_n + \frac{\Delta t}{2} f_1, t + \frac{\Delta
-t}{2}\right),\)</li>
-<li>\(f_3 = f\left(U_n + \frac{\Delta t}{2} f_2, t + \frac{\Delta
-t}{2}\right),\)</li>
-<li>\(f_4 = f(U_n + \Delta t f_3, t + \Delta t),\)</li>
-</ul>
-<p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
-    <tr><td class="paramname">shift</td><td>ADM shift vector. </td></tr>
-    <tr><td class="paramname">metric</td><td>ADM 3 dimension metric. </td></tr>
-    <tr><td class="paramname">curv</td><td>Extrinsic curvature. </td></tr>
-    <tr><td class="paramname">dt</td><td>Timestep. </td></tr>
-    <tr><td class="paramname">lev</td><td>AMR Level of discretization. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
