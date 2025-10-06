@@ -1,5 +1,6 @@
 #include <cctk.h>
 
+#include "AMReX_ParallelDescriptor.H"
 #include "CParameters.h"
 #include "Initializers.hxx"
 #include "Photons.hxx"
@@ -22,7 +23,7 @@ using ParticleData = Photons::PhotonsData;
 using PC = Containers::PhotonsContainer<ParticleData>;
 std::vector<std::unique_ptr<PC>> g_nupcs;
 
-extern "C" void test_setup(CCTK_ARGUMENTS) {
+extern "C" void setup(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
 
@@ -46,11 +47,11 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
       // PC>,
       //                photons_per_cell, metric, lev);
       pc->initialize(
-          photons_init::random_photons_per_container_initializer<ParticleData,
-                                                                 PC>,
+          photons_init::random_parallel_photons_per_container_initializer<
+              ParticleData, PC>,
           photons_per_cell, metric);
-      pc->Redistribute();
     }
+    pc->Redistribute();
   }
 }
 
@@ -132,7 +133,6 @@ extern "C" void init_iso_schwarzschild(CCTK_ARGUMENTS) {
 }
 
 extern "C" void test(CCTK_ARGUMENTS) {
-  CCTK_INFO("EVOLVING");
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
 
@@ -162,8 +162,9 @@ extern "C" void test(CCTK_ARGUMENTS) {
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
       const amrex::MultiFab &curv = *gd_curv.mfab[tl];
 
-      pc->evolveRK4(lapse, shift, metric, curv, CCTK_DELTA_TIME, lev);
+      pc->evolve(lapse, shift, metric, curv, CCTK_DELTA_TIME, lev);
     }
+    pc->Redistribute();
   }
 }
 
@@ -204,7 +205,7 @@ extern "C" void check_velocities(CCTK_ARGUMENTS) {
       const amrex::MultiFab &lapse = *gd_lapse.mfab[tl];
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
       const amrex::MultiFab &shift = *gd_shift.mfab[tl];
-      pc->check_velocity(CCTK_PASS_CTOC, metric, lapse, shift, lev);
+      pc->check_constants(CCTK_PASS_CTOC, metric, lapse, shift, lev);
     }
   }
 }

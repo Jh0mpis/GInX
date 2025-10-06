@@ -18,13 +18,13 @@ if (CCTK_Equals(initial_metric, "minkowski")) {
     } "Fields setup"
 }
 
-SCHEDULE test_setup AT CCTK_POSTINITIAL {
+SCHEDULE setup AT CCTK_POSTINITIAL {
     LANG: C
     OPTIONS: global
 } "setup"
 
 if ((particle_plot_every>0)||(particle_tsv_every>0) ){
-    SCHEDULE print AT CCTK_POSTINITIAL AFTER test_setup
+    SCHEDULE print AT CCTK_POSTINITIAL AFTER setup
     {
         LANG: C
         OPTIONS: global
@@ -32,7 +32,7 @@ if ((particle_plot_every>0)||(particle_tsv_every>0) ){
 }
 
 if ((particle_plot_every||particle_tsv_every) ) {
-    SCHEDULE check_velocities AT CCTK_POSTINITIAL AFTER test_setup
+    SCHEDULE check_velocities AT CCTK_POSTINITIAL AFTER setup
     {
         LANG: C
         OPTIONS: global
