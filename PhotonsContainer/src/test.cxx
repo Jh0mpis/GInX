@@ -186,26 +186,29 @@ extern "C" void check_velocities(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
 
-  const int tl = 0;
-  const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
-  const int gi_lapse = CCTK_GroupIndex("ADMBaseX::lapse");
-  const int gi_shift = CCTK_GroupIndex("ADMBaseX::shift");
-  assert(gi_lapse >= 0 && "Failed to get the lapse group index");
-  assert(gi_metric >= 0 && "Failed to get the metric group index");
-  assert(gi_shift >= 0 && "Failed to get the shift group index");
+  const int it = cctkGH->cctk_iteration;
+  if (particle_tsv_every > 0 && it % particle_tsv_every == 0) {
+    const int tl = 0;
+    const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
+    const int gi_lapse = CCTK_GroupIndex("ADMBaseX::lapse");
+    const int gi_shift = CCTK_GroupIndex("ADMBaseX::shift");
+    assert(gi_lapse >= 0 && "Failed to get the lapse group index");
+    assert(gi_metric >= 0 && "Failed to get the metric group index");
+    assert(gi_shift >= 0 && "Failed to get the shift group index");
 
-  for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
-    auto &pc = g_nupcs.at(patch);
-    auto &pd = CarpetX::ghext->patchdata.at(patch);
-    for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
-      const auto &ld = pd.leveldata.at(lev);
-      const auto &gd_metric = *ld.groupdata.at(gi_metric);
-      const auto &gd_lapse = *ld.groupdata.at(gi_lapse);
-      const auto &gd_shift = *ld.groupdata.at(gi_shift);
-      const amrex::MultiFab &lapse = *gd_lapse.mfab[tl];
-      const amrex::MultiFab &metric = *gd_metric.mfab[tl];
-      const amrex::MultiFab &shift = *gd_shift.mfab[tl];
-      pc->check_constants(CCTK_PASS_CTOC, metric, lapse, shift, lev);
+    for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
+      auto &pc = g_nupcs.at(patch);
+      auto &pd = CarpetX::ghext->patchdata.at(patch);
+      for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
+        const auto &ld = pd.leveldata.at(lev);
+        const auto &gd_metric = *ld.groupdata.at(gi_metric);
+        const auto &gd_lapse = *ld.groupdata.at(gi_lapse);
+        const auto &gd_shift = *ld.groupdata.at(gi_shift);
+        const amrex::MultiFab &lapse = *gd_lapse.mfab[tl];
+        const amrex::MultiFab &metric = *gd_metric.mfab[tl];
+        const amrex::MultiFab &shift = *gd_shift.mfab[tl];
+        pc->check_constants(CCTK_PASS_CTOC, metric, lapse, shift, lev);
+      }
     }
   }
 }

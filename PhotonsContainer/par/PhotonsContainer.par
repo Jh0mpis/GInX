@@ -12,12 +12,12 @@ Cactus::presync_mode = "mixed-error"
 CarpetX::verbose = yes
 CarpetX::poison_undefined_values = yes
 
-CarpetX::xmin = -5.0
-CarpetX::ymin = -5.0
-CarpetX::zmin = -5.0
-CarpetX::xmax = +5.0
-CarpetX::ymax = +5.0
-CarpetX::zmax = +5.0
+CarpetX::xmin = -20.0
+CarpetX::ymin = -20.0
+CarpetX::zmin = -20.0
+CarpetX::xmax = +20.0
+CarpetX::ymax = +20.0
+CarpetX::zmax = +20.0
 
 CarpetX::ncells_x = 160
 CarpetX::ncells_y = 160
@@ -36,9 +36,9 @@ CarpetX::max_tile_size_y = 10000000
 CarpetX::max_tile_size_z = 10000000
 
 CarpetX::ghost_size = 3
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = 1.0
 
-Cactus::cctk_itlast = 1000
+Cactus::cctk_itlast = 20
 
 CarpetX::regrid_error_threshold = 4.
 CarpetX::max_num_levels = 1
@@ -57,7 +57,7 @@ CarpetX::out_tsv_vars = ""
 
 # PhotonsContainer parameters definition
 ParticlesContainer::particle_plot_every = 0
-ParticlesContainer::particle_tsv_every = 1
-PhotonsContainer::photons_per_cell = 2000
+ParticlesContainer::particle_tsv_every = 10
+PhotonsContainer::photons_per_cell = 100
 PhotonsContainer::initial_metric = "iso schwarzschild"
 # PhotonsContainer::initial_metric = "minkowski"

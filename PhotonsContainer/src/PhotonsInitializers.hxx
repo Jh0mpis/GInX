@@ -412,7 +412,7 @@ void random_parallel_photons_per_container_initializer(
     // get the current process id
     auto const metric_array = metric.array(mfi);
     CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-               "Number of particles created: %d %f", local_particles_size,
+               "Number of particles created: %d %d", local_particles_size,
                old_size);
 
     for (int i = 0; i < local_particles_size; i++) {
@@ -481,9 +481,9 @@ void random_parallel_photons_per_container_initializer(
           (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
 
       // Compute a random initial Velocity
-      ratio[0] = 0.0; // 2.0 * amrex::Random() - 1.0;
-      ratio[1] = 0.0; // 2.0 * amrex::Random() - 1.0;
-      ratio[2] = 1.0; // 2.0 * amrex::Random() - 1.0;
+      ratio[0] = 2.0 * amrex::Random() - 1.0;
+      ratio[1] = 2.0 * amrex::Random() - 1.0;
+      ratio[2] = 2.0 * amrex::Random() - 1.0;
 
       // Normalizing the velocity.
       const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
@@ -505,10 +505,9 @@ void random_parallel_photons_per_container_initializer(
       arrdata[StructType::vz][pidx] = ratio[2] / v;
       arrdata[StructType::ln_E][pidx] = 0;
     }
-
-    CCTK_VINFO("%d particles created",
-               particle_tile.GetArrayOfStructs().size());
   }
+
+  CCTK_VINFO("%d particles created", pc.TotalNumberOfParticles());
 
 } // random_parallel_photons_initializer
 
