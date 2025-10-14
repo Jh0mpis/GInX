@@ -127,203 +127,203 @@ $(function() {
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>              <span class="keyword">const</span> amrex::MultiFab &amp;metric, <span class="keyword">const</span> amrex::MultiFab &amp;curv,</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>              <span class="keyword">const</span> CCTK_REAL &amp;dt, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="comment">// Evolving using Runge-Kutta 2.</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">   70</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">evolveRK2</a>(<span class="keyword">const</span> amrex::MultiFab &amp;lapse, <span class="keyword">const</span> amrex::MultiFab &amp;shift,</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                 <span class="keyword">const</span> amrex::MultiFab &amp;metric, <span class="keyword">const</span> amrex::MultiFab &amp;curv,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                 <span class="keyword">const</span> CCTK_REAL &amp;dt, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="comment">// Given differential equation dU/dt = f(U, dU/dx; t) computes f(U, dU/dx;t)</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a>(<span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; &amp;u,</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>              <span class="keyword">const</span> CCTK_REAL &amp;t, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;lapse,</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;shift,</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;metric,</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;K, <span class="keyword">const</span> CCTK_REAL dt,</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>              <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>              <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="comment">// Given differential equation dU/dt = f(U, dU/dx; t) computes f(U, dU/dx;t)</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a>(<span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; &amp;u,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>              <span class="keyword">const</span> CCTK_REAL &amp;t, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;lapse,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;shift,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;metric,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>              amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;K, <span class="keyword">const</span> CCTK_REAL dt,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>              <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>              <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <span class="comment">// Computes and print all photons velocities</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">check_constants</a>(CCTK_ARGUMENTS, <span class="keyword">const</span> amrex::MultiFab &amp;metric,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                       <span class="keyword">const</span> amrex::MultiFab &amp;lapse,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                       <span class="keyword">const</span> amrex::MultiFab &amp;shift, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="comment">// Computes and print all photons velocities</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">check_constants</a>(CCTK_ARGUMENTS, <span class="keyword">const</span> amrex::MultiFab &amp;metric,</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                       <span class="keyword">const</span> amrex::MultiFab &amp;lapse,</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                       <span class="keyword">const</span> amrex::MultiFab &amp;shift, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a>();</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}; <span class="comment">// PhotonsContainer class</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// ##############################################################################</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">//                   PhotonsContainer::METHODS DECLARATION</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">// ##############################################################################</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">  145</a></span><a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">PhotonsContainer&lt;StructType&gt;::compute_rhs</a>(</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; &amp;u,</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keyword">const</span> CCTK_REAL &amp;t, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;lapse,</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;shift,</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;metric,</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;curv, <span class="keyword">const</span> CCTK_REAL dt,</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo) {</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; rhs = {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>      0., 0., 0., 0., 0., 0., 0.};</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  <span class="comment">// Compute the cell&#39;s index where the particle is at position (u[0], u[1],</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="comment">// u[2])</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  <span class="comment">// Interpolate lapse</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="comment">// Interpolate partial lapse</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  CCTK_REAL lapse_x;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; d_lapse_x;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  barycentric_derivative_and_interpolate&lt;5&gt;(lapse_x, d_lapse_x[0], d_lapse_x[1],</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                                            d_lapse_x[2], lapse, i0, j0, k0,</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                                            u[0], u[1], u[2], dx, plo, 0);</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="comment">// Interpolate shift</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  <span class="comment">// Interpolate partial shift</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; shift_x;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  amrex::GpuArray&lt;amrex::GpuArray&lt;CCTK_REAL, 3&gt;, 3&gt; d_shift_x;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>      shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>      j0, k0, u[0], u[1], u[2], dx, plo, 0);</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>      shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>      j0, k0, u[0], u[1], u[2], dx, plo, 1);</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>      shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>      j0, k0, u[0], u[1], u[2], dx, plo, 2);</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>  <span class="comment">// Interpolate metric</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  <span class="comment">// Interpolate partial metric</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>  amrex::GpuArray&lt;CCTK_REAL, 6&gt; gamma_x;</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>  amrex::GpuArray&lt;amrex::GpuArray&lt;CCTK_REAL, 6&gt;, 3&gt; d_gamma_x;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>      gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>      j0, k0, u[0], u[1], u[2], dx, plo, 0);</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>      gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>      j0, k0, u[0], u[1], u[2], dx, plo, 1);</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>      gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>      j0, k0, u[0], u[1], u[2], dx, plo, 2);</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>      gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>      j0, k0, u[0], u[1], u[2], dx, plo, 3);</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>      gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>      j0, k0, u[0], u[1], u[2], dx, plo, 4);</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>      gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>      j0, k0, u[0], u[1], u[2], dx, plo, 5);</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  <span class="comment">// Interpolate Curvature</span></div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 6&gt; curv_x = {</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 0),</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 1),</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 2),</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 3),</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 4),</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 5)};</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>  <span class="comment">// Compute the inverse of the metric.</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>  <span class="keyword">const</span> CCTK_REAL inv_det_gamma =</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>      1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>             2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>             gamma_x[2] * gamma_x[2] * gamma_x[3] -</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>             gamma_x[4] * gamma_x[4] * gamma_x[0] -</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>             gamma_x[1] * gamma_x[1] * gamma_x[5]);</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 6&gt; gamma_inv_x = {</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>      (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>      (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>      (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>      (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>      (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>      (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt; V_down = {u[3], u[4], u[5]};</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>  <span class="comment">// Compute the upper index velocity terms.</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt; V_up = {</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>      gamma_inv_x[0] * u[3] + gamma_inv_x[1] * u[4] + gamma_inv_x[2] * u[5],</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>      gamma_inv_x[1] * u[3] + gamma_inv_x[3] * u[4] + gamma_inv_x[4] * u[5],</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>      gamma_inv_x[2] * u[3] + gamma_inv_x[4] * u[4] + gamma_inv_x[5] * u[5]};</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a>();</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>}; <span class="comment">// PhotonsContainer class</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">// ##############################################################################</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">//                   PhotonsContainer::METHODS DECLARATION</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">// ##############################################################################</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">  140</a></span><a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">PhotonsContainer&lt;StructType&gt;::compute_rhs</a>(</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; &amp;u,</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keyword">const</span> CCTK_REAL &amp;t, amrex::Array4&lt;CCTK_REAL const&gt; <span class="keyword">const</span> &amp;lapse,</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;shift,</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;metric,</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="keyword">const</span> amrex::Array4&lt;CCTK_REAL const&gt; &amp;curv, <span class="keyword">const</span> CCTK_REAL dt,</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;dx, <span class="keyword">const</span> <span class="keywordtype">int</span> lev,</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keyword">const</span> amrex::GpuArray&lt;double, 3&gt; &amp;plo) {</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; rhs = {</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>      0., 0., 0., 0., 0., 0., 0.};</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="comment">// Compute the cell&#39;s index where the particle is at position (u[0], u[1],</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  <span class="comment">// u[2])</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="comment">// Interpolate lapse</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  <span class="comment">// Interpolate partial lapse</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  CCTK_REAL lapse_x;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; d_lapse_x;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  barycentric_derivative_and_interpolate&lt;5&gt;(lapse_x, d_lapse_x[0], d_lapse_x[1],</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>                                            d_lapse_x[2], lapse, i0, j0, k0,</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>                                            u[0], u[1], u[2], dx, plo, 0);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  <span class="comment">// Interpolate shift</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <span class="comment">// Interpolate partial shift</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  amrex::GpuArray&lt;CCTK_REAL, 3&gt; shift_x;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  amrex::GpuArray&lt;amrex::GpuArray&lt;CCTK_REAL, 3&gt;, 3&gt; d_shift_x;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>      shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>      j0, k0, u[0], u[1], u[2], dx, plo, 0);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>      shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>      j0, k0, u[0], u[1], u[2], dx, plo, 1);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>      shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>      j0, k0, u[0], u[1], u[2], dx, plo, 2);</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  <span class="comment">// Interpolate metric</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>  <span class="comment">// Interpolate partial metric</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>  amrex::GpuArray&lt;CCTK_REAL, 6&gt; gamma_x;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  amrex::GpuArray&lt;amrex::GpuArray&lt;CCTK_REAL, 6&gt;, 3&gt; d_gamma_x;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>      gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>      j0, k0, u[0], u[1], u[2], dx, plo, 0);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>      gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>      j0, k0, u[0], u[1], u[2], dx, plo, 1);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>      gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>      j0, k0, u[0], u[1], u[2], dx, plo, 2);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>      gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>      j0, k0, u[0], u[1], u[2], dx, plo, 3);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>      gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>      j0, k0, u[0], u[1], u[2], dx, plo, 4);</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  barycentric_derivative_and_interpolate&lt;5&gt;(</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>      gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>      j0, k0, u[0], u[1], u[2], dx, plo, 5);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="comment">// Interpolate Curvature</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 6&gt; curv_x = {</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 0),</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 1),</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 2),</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 3),</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 4),</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>      barycentric_cubic_3d&lt;5&gt;(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 5)};</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>  <span class="comment">// Compute the inverse of the metric.</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  <span class="keyword">const</span> CCTK_REAL inv_det_gamma =</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>      1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>             2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>             gamma_x[2] * gamma_x[2] * gamma_x[3] -</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>             gamma_x[4] * gamma_x[4] * gamma_x[0] -</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>             gamma_x[1] * gamma_x[1] * gamma_x[5]);</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 6&gt; gamma_inv_x = {</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>      (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>      (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>      (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>      (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>      (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>      (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt; V_down = {u[3], u[4], u[5]};</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>  <span class="comment">// Compute the upper index velocity terms.</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, 3&gt; V_up = {</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>      gamma_inv_x[0] * u[3] + gamma_inv_x[1] * u[4] + gamma_inv_x[2] * u[5],</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>      gamma_inv_x[1] * u[3] + gamma_inv_x[3] * u[4] + gamma_inv_x[4] * u[5],</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>      gamma_inv_x[2] * u[3] + gamma_inv_x[4] * u[4] + gamma_inv_x[5] * u[5]};</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>  <span class="comment">// Compute the rhs for position</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>  rhs[0] = lapse_x * V_up[0] - shift_x[0];</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>  rhs[1] = lapse_x * V_up[1] - shift_x[1];</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>  rhs[2] = lapse_x * V_up[2] - shift_x[2];</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="comment">// Compute the rhs for position</span></div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  rhs[0] = lapse_x * V_up[0] - shift_x[0];</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  rhs[1] = lapse_x * V_up[1] - shift_x[1];</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  rhs[2] = lapse_x * V_up[2] - shift_x[2];</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>  <span class="comment">// Compute the rhs for velocity</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++) {</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    rhs[3 + i] =</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        -d_lapse_x[i] +</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        (<a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(d_lapse_x, V_up) -</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>         lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(curv_x, V_up), V_up)) *</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>            V_down[i] +</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        0.5 * lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(d_gamma_x[i], V_up), V_up) +</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(V_down, d_shift_x[i]);</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>  }</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="comment">// Compute the rhs for velocity</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 3; i++) {</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    rhs[3 + i] =</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        -d_lapse_x[i] +</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        (<a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(d_lapse_x, V_up) -</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>         lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(curv_x, V_up), V_up)) *</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            V_down[i] +</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        0.5 * lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(d_gamma_x[i], V_up), V_up) +</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(V_down, d_shift_x[i]);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  }</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  <span class="comment">// Compute the rhs for energy</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>  rhs[3 + StructType::ln_E] =</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>      lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(curv_x, V_up), V_up) -</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>      <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(V_up, d_lapse_x);</div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  <span class="comment">// Compute the rhs for energy</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  rhs[3 + StructType::ln_E] =</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>      lapse_x * <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(<a class="code hl_function" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a>(curv_x, V_up), V_up) -</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>      <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(V_up, d_lapse_x);</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="keywordflow">return</span> rhs;</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>} <span class="comment">// PhotonsContainer::compute_rhs</span></div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">  296</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">PhotonsContainer&lt;StructType&gt;::evolve</a>(<span class="keyword">const</span> amrex::MultiFab &amp;lapse,</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;shift,</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;metric,</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;curv,</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>                                          <span class="keyword">const</span> CCTK_REAL &amp;dt, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev) {</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>  <span class="keyword">const</span> <span class="keyword">auto</span> plo0 = this-&gt;Geom(0).ProbLoArray();</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  <span class="keyword">const</span> <span class="keyword">auto</span> phi0 = this-&gt;Geom(0).ProbHiArray();</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>  <span class="keyword">const</span> <span class="keyword">auto</span> dx = this-&gt;Geom(lev).CellSizeArray();</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>  <span class="keyword">const</span> <span class="keyword">auto</span> plo = this-&gt;Geom(lev).ProbLoArray();</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hx = phi0[0] - 0.5 * dx[0];</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>  <span class="keyword">const</span> CCTK_REAL boundarie_lx = plo0[0] + 0.5 * dx[0];</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hy = phi0[1] - 0.5 * dx[1];</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>  <span class="keyword">const</span> CCTK_REAL boundarie_ly = plo0[1] + 0.5 * dx[1];</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hz = phi0[2] - 0.5 * dx[2];</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="keyword">const</span> CCTK_REAL boundarie_lz = plo0[2] + 0.5 * dx[2];</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  <span class="keywordflow">return</span> rhs;</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>} <span class="comment">// PhotonsContainer::compute_rhs</span></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">  291</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">PhotonsContainer&lt;StructType&gt;::evolve</a>(<span class="keyword">const</span> amrex::MultiFab &amp;lapse,</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;shift,</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;metric,</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>                                          <span class="keyword">const</span> amrex::MultiFab &amp;curv,</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>                                          <span class="keyword">const</span> CCTK_REAL &amp;dt, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;lev) {</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  <span class="keyword">const</span> <span class="keyword">auto</span> plo0 = this-&gt;Geom(0).ProbLoArray();</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>  <span class="keyword">const</span> <span class="keyword">auto</span> phi0 = this-&gt;Geom(0).ProbHiArray();</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>  <span class="keyword">const</span> <span class="keyword">auto</span> dx = this-&gt;Geom(lev).CellSizeArray();</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>  <span class="keyword">const</span> <span class="keyword">auto</span> plo = this-&gt;Geom(lev).ProbLoArray();</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hx = phi0[0] - 0.5 * dx[0];</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>  <span class="keyword">const</span> CCTK_REAL boundarie_lx = plo0[0] + 0.5 * dx[0];</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hy = phi0[1] - 0.5 * dx[1];</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>  <span class="keyword">const</span> CCTK_REAL boundarie_ly = plo0[1] + 0.5 * dx[1];</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hz = phi0[2] - 0.5 * dx[2];</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  <span class="keyword">const</span> CCTK_REAL boundarie_lz = plo0[2] + 0.5 * dx[2];</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>  amrex::ParallelDescriptor::Barrier();</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  <span class="keywordflow">for</span> (Iterator::ParticleIterator&lt;StructType&gt; pti(*<span class="keyword">this</span>, lev); pti.isValid();</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>       ++pti) {</div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span> </div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>  <span class="keywordflow">for</span> (Iterator::ParticleIterator&lt;StructType&gt; pti(*<span class="keyword">this</span>, lev); pti.isValid();</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>       ++pti) {</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> np = pti.numParticles();</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="comment">// Get the information relate to the velocities.</span></div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    <span class="keyword">auto</span> &amp;attribs = pti.GetAttributes();</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keyword">auto</span> *AMREX_RESTRICT particles = &amp;(pti.GetArrayOfStructs()[0]);</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    <span class="comment">// Get the array of each parameters.</span></div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keyword">auto</span> <span class="keyword">const</span> lapse_array = lapse.array(pti);</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <span class="keyword">auto</span> <span class="keyword">const</span> shift_array = shift.array(pti);</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    <span class="keyword">auto</span> <span class="keyword">const</span> metric_array = metric.array(pti);</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    <span class="keyword">auto</span> <span class="keyword">const</span> curv_array = curv.array(pti);</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(<span class="keywordtype">int</span> i) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>      <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; U = {</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>          particles[i].pos(0),         particles[i].pos(1),</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>          particles[i].pos(2),         attribs[StructType::vx][i],</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>          attribs[StructType::vy][i],  attribs[StructType::vz][i],</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>          attribs[StructType::ln_E][i]};</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> np = pti.numParticles();</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="comment">// Get the information relate to the velocities.</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keyword">auto</span> &amp;attribs = pti.GetAttributes();</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="keyword">auto</span> *AMREX_RESTRICT particles = &amp;(pti.GetArrayOfStructs()[0]);</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="comment">// Get the array of each parameters.</span></div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keyword">auto</span> <span class="keyword">const</span> lapse_array = lapse.array(pti);</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    <span class="keyword">auto</span> <span class="keyword">const</span> shift_array = shift.array(pti);</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    <span class="keyword">auto</span> <span class="keyword">const</span> metric_array = metric.array(pti);</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keyword">auto</span> <span class="keyword">const</span> curv_array = curv.array(pti);</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(<span class="keywordtype">int</span> i) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>      <span class="keyword">const</span> amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; U = {</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>          particles[i].pos(0),         particles[i].pos(1),</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>          particles[i].pos(2),         attribs[StructType::vx][i],</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>          attribs[StructType::vy][i],  attribs[StructType::vz][i],</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>          attribs[StructType::ln_E][i]};</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>      amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; U_tmp;</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>      amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; partial_sum;</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>      amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; U_tmp;</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>      amrex::GpuArray&lt;CCTK_REAL, StructType::n_attributes + 3&gt; partial_sum;</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>      U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>      partial_sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};</div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>      <span class="comment">// f1 = rhs(u , t) for the runge kutta 4 step</span></div>
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>      <span class="keyword">auto</span> k_odd =</div>
@@ -438,8 +438,8 @@ $(function() {
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>  <span class="comment">// Initializing the files.</span></div>
 <div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>  std::ostringstream file_name;</div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>  file_name &lt;&lt; <span class="stringliteral">&quot;Constants_&quot;</span> &lt;&lt; iteration &lt;&lt; <span class="stringliteral">&quot;_&quot;</span></div>
-<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>            &lt;&lt; amrex::ParallelDescriptor::MyProc() &lt;&lt; <span class="stringliteral">&quot;.dat&quot;</span>;</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>  file_name &lt;&lt; <span class="stringliteral">&quot;Constants_&quot;</span> &lt;&lt; amrex::ParallelDescriptor::MyProc() &lt;&lt; <span class="stringliteral">&quot;_&quot;</span></div>
+<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>            &lt;&lt; iteration;</div>
 <div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>  std::ofstream vel_file;</div>
 <div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>  vel_file.open(file_name.str());</div>
 <div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span> </div>
@@ -540,40 +540,41 @@ $(function() {
 <div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>          P_i[0], P_i[1], P_i[2]};</div>
 <div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>      <span class="comment">// Write data into a file.</span></div>
 <div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>      <span class="comment">// V^2 - 1 error</span></div>
-<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>      vel_file &lt;&lt; std::setprecision(17) &lt;&lt; std::scientific &lt;&lt; p.id() &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>               &lt;&lt; v_squared - 1.0 &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
-<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>               &lt;&lt; P_mu[0] * (E / lapse_x) + <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(P_i, P_i_up) &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
-<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>               &lt;&lt; P_mu[0] &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; p.pos(0) * P_i[1] - p.pos(1) * P_i[0]</div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>               &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>               &lt;&lt; p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +</div>
-<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>                      p.pos(2) * p.pos(2)</div>
-<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>               &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>    });</div>
-<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>  }</div>
-<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span> </div>
-<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>  vel_file.close();</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>      vel_file &lt;&lt; std::setprecision(17) &lt;&lt; std::scientific &lt;&lt; p.pos(0) &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>               &lt;&lt; p.pos(1) &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; p.pos(2) &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>               &lt;&lt; amrex::ParallelDescriptor::MyProc() &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; p.id() &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>               &lt;&lt; v_squared - 1.0 &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>               &lt;&lt; P_mu[0] * (E / lapse_x) + <a class="code hl_function" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a>(P_i, P_i_up) &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>               &lt;&lt; P_mu[0] &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; p.pos(0) * P_i[1] - p.pos(1) * P_i[0]</div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>               &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span></div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>               &lt;&lt; p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>                      p.pos(2) * p.pos(2)</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>               &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>    });</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>  }</div>
 <div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span> </div>
-<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>} <span class="comment">// PhotonsContainer::check_constants</span></div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>  vel_file.close();</div>
 <div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span> </div>
-<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
-<div class="line"><a id="l00583" name="l00583"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">  583</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">PhotonsContainer&lt;StructType&gt;::redistribute_particles</a>() {</div>
-<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>  CCTK_INFO(<span class="stringliteral">&quot;Redistributing particles&quot;</span>);</div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>} <span class="comment">// PhotonsContainer::redistribute_particles</span></div>
-<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span> </div>
-<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>} <span class="comment">// namespace Containers</span></div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>} <span class="comment">// PhotonsContainer::check_constants</span></div>
+<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span> </div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno"><a class="line" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">  585</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">PhotonsContainer&lt;StructType&gt;::redistribute_particles</a>() {</div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>  CCTK_INFO(<span class="stringliteral">&quot;Redistributing particles&quot;</span>);</div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>} <span class="comment">// PhotonsContainer::redistribute_particles</span></div>
 <div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span> </div>
-<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span><span class="preprocessor">#endif </span><span class="comment">// !PHOTONSCONTAINER_HXX</span></div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>} <span class="comment">// namespace Containers</span></div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span> </div>
+<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span><span class="preprocessor">#endif </span><span class="comment">// !PHOTONSCONTAINER_HXX</span></div>
 <div class="ttc" id="aInterpolator_8hxx_html"><div class="ttname"><a href="Interpolator_8hxx.html">Interpolator.hxx</a></div><div class="ttdoc">Interpolators definitions.</div></div>
 <div class="ttc" id="aUtilities_8hxx_html"><div class="ttname"><a href="Utilities_8hxx.html">Utilities.hxx</a></div><div class="ttdoc">Code utilities such as matrix and vector multiplications.</div></div>
 <div class="ttc" id="aUtilities_8hxx_html_a9422f8c771699b58ed5467ed1c64c378"><div class="ttname"><a href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL VecVecMul(amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:51</div></div>
 <div class="ttc" id="aUtilities_8hxx_html_aacdff6aa83092d12a265d0d1b8f92e70"><div class="ttname"><a href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul(amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:30</div></div>
 <div class="ttc" id="aclassContainers_1_1PhotonsContainer_html"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a></div><div class="ttdoc">PhotonsContainer class definition.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:56</div></div>
-<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_a0fa46b76c61baeb64e8d8f0a3a59237d"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#a0fa46b76c61baeb64e8d8f0a3a59237d">Containers::PhotonsContainer::evolveRK2</a></div><div class="ttdeci">void evolveRK2(const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)</div></div>
-<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_a238395b0e861a0be9e4daab1aba8d2d9"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">Containers::PhotonsContainer::evolve</a></div><div class="ttdeci">void evolve(const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</div><div class="ttdoc">Evolving using Runge-Kutta 4.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:296</div></div>
+<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_a238395b0e861a0be9e4daab1aba8d2d9"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">Containers::PhotonsContainer::evolve</a></div><div class="ttdeci">void evolve(const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</div><div class="ttdoc">Evolving using Runge-Kutta 4.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:291</div></div>
 <div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_a3dbd4c2aace62ed55d86c0e722d82268"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">Containers::PhotonsContainer::check_constants</a></div><div class="ttdeci">void check_constants(CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</div><div class="ttdoc">Computes and print all photons velocities.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:455</div></div>
 <div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_aa0463738f45c8445189d89505fcfaab6"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#aa0463738f45c8445189d89505fcfaab6">Containers::PhotonsContainer::Base</a></div><div class="ttdeci">BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt; Base</div><div class="ttdoc">Using BaseParticlesContainer constructor.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:62</div></div>
-<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_ac82e8ecf5f20496c96089f5ccc13759b"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">Containers::PhotonsContainer::compute_rhs</a></div><div class="ttdeci">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; compute_rhs(const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</div><div class="ttdoc">Computes the right hind side of the geodesic differential equation.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:145</div></div>
-<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_aebba2fa6ea568b7cce9b46af5976d650"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">Containers::PhotonsContainer::redistribute_particles</a></div><div class="ttdeci">void redistribute_particles()</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:583</div></div>
+<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_ac82e8ecf5f20496c96089f5ccc13759b"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">Containers::PhotonsContainer::compute_rhs</a></div><div class="ttdeci">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; compute_rhs(const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</div><div class="ttdoc">Computes the right hind side of the geodesic differential equation.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:140</div></div>
+<div class="ttc" id="aclassContainers_1_1PhotonsContainer_html_aebba2fa6ea568b7cce9b46af5976d650"><div class="ttname"><a href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">Containers::PhotonsContainer::redistribute_particles</a></div><div class="ttdeci">void redistribute_particles()</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:585</div></div>
 <div class="ttc" id="anamespaceContainers_html"><div class="ttname"><a href="namespaceContainers.html">Containers</a></div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:39</div></div>
 <div class="ttc" id="anamespaceInterpolator_html"><div class="ttname"><a href="namespaceInterpolator.html">Interpolator</a></div><div class="ttdoc">Interpolators namespace.</div><div class="ttdef"><b>Definition:</b> Interpolator.hxx:25</div></div>
 </div><!-- fragment --></div><!-- contents -->

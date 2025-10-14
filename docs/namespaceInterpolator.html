@@ -108,7 +108,7 @@ Variables</h2></td></tr>
 <tr class="memitem:a2bdaedf8dcad6a971d8ccb866028f0c2"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">all_nodes</a> [14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2}</td></tr>
 <tr class="memdesc:a2bdaedf8dcad6a971d8ccb866028f0c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nodes interpolator's array.  <a href="namespaceInterpolator.html#a2bdaedf8dcad6a971d8ccb866028f0c2">More...</a><br /></td></tr>
 <tr class="separator:a2bdaedf8dcad6a971d8ccb866028f0c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ef713bfd5da0f741eb1448ac5a2926d"><td class="memItemLeft" align="right" valign="top">const CCTK_REAL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a> [14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0}</td></tr>
+<tr class="memitem:a3ef713bfd5da0f741eb1448ac5a2926d"><td class="memItemLeft" align="right" valign="top">const CCTK_REAL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">all_weights</a> [14]</td></tr>
 <tr class="memdesc:a3ef713bfd5da0f741eb1448ac5a2926d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weights interpolator's array.  <a href="namespaceInterpolator.html#a3ef713bfd5da0f741eb1448ac5a2926d">More...</a><br /></td></tr>
 <tr class="separator:a3ef713bfd5da0f741eb1448ac5a2926d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -742,11 +742,14 @@ x_i}\right)^2}
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const CCTK_REAL Interpolator::all_weights[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0}</td>
+          <td class="memname">const CCTK_REAL Interpolator::all_weights[14]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,</div>
+<div class="line">    -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0}</div>
+</div><!-- fragment -->
 <p>Weights interpolator's array. </p>
 <p >Contains the weights that we are going to use for the orders from 2 to 5. </p>
 
