@@ -25,18 +25,20 @@
 namespace Interpolator {
 
 /**
- * \brief Nodes interpolator's array. 
+ * \brief Nodes interpolator's array.
  *
  * Contains the nodes that we are going to use for the orders from 2 to 5.
  */
 const int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
 /**
- * \brief Weights interpolator's array. 
+ * \brief Weights interpolator's array.
  *
  * Contains the weights that we are going to use for the orders from 2 to 5.
  */
-const CCTK_REAL all_weights[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
+const CCTK_REAL all_weights[14] = {
+    -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+    -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
 
 // #############################################################################
 //                   Barycentric Lagrange Interpolator
@@ -65,8 +67,7 @@ const CCTK_REAL all_weights[14] = {-1., 1., 0.5, 1., -0.5, -1.0 / 6.0, 0.5, -0.5
  */
 template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
-barycentric_cubic_1d(const int (&points)[N],
-                     const CCTK_REAL *weights,
+barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
                      const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
@@ -131,9 +132,10 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      CCTK_REAL const &y, CCTK_REAL const &z,
                      const amrex::GpuArray<double, 3> &dx,
                      const amrex::GpuArray<double, 3> &plo, const int &comp) {
-    const int order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-    const CCTK_INT *nodes = &all_nodes[order];
-    const CCTK_REAL *w = &all_weights[order];
+  const int order =
+      (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+  const CCTK_INT *nodes = &all_nodes[order];
+  const CCTK_REAL *w = &all_weights[order];
 
   // Setting the pre-computed weights.
   if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
@@ -266,14 +268,14 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
 template <int N>
 AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline void
 der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
-                         const int (&points)[N],
-                         const CCTK_REAL *weights,
+                         const int (&points)[N], const CCTK_REAL *weights,
                          const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                          const CCTK_REAL &plo, const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
   CCTK_REAL den{0.0};
   CCTK_REAL den_sqr{0.0};
   CCTK_REAL der_num{0.0};
+  d_f_x = 0.0;
 
   // Compute the interpolation
   for (int i = 0; i < N; i++) {
@@ -282,13 +284,15 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
     if (diff < tolerance && diff > -tolerance) {
       // Check if the point makes part of the points used on the
       // interpolation.
-      for (int j = 0; j <= N; j++) {
+      for (int j = 0; j < N; j++) {
         if (i == j) {
           continue;
         }
         const auto x_j = points[j] * dx;
         const auto x_i = points[i] * dx;
         d_f_x += weights[j] * (values[i] - values[j]) / (x_j - x_i);
+        // CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING, "d_f_x %f %f %f",
+        // x, weights[j] * (values[i] - values[j]) , (x_j - x_i));
       }
       d_f_x /= weights[i];
       f_x = values[i];
@@ -392,9 +396,10 @@ barycentric_derivative_and_interpolate(
     CCTK_REAL const &z, const amrex::GpuArray<double, 3> &dx,
     const amrex::GpuArray<double, 3> &plo, const int &comp) {
 
-    const int order = (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-    const CCTK_INT *nodes = &all_nodes[order];
-    const CCTK_REAL *w = &all_weights[order];
+  const int order =
+      (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+  const CCTK_INT *nodes = &all_nodes[order];
+  const CCTK_REAL *w = &all_weights[order];
 
   if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
     CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "

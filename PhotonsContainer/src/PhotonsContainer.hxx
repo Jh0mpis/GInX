@@ -66,11 +66,6 @@ public:
               const amrex::MultiFab &metric, const amrex::MultiFab &curv,
               const CCTK_REAL &dt, const int &lev) override;
 
-  // Evolving using Runge-Kutta 2.
-  void evolveRK2(const amrex::MultiFab &lapse, const amrex::MultiFab &shift,
-                 const amrex::MultiFab &metric, const amrex::MultiFab &curv,
-                 const CCTK_REAL &dt, const int &lev);
-
   // Given differential equation dU/dt = f(U, dU/dx; t) computes f(U, dU/dx;t)
   amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3>
   compute_rhs(const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> &u,
@@ -311,6 +306,8 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
   const CCTK_REAL boundarie_hz = phi0[2] - 0.5 * dx[2];
   const CCTK_REAL boundarie_lz = plo0[2] + 0.5 * dx[2];
 
+  amrex::ParallelDescriptor::Barrier();
+
   for (Iterator::ParticleIterator<StructType> pti(*this, lev); pti.isValid();
        ++pti) {
 
@@ -339,6 +336,9 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
 
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
+
+      U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+      partial_sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
       // f1 = rhs(u , t) for the runge kutta 4 step
       auto k_odd =
@@ -462,8 +462,8 @@ void PhotonsContainer<StructType>::check_constants(
 
   // Initializing the files.
   std::ostringstream file_name;
-  file_name << "Constants_" << iteration << "_"
-            << amrex::ParallelDescriptor::MyProc() << ".dat";
+  file_name << "Constants_" << amrex::ParallelDescriptor::MyProc() << "_"
+            << iteration;
   std::ofstream vel_file;
   vel_file.open(file_name.str());
 
@@ -564,7 +564,9 @@ void PhotonsContainer<StructType>::check_constants(
           P_i[0], P_i[1], P_i[2]};
       // Write data into a file.
       // V^2 - 1 error
-      vel_file << std::setprecision(17) << std::scientific << p.id() << "\t"
+      vel_file << std::setprecision(17) << std::scientific << p.pos(0) << "\t"
+               << p.pos(1) << "\t" << p.pos(2) << "\t"
+               << amrex::ParallelDescriptor::MyProc() << "\t" << p.id() << "\t"
                << v_squared - 1.0 << "\t"
                << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"
                << P_mu[0] << "\t" << p.pos(0) * P_i[1] - p.pos(1) * P_i[0]

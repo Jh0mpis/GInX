@@ -366,10 +366,29 @@ void random_parallel_photons_per_container_initializer(
   const auto p_lo = pc.Geom(lev).ProbLoArray();
   const auto p_hi = pc.Geom(lev).ProbHiArray();
 
-  amrex::MFIter mfi = pc.MakeMFIter(lev);
+  const int n_procs = amrex::ParallelDescriptor::NProcs();
+  const int proc_id = amrex::ParallelDescriptor::MyProc();
+
+  const int local_particles_size =
+      number_of_particles_per_container / n_procs +
+      (proc_id < number_of_particles_per_container % n_procs);
+
+  int total_tiles{0};
+  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+    total_tiles++;
+  }
+  int current_tile = 0;
 
   // Iterating over all the tiles of the particle data structure
-  for (; mfi.isValid(); ++mfi) {
+  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+
+    const int particles_per_tile =
+        local_particles_size / total_tiles +
+        (current_tile < local_particles_size % total_tiles);
+    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
+               "Number of particles created at tile %d: %d ", current_tile,
+               particles_per_tile);
+    current_tile++;
 
     // get each tile box
     const amrex::Box &tile_box = mfi.tilebox();
@@ -384,16 +403,9 @@ void random_parallel_photons_per_container_initializer(
 
     // Determines the current size and the required new size
     auto old_size = particle_tile.GetArrayOfStructs().size();
-    const int n_procs = amrex::ParallelDescriptor::NProcs();
-    const int proc_id = amrex::ParallelDescriptor::MyProc();
 
-    int local_particles_size = number_of_particles_per_container / n_procs;
-
-    if (proc_id < number_of_particles_per_container % n_procs) {
-      local_particles_size++;
-    }
     // Resize the container once, we do not need to do it one by one
-    auto new_size = old_size + local_particles_size;
+    auto new_size = old_size + particles_per_tile;
     particle_tile.resize(new_size);
 
     // Gets raw pointers to the two different ways particle data is stored for
@@ -409,13 +421,14 @@ void random_parallel_photons_per_container_initializer(
     const CCTK_REAL tile_z_min = p_lo[2] + lo.z * dx[2];
     const CCTK_REAL tile_z_max = p_lo[2] + (hi.z + 1) * dx[2];
 
+    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
+               "x (%f %f), y (%f %f), z (%f, %f)", tile_x_min, tile_x_max,
+               tile_y_min, tile_y_max, tile_z_min, tile_z_max);
+
     // get the current process id
     auto const metric_array = metric.array(mfi);
-    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-               "Number of particles created: %d %d", local_particles_size,
-               old_size);
 
-    for (int i = 0; i < local_particles_size; i++) {
+    for (int i = 0; i < particles_per_tile; i++) {
       // Start a for loop with Random Number evolution
       int pidx = old_size + i;
 
@@ -438,8 +451,8 @@ void random_parallel_photons_per_container_initializer(
 
       // p.id() = pidx + local_particles_size * proc_id;
       const int tile_id = mfi.index();
-      p.id() =
-          old_size + i + local_particles_size * (proc_id + n_procs * tile_id);
+      p.id() = ParticleContainerClass::ParticleType::NextID();
+      // old_size + i + local_particles_size * (proc_id + n_procs * tile_id);
       p.cpu() = proc_id;
 
       p.pos(0) = ratio[0];
@@ -493,11 +506,6 @@ void random_parallel_photons_per_container_initializer(
                                   2.0 * ratio[0] * ratio[2] * gamma_inv_x[2] +
                                   2.0 * ratio[1] * ratio[2] * gamma_inv_x[4];
       const CCTK_REAL v = std::sqrt(v_squared);
-
-      // CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-      //            "pos: %f %f %f\tgamma: %f %f %f %f %f %f\tV: %f", p.pos(0),
-      //            p.pos(1), p.pos(2), gamma_x[0], gamma_x[1], gamma_x[2],
-      //            gamma_x[3], gamma_x[4], gamma_x[5], v);
 
       // Create the particle and add it to the container
       arrdata[StructType::vx][pidx] = ratio[0] / v;
