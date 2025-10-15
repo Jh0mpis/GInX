@@ -43,13 +43,10 @@ extern "C" void setup(CCTK_ARGUMENTS) {
       const auto &gd_metric = *ld.groupdata.at(gi_metric);
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
 
-      // pc->initialize(photons_init::random_photons_initializer<ParticleData,
-      // PC>,
-      //                photons_per_cell, metric, lev);
       pc->initialize(
           photons_init::random_parallel_photons_per_container_initializer<
               ParticleData, PC>,
-          photons_per_cell, metric);
+          total_photons, metric);
     }
     pc->Redistribute();
   }
@@ -187,7 +184,7 @@ extern "C" void check_velocities(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTS;
 
   const int it = cctkGH->cctk_iteration;
-  if (particle_tsv_every > 0 && it % particle_tsv_every == 0) {
+  if (print_photons_constants > 0 && it % print_photons_constants == 0) {
     const int tl = 0;
     const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
     const int gi_lapse = CCTK_GroupIndex("ADMBaseX::lapse");
