@@ -377,6 +377,7 @@ void random_parallel_photons_per_container_initializer(
   for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
     total_tiles++;
   }
+
   int current_tile = 0;
 
   // Iterating over all the tiles of the particle data structure
@@ -389,13 +390,6 @@ void random_parallel_photons_per_container_initializer(
                "Number of particles created at tile %d: %d ", current_tile,
                particles_per_tile);
     current_tile++;
-
-    // get each tile box
-    const amrex::Box &tile_box = mfi.tilebox();
-
-    // Get the tile bounds
-    const auto lo = amrex::lbound(tile_box);
-    const auto hi = amrex::ubound(tile_box);
 
     // Get a reference to the particles
     auto &particles = pc.GetParticles(lev);
@@ -414,50 +408,67 @@ void random_parallel_photons_per_container_initializer(
         particle_tile.GetArrayOfStructs()().data();
     auto arrdata = particle_tile.GetStructOfArrays().realarray();
 
-    const CCTK_REAL tile_x_min = p_lo[0] + lo.x * dx[0];
-    const CCTK_REAL tile_x_max = p_lo[0] + (hi.x + 1) * dx[0];
-    const CCTK_REAL tile_y_min = p_lo[1] + lo.y * dx[1];
-    const CCTK_REAL tile_y_max = p_lo[1] + (hi.y + 1) * dx[1];
-    const CCTK_REAL tile_z_min = p_lo[2] + lo.z * dx[2];
-    const CCTK_REAL tile_z_max = p_lo[2] + (hi.z + 1) * dx[2];
-
-    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-               "x (%f %f), y (%f %f), z (%f, %f)", tile_x_min, tile_x_max,
-               tile_y_min, tile_y_max, tile_z_min, tile_z_max);
-
-    // get the current process id
-    auto const metric_array = metric.array(mfi);
-
     for (int i = 0; i < particles_per_tile; i++) {
       // Start a for loop with Random Number evolution
       int pidx = old_size + i;
 
-      amrex::Real ratio[AMREX_SPACEDIM];
-
       // Generate a random position
-      ratio[0] = tile_x_min + amrex::Random() * (tile_x_max - tile_x_min);
-      ratio[1] = tile_y_min + amrex::Random() * (tile_y_max - tile_y_min);
-      ratio[2] = tile_z_min + amrex::Random() * (tile_z_max - tile_z_min);
+      const amrex::Real ratio[AMREX_SPACEDIM] = {
+          (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7) * amrex::Random() + 0.7,
+          amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
 
       typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
 
-      const auto R =
-          ratio[0] * ratio[0] + ratio[1] * ratio[1] + ratio[2] * ratio[2];
+      p.id() = ParticleContainerClass::ParticleType::NextID();
+      p.cpu() = proc_id;
 
-      if (R <= 0.25) {
-        p.id() = -1;
+      p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
+      p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
+      p.pos(2) = ratio[0] * std::cos(ratio[1]);
+
+      // Create the particle and add it to the container
+      arrdata[StructType::vx][pidx] = 0.0;
+      arrdata[StructType::vy][pidx] = 0.0;
+      arrdata[StructType::vz][pidx] = 0.0;
+      arrdata[StructType::ln_E][pidx] = 0;
+    }
+  }
+
+  pc.Redistribute();
+
+  // Iterating over all the tiles of the particle data structure
+  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+    // Get a reference to the particles
+    auto &particles = pc.GetParticles(lev);
+    auto &particle_tile = pc.DefineAndReturnParticleTile(lev, mfi);
+
+    // Determines the current size and the required new size
+    auto current_size = particle_tile.GetArrayOfStructs().size();
+
+    // Gets raw pointers to the two different ways particle data is stored for
+    // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
+    typename ParticleContainerClass::ParticleType *p_struct =
+        particle_tile.GetArrayOfStructs()().data();
+    auto arrdata = particle_tile.GetStructOfArrays().realarray();
+
+    // get the current process id
+    auto const metric_array = metric.array(mfi);
+
+    for (int i = 0; i < current_size; i++) {
+
+      if (!(arrdata[StructType::vx][i] == 0.0 &&
+            arrdata[StructType::vy][i] == 0.0 &&
+            arrdata[StructType::vz][i] == 0.0)) {
         continue;
       }
 
-      // p.id() = pidx + local_particles_size * proc_id;
-      const int tile_id = mfi.index();
-      p.id() = ParticleContainerClass::ParticleType::NextID();
-      // old_size + i + local_particles_size * (proc_id + n_procs * tile_id);
-      p.cpu() = proc_id;
+      // Start a for loop with Random Number evolution for the velocity
+      const amrex::Real ratio[AMREX_SPACEDIM] = {2.0 * amrex::Random() - 1.0,
+                                                 2.0 * amrex::Random() - 1.0,
+                                                 2.0 * amrex::Random() - 1.0};
 
-      p.pos(0) = ratio[0];
-      p.pos(1) = ratio[1];
-      p.pos(2) = ratio[2];
+      // Generate a random position
+      typename ParticleContainerClass::ParticleType &p = p_struct[i];
 
       const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
       const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
@@ -493,11 +504,6 @@ void random_parallel_photons_per_container_initializer(
           (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
           (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
 
-      // Compute a random initial Velocity
-      ratio[0] = 2.0 * amrex::Random() - 1.0;
-      ratio[1] = 2.0 * amrex::Random() - 1.0;
-      ratio[2] = 2.0 * amrex::Random() - 1.0;
-
       // Normalizing the velocity.
       const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
                                   ratio[1] * ratio[1] * gamma_inv_x[3] +
@@ -508,10 +514,10 @@ void random_parallel_photons_per_container_initializer(
       const CCTK_REAL v = std::sqrt(v_squared);
 
       // Create the particle and add it to the container
-      arrdata[StructType::vx][pidx] = ratio[0] / v;
-      arrdata[StructType::vy][pidx] = ratio[1] / v;
-      arrdata[StructType::vz][pidx] = ratio[2] / v;
-      arrdata[StructType::ln_E][pidx] = 0;
+      arrdata[StructType::vx][i] = ratio[0] / v;
+      arrdata[StructType::vy][i] = ratio[1] / v;
+      arrdata[StructType::vz][i] = ratio[2] / v;
+      arrdata[StructType::ln_E][i] = 0;
     }
   }
 
