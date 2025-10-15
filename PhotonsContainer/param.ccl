@@ -1,4 +1,8 @@
 INT photons_per_cell "Number of photons per cell unit"{
+    0:*
+} 0
+
+INT total_photons "Number of photons per cell unit"{
     1:*
 } 1
 
@@ -11,6 +15,12 @@ KEYWORD initial_metric "metric to initialize" {
     "iso schwarzschild" :: "Isotropic Schwarzswchild metric"
     "none" :: "Not initialize using a metric"
 } "iso schwarzschild" 
+
+RESTRICTED: INT print_photons_constants "Output the constants computed for all the photons" STEERABLE=always
+{
+   0 :: "never output Plot"
+   1:* :: "every that many iterations"
+} 0
 
 SHARES: ParticlesContainer
 
