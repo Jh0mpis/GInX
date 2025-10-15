@@ -293,6 +293,7 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
                                           const amrex::MultiFab &metric,
                                           const amrex::MultiFab &curv,
                                           const CCTK_REAL &dt, const int &lev) {
+
   const auto plo0 = this->Geom(0).ProbLoArray();
   const auto phi0 = this->Geom(0).ProbHiArray();
 
@@ -305,8 +306,6 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
   const CCTK_REAL boundarie_ly = plo0[1] + 0.5 * dx[1];
   const CCTK_REAL boundarie_hz = phi0[2] - 0.5 * dx[2];
   const CCTK_REAL boundarie_lz = plo0[2] + 0.5 * dx[2];
-
-  amrex::ParallelDescriptor::Barrier();
 
   for (Iterator::ParticleIterator<StructType> pti(*this, lev); pti.isValid();
        ++pti) {
