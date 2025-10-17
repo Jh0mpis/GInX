@@ -336,12 +336,6 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
 
-      if (U[0] * U[0] + U[1] * U[1] + U[2] * U[2] <=
-          0.25) {
-        particles[i].id() = -1;
-        return;
-      }
-
       U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
       partial_sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 

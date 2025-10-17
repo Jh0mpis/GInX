@@ -48,7 +48,6 @@ extern "C" void setup(CCTK_ARGUMENTS) {
               ParticleData, PC>,
           total_photons, metric);
     }
-    pc->Redistribute();
   }
 }
 

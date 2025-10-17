@@ -60,6 +60,6 @@ ParticlesContainer::particle_plot_every = 0
 ParticlesContainer::particle_tsv_every = 1
 PhotonsContainer::print_photons_constants = 0
 PhotonsContainer::total_photons = 1000
-PhotonsContainer::initial_metric = "schwarzschild"
+PhotonsContainer::initial_metric = "iso schwarzschild"
 # PhotonsContainer::photons_per_cell = 5
 # PhotonsContainer::initial_metric = "minkowski"
