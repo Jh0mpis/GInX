@@ -13,6 +13,7 @@ REAL black_hole_mass "Black hole mass" {
 KEYWORD initial_metric "metric to initialize" {
     "minkowski" :: "Minkowski metric"
     "iso schwarzschild" :: "Isotropic Schwarzswchild metric"
+    "schwarzschild" :: "Schwarzswchild metric"
     "none" :: "Not initialize using a metric"
 } "iso schwarzschild" 
 

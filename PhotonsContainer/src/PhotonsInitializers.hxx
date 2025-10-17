@@ -391,6 +391,24 @@ void random_parallel_photons_per_container_initializer(
                particles_per_tile);
     current_tile++;
 
+    // get each tile box
+    const amrex::Box &tile_box = mfi.tilebox();
+
+    // Get the tile bounds
+    const auto lo = amrex::lbound(tile_box);
+    const auto hi = amrex::ubound(tile_box);
+
+    const CCTK_REAL tile_x_min = p_lo[0] + lo.x * dx[0];
+    const CCTK_REAL tile_x_max = p_lo[0] + (hi.x + 1) * dx[0];
+    const CCTK_REAL tile_y_min = p_lo[1] + lo.y * dx[1];
+    const CCTK_REAL tile_y_max = p_lo[1] + (hi.y + 1) * dx[1];
+    const CCTK_REAL tile_z_min = p_lo[2] + lo.z * dx[2];
+    const CCTK_REAL tile_z_max = p_lo[2] + (hi.z + 1) * dx[2];
+
+    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
+               "x (%f %f), y (%f %f), z (%f, %f)", tile_x_min, tile_x_max,
+               tile_y_min, tile_y_max, tile_z_min, tile_z_max);
+
     // Get a reference to the particles
     auto &particles = pc.GetParticles(lev);
     auto &particle_tile = pc.DefineAndReturnParticleTile(lev, mfi);
@@ -511,6 +529,7 @@ void random_parallel_photons_per_container_initializer(
                                   2.0 * ratio[0] * ratio[1] * gamma_inv_x[1] +
                                   2.0 * ratio[0] * ratio[2] * gamma_inv_x[2] +
                                   2.0 * ratio[1] * ratio[2] * gamma_inv_x[4];
+
       const CCTK_REAL v = std::sqrt(v_squared);
 
       // Create the particle and add it to the container
@@ -520,6 +539,8 @@ void random_parallel_photons_per_container_initializer(
       arrdata[StructType::ln_E][i] = 0;
     }
   }
+
+  pc.SortParticlesByCell();
 
   CCTK_VINFO("%d particles created", pc.TotalNumberOfParticles());
 

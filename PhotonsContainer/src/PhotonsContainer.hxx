@@ -151,9 +151,9 @@ PhotonsContainer<StructType>::compute_rhs(
 
   // Compute the cell's index where the particle is at position (u[0], u[1],
   // u[2])
-  const unsigned long i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
-  const unsigned long j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
-  const unsigned long k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
+  const int i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
+  const int j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
+  const int k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
 
   // Interpolate lapse
   // Interpolate partial lapse
@@ -336,6 +336,12 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
 
+      if (U[0] * U[0] + U[1] * U[1] + U[2] * U[2] <=
+          0.25) {
+        particles[i].id() = -1;
+        return;
+      }
+
       U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
       partial_sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
@@ -358,6 +364,7 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
         particles[i].id() = -1;
         return;
       }
+
 
       // f2 = rhs(u + 0.5 * dt * f1, t) for the runge kutta 4 step
       auto k_even =
@@ -564,14 +571,10 @@ void PhotonsContainer<StructType>::check_constants(
       // Write data into a file.
       // V^2 - 1 error
       vel_file << std::setprecision(17) << std::scientific << p.pos(0) << "\t"
-               << p.pos(1) << "\t" << p.pos(2) << "\t"
-               << amrex::ParallelDescriptor::MyProc() << "\t" << p.id() << "\t"
+               << p.pos(1) << "\t" << p.pos(2) << "\t" << p.id() << "\t"
                << v_squared - 1.0 << "\t"
                << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"
                << P_mu[0] << "\t" << p.pos(0) * P_i[1] - p.pos(1) * P_i[0]
-               << "\t"
-               << p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
-                      p.pos(2) * p.pos(2)
                << "\n";
     });
   }

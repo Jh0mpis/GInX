@@ -16,7 +16,17 @@ if (CCTK_Equals(initial_metric, "minkowski")) {
         WRITES: ADMBaseX::shift(everywhere)
         WRITES: ADMBaseX::curv(everywhere)
     } "Fields setup"
+} else if (CCTK_Equals(initial_metric, "schwarzschild")) {
+    SCHEDULE init_schwarzschild AT CCTK_INITIAL {
+        LANG: C
+        OPTIONS: local
+        WRITES: ADMBaseX::metric(everywhere)
+        WRITES: ADMBaseX::lapse(everywhere)
+        WRITES: ADMBaseX::shift(everywhere)
+        WRITES: ADMBaseX::curv(everywhere)
+    } "Fields setup"
 }
+
 
 SCHEDULE setup AT CCTK_POSTINITIAL {
     LANG: C
@@ -31,7 +41,7 @@ if ((particle_plot_every>0)||(particle_tsv_every>0) ){
     } "print the particles"
 }
 
-if ((particle_plot_every||particle_tsv_every) ) {
+if (print_photons_constants) {
     SCHEDULE check_velocities AT CCTK_POSTINITIAL AFTER setup
     {
         LANG: C
@@ -53,7 +63,7 @@ if ((particle_plot_every||particle_tsv_every) ) {
     } "print the particles"
 }
 
-if ((particle_plot_every||particle_tsv_every) ) {
+if (print_photons_constants) {
     SCHEDULE check_velocities AT evol AFTER print
     {
         LANG: C
