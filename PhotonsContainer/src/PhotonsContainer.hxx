@@ -334,10 +334,8 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
           attribs[StructType::ln_E][i]};
 
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
-      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> partial_sum;
 
       U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-      partial_sum = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
       // f1 = rhs(u , t) for the runge kutta 4 step
       auto k_odd =
@@ -359,7 +357,6 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
         return;
       }
 
-
       // f2 = rhs(u + 0.5 * dt * f1, t) for the runge kutta 4 step
       auto k_even =
           this->compute_rhs(U_tmp, 0.5 * dt, lapse_array, shift_array,
@@ -374,13 +371,13 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       U_tmp[5] = U[5] + 0.5 * dt * k_even[5];
       U_tmp[6] = U[6] + 0.5 * dt * k_even[6];
 
-      partial_sum[0] = k_odd[0] + 2. * k_even[0];
-      partial_sum[1] = k_odd[1] + 2. * k_even[1];
-      partial_sum[2] = k_odd[2] + 2. * k_even[2];
-      partial_sum[3] = k_odd[3] + 2. * k_even[3];
-      partial_sum[4] = k_odd[4] + 2. * k_even[4];
-      partial_sum[5] = k_odd[5] + 2. * k_even[5];
-      partial_sum[6] = k_odd[6] + 2. * k_even[6];
+      particles[i].pos(0) += (1. / 6.) * dt * (k_odd[0] + 2. * k_even[0]);
+      particles[i].pos(1) += (1. / 6.) * dt * (k_odd[1] + 2. * k_even[1]);
+      particles[i].pos(2) += (1. / 6.) * dt * (k_odd[2] + 2. * k_even[2]);
+      vels_x[i] += (1. / 6.) * dt * (k_odd[3] + 2. * k_even[3]);
+      vels_y[i] += (1. / 6.) * dt * (k_odd[4] + 2. * k_even[4]);
+      vels_z[i] += (1. / 6.) * dt * (k_odd[5] + 2. * k_even[5]);
+      ln_energy[i] += (1. / 6.) * dt * (k_odd[6] + 2. * k_even[6]);
 
       if ((U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx) ||
           (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly) ||
@@ -413,20 +410,13 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
                                  metric_array, curv_array, dt, dx, lev, plo0);
 
       // Update particles with the f3 and f4 from RK4
-      particles[i].pos(0) +=
-          (1. / 6.) * dt * (2. * k_odd[0] + k_even[0] + partial_sum[0]);
-      particles[i].pos(1) +=
-          (1. / 6.) * dt * (2. * k_odd[1] + k_even[1] + partial_sum[1]);
-      particles[i].pos(2) +=
-          (1. / 6.) * dt * (2. * k_odd[2] + k_even[2] + partial_sum[2]);
-      vels_x[i] +=
-          (1. / 6.) * dt * (2. * k_odd[3] + k_even[3] + partial_sum[3]);
-      vels_y[i] +=
-          (1. / 6.) * dt * (2. * k_odd[4] + k_even[4] + partial_sum[4]);
-      vels_z[i] +=
-          (1. / 6.) * dt * (2. * k_odd[5] + k_even[5] + partial_sum[5]);
-      ln_energy[i] +=
-          (1. / 6.) * dt * (2. * k_odd[6] + k_even[6] + partial_sum[6]);
+      particles[i].pos(0) += (1. / 6.) * dt * (2. * k_odd[0] + k_even[0]);
+      particles[i].pos(1) += (1. / 6.) * dt * (2. * k_odd[1] + k_even[1]);
+      particles[i].pos(2) += (1. / 6.) * dt * (2. * k_odd[2] + k_even[2]);
+      vels_x[i] += (1. / 6.) * dt * (2. * k_odd[3] + k_even[3]);
+      vels_y[i] += (1. / 6.) * dt * (2. * k_odd[4] + k_even[4]);
+      vels_z[i] += (1. / 6.) * dt * (2. * k_odd[5] + k_even[5]);
+      ln_energy[i] += (1. / 6.) * dt * (2. * k_odd[6] + k_even[6]);
 
       // Check if is outside of the grid
       if ((particles[i].pos(0) > boundarie_hx) ||
@@ -562,6 +552,9 @@ void PhotonsContainer<StructType>::check_constants(
                   (E / lapse_x) +
               VecVecMul(shift_down, P_i_up),
           P_i[0], P_i[1], P_i[2]};
+
+      const CCTK_REAL R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
+                                    p.pos(2) * p.pos(2));
       // Write data into a file.
       // V^2 - 1 error
       vel_file << std::setprecision(17) << std::scientific << p.pos(0) << "\t"
@@ -569,6 +562,9 @@ void PhotonsContainer<StructType>::check_constants(
                << v_squared - 1.0 << "\t"
                << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"
                << P_mu[0] << "\t" << p.pos(0) * P_i[1] - p.pos(1) * P_i[0]
+               << "\t"
+               << R + 1. / (4. * R) + 4. * std::log(2. * R - 1.) -
+                      2. * std::log(R)
                << "\n";
     });
   }
