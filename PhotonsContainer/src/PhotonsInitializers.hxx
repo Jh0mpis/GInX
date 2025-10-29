@@ -432,8 +432,9 @@ void random_parallel_photons_per_container_initializer(
 
       // Generate a random position
       const amrex::Real ratio[AMREX_SPACEDIM] = {
-          (std::abs(p_hi[0] - p_lo[0]) * 0.5 - 0.7) * amrex::Random() + 0.7,
-          amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
+          (std::abs(p_hi[0] - p_lo[0]) - 0.5) * amrex::Random() + 0.5,
+          // amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
+          M_PI / 2., 0.0};
 
       typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
 
@@ -487,6 +488,7 @@ void random_parallel_photons_per_container_initializer(
 
       // Generate a random position
       typename ParticleContainerClass::ParticleType &p = p_struct[i];
+      // const amrex::Real ratio[AMREX_SPACEDIM] = {1.0, 0.0, 0.0};
 
       const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
       const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);

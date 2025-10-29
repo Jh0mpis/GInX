@@ -29,14 +29,14 @@ namespace Interpolator {
  *
  * Contains the nodes that we are going to use for the orders from 2 to 5.
  */
-const int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
+AMREX_GPU_CONSTANT int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
 /**
  * \brief Weights interpolator's array.
  *
  * Contains the weights that we are going to use for the orders from 2 to 5.
  */
-const CCTK_REAL all_weights[14] = {
+AMREX_GPU_CONSTANT CCTK_REAL all_weights[14] = {
     -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
     -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
 
@@ -66,7 +66,7 @@ const CCTK_REAL all_weights[14] = {
  * @return The interpolated value.
  */
 template <int N>
-AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
+AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
                      const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
@@ -126,7 +126,7 @@ barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
  * @return The interpolated value.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
+AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
@@ -138,12 +138,12 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   const CCTK_REAL *w = &all_weights[order];
 
   // Setting the pre-computed weights.
-  if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
-    CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
-              "implemented. Available orders: 1, 2, 3.");
-    throw std::invalid_argument(
-        "Wrong order of barycentric Lagrange interpolation");
-  }
+  // if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
+  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
+  //             "implemented. Available orders: 1, 2, 3.");
+  //   throw std::invalid_argument(
+  //       "Wrong order of barycentric Lagrange interpolation");
+  // }
 
   // Do the interpolation on x
   CCTK_REAL G[INTERPOLATION_ORDER][INTERPOLATION_ORDER];
@@ -218,7 +218,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * @return The interpolated value.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline CCTK_REAL
+AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
@@ -266,7 +266,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * @param dx Vector \f$\Delta x\f$  with the space steps value.
  */
 template <int N>
-AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE inline void
+AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE void
 der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
                          const int (&points)[N], const CCTK_REAL *weights,
                          const CCTK_REAL (&values)[N], const CCTK_REAL &x,
@@ -388,7 +388,7 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
  * @param comp Function's component to compute.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE inline void
+AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void
 barycentric_derivative_and_interpolate(
     CCTK_REAL &f_xyz, CCTK_REAL &df_xyz_0, CCTK_REAL &df_xyz_1,
     CCTK_REAL &df_xyz_2, amrex::Array4<CCTK_REAL const> const &f, int const &i0,
@@ -401,12 +401,12 @@ barycentric_derivative_and_interpolate(
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
 
-  if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
-    CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
-              "implemented. Available orders: 1, 2, 3.");
-    throw std::invalid_argument(
-        "Wrong order of barycentric Lagrange interpolation");
-  }
+  // if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
+  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
+  //             "implemented. Available orders: 1, 2, 3.");
+  //   throw std::invalid_argument(
+  //       "Wrong order of barycentric Lagrange interpolation");
+  // }
 
   // Computing f(x, y_i, z_i)
   CCTK_REAL G_xyz[INTERPOLATION_ORDER][INTERPOLATION_ORDER];

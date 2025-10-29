@@ -1,8 +1,7 @@
 #include <cctk.h>
 
-#include "AMReX_ParallelDescriptor.H"
-#include "CParameters.h"
-#include "Initializers.hxx"
+#include <AMReX_ParallelDescriptor.H>
+#include <CParameters.h>
 #include "Photons.hxx"
 #include "PhotonsContainer.hxx"
 #include "PhotonsInitializers.hxx"
