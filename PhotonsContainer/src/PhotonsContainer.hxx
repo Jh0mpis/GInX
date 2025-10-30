@@ -61,6 +61,8 @@ public:
   using Base = BaseParticleContainer<PhotonsContainer<StructType>, StructType>;
   using Base::Base;
 
+  ~PhotonsContainer() = default;
+
   void evolve(const amrex::MultiFab &lapse, const amrex::MultiFab &shift,
               const amrex::MultiFab &metric, const amrex::MultiFab &curv,
               const CCTK_REAL &dt, const int &lev) override;
@@ -332,12 +334,8 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
 
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
       const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
-          particles[i].pos(0),         
-        particles[i].pos(1),
-          particles[i].pos(2),         
-          vels_x[i],
-          vels_y[i],  
-        vels_z[i],
+          particles[i].pos(0), particles[i].pos(1), particles[i].pos(2),
+          vels_x[i],           vels_y[i],           vels_z[i],
           ln_energy[i]};
 
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
@@ -454,10 +452,11 @@ void PhotonsContainer<StructType>::check_constants(
     const amrex::MultiFab &shift, const int &lev) {
   // Get the current iteration number.
   // const int iteration = cctkGH->cctk_iteration;
-  // CCTK_VINFO("Checking the constants and the velocity error at iteration %d.",
+  // CCTK_VINFO("Checking the constants and the velocity error at iteration
+  // %d.",
   //            iteration);
 
-    return; // Commented for the GPU I have to solve it in future commits.
+  return; // Commented for the GPU I have to solve it in future commits.
   // // Initializing the files.
   // std::ostringstream file_name;
   // file_name << "Constants_" << amrex::ParallelDescriptor::MyProc() << "_"
@@ -488,7 +487,7 @@ void PhotonsContainer<StructType>::check_constants(
   //   auto const shift_array = shift.array(pti);
   //
   //   // foreach particle
-  //   amrex::ParallelFor(np, [=, &vel_file] AMREX_GPU_DEVICE(int i) noexcept {
+  //   amrex::ParallelFor(np, [=, &vel_file] (int i) noexcept {
   //     const auto p = particles[i];
   //
   //     // Get the cell's index at the particle's position.
@@ -498,32 +497,41 @@ void PhotonsContainer<StructType>::check_constants(
   //
   //     // Interpolate metric
   //     const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo,
   //                                 0), // g_11
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo,
   //                                 1), // g_12 & g_21
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo,
   //                                 2), // g_13 & g_31
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo,
   //                                 3), // g_22
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo,
   //                                 4), // g_23, g_32
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo, 5)}; // g_33
   //
   //     const CCTK_REAL lapse_x = barycentric_cubic_3d<5>(
   //         lapse_array, i0, j0, k0, p.pos(0), p.pos(1), p.pos(2), dx, p_lo);
   //     amrex::GpuArray<CCTK_REAL, 3> shift_x = {
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo, 0),
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo, 1),
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0), p.pos(1),
+  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
+  //         p.pos(1),
   //                                 p.pos(2), dx, p_lo, 2)};
   //
   //     // Get the inverse metric.
@@ -535,37 +543,42 @@ void PhotonsContainer<StructType>::check_constants(
   //                gamma_x[1] * gamma_x[1] * gamma_x[5]);
   //
   //     const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
-  //         (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,
-  //         (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,
-  //         (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,
-  //         (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,
-  //         (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
-  //         (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
+  //         (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) *
+  //         inv_det_gamma, (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5])
+  //         * inv_det_gamma, (gamma_x[1] * gamma_x[4] - gamma_x[2] *
+  //         gamma_x[3]) * inv_det_gamma, (gamma_x[0] * gamma_x[5] - gamma_x[2]
+  //         * gamma_x[2]) * inv_det_gamma, (gamma_x[2] * gamma_x[1] -
+  //         gamma_x[0] * gamma_x[4]) * inv_det_gamma, (gamma_x[0] * gamma_x[3]
+  //         - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
   //
   //     const CCTK_REAL v_squared = vels_x[i] * vels_x[i] * gamma_inv_x[0] +
   //                                 vels_y[i] * vels_y[i] * gamma_inv_x[3] +
   //                                 vels_z[i] * vels_z[i] * gamma_inv_x[5] +
-  //                                 2.0 * vels_x[i] * vels_y[i] * gamma_inv_x[1] +
-  //                                 2.0 * vels_x[i] * vels_z[i] * gamma_inv_x[2] +
-  //                                 2.0 * vels_y[i] * vels_z[i] * gamma_inv_x[4];
+  //                                 2.0 * vels_x[i] * vels_y[i] *
+  //                                 gamma_inv_x[1] + 2.0 * vels_x[i] *
+  //                                 vels_z[i] * gamma_inv_x[2] + 2.0 *
+  //                                 vels_y[i] * vels_z[i] * gamma_inv_x[4];
   //
   //     const CCTK_REAL E = std::exp(ln_energy[i]);
   //     const amrex::GpuArray<CCTK_REAL, 3> shift_down =
   //         SMatVecMul(gamma_x, shift_x);
-  //     const amrex::GpuArray<CCTK_REAL, 3> P_i = {E * vels_x[i], E * vels_y[i],
+  //     const amrex::GpuArray<CCTK_REAL, 3> P_i = {E * vels_x[i], E *
+  //     vels_y[i],
   //                                                E * vels_z[i]};
-  //     const amrex::GpuArray<CCTK_REAL, 3> P_i_up = SMatVecMul(gamma_inv_x, P_i);
-  //     const amrex::GpuArray<CCTK_REAL, 4> P_mu = {
+  //     const amrex::GpuArray<CCTK_REAL, 3> P_i_up = SMatVecMul(gamma_inv_x,
+  //     P_i); const amrex::GpuArray<CCTK_REAL, 4> P_mu = {
   //         (-lapse_x * lapse_x + VecVecMul(shift_x, shift_down)) *
   //                 (E / lapse_x) +
   //             VecVecMul(shift_down, P_i_up),
   //         P_i[0], P_i[1], P_i[2]};
   //
-  //     const CCTK_REAL R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
+  //     const CCTK_REAL R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1)
+  //     +
   //                                   p.pos(2) * p.pos(2));
   //     // Write data into a file.
   //     // V^2 - 1 error
-  //     vel_file << std::setprecision(17) << std::scientific << p.pos(0) << "\t"
+  //     vel_file << std::setprecision(17) << std::scientific << p.pos(0) <<
+  //     "\t"
   //              << p.pos(1) << "\t" << p.pos(2) << "\t" << p.id() << "\t"
   //              << v_squared - 1.0 << "\t"
   //              << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"

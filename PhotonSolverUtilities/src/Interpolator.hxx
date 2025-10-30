@@ -24,22 +24,6 @@
  */
 namespace Interpolator {
 
-/**
- * \brief Nodes interpolator's array.
- *
- * Contains the nodes that we are going to use for the orders from 2 to 5.
- */
-AMREX_GPU_CONSTANT int all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-/**
- * \brief Weights interpolator's array.
- *
- * Contains the weights that we are going to use for the orders from 2 to 5.
- */
-AMREX_GPU_CONSTANT CCTK_REAL all_weights[14] = {
-    -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
-    -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
-
 // #############################################################################
 //                   Barycentric Lagrange Interpolator
 // #############################################################################
@@ -66,7 +50,7 @@ AMREX_GPU_CONSTANT CCTK_REAL all_weights[14] = {
  * @return The interpolated value.
  */
 template <int N>
-AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
+AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
                      const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
@@ -134,12 +118,32 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      const amrex::GpuArray<double, 3> &plo, const int &comp) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+  /**
+   * \brief Nodes interpolator's array.
+   *
+   * Contains the nodes that we are going to use for the orders from 2 to 5.
+   */
+  const CCTK_INT all_nodes[14] = {0, 1, -1, 0,  1, -1, 0,
+                                               1, 2, -2, -1, 0, 1,  2};
+
+  /**
+   * \brief Weights interpolator's array.
+   *
+   * Contains the weights that we are going to use for the orders from 2 to 5.
+   */
+  const CCTK_REAL all_weights[14] = {
+      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
+  // const CCTK_INT nodes[order] = {-2, -1, 0, 1,  2};
+  // const CCTK_REAL w[order] = {1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0
+  // / 24.0};
 
   // Setting the pre-computed weights.
   // if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
-  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
+  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet
+  //   "
   //             "implemented. Available orders: 1, 2, 3.");
   //   throw std::invalid_argument(
   //       "Wrong order of barycentric Lagrange interpolation");
@@ -398,11 +402,28 @@ barycentric_derivative_and_interpolate(
 
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
+  /**
+   * \brief Nodes interpolator's array.
+   *
+   * Contains the nodes that we are going to use for the orders from 2 to 5.
+   */
+  const CCTK_INT all_nodes[14] = {0, 1, -1, 0,  1, -1, 0,
+                                               1, 2, -2, -1, 0, 1,  2};
+
+  /**
+   * \brief Weights interpolator's array.
+   *
+   * Contains the weights that we are going to use for the orders from 2 to 5.
+   */
+  const CCTK_REAL all_weights[14] = {
+      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
 
   // if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
-  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet "
+  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet
+  //   "
   //             "implemented. Available orders: 1, 2, 3.");
   //   throw std::invalid_argument(
   //       "Wrong order of barycentric Lagrange interpolation");

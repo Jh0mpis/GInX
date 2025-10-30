@@ -1,10 +1,10 @@
 #include <cctk.h>
 
-#include <AMReX_ParallelDescriptor.H>
-#include <CParameters.h>
 #include "Photons.hxx"
 #include "PhotonsContainer.hxx"
 #include "PhotonsInitializers.hxx"
+#include <AMReX_ParallelDescriptor.H>
+#include <CParameters.h>
 
 #include <driver.hxx>
 
@@ -275,4 +275,10 @@ extern "C" void check_velocities(CCTK_ARGUMENTS) {
       }
     }
   }
+}
+
+extern "C" int PhotonsContainer_final_cleanup() {
+  amrex::Gpu::Device::synchronize();
+  g_nupcs.clear();
+  return 0;
 }

@@ -70,3 +70,8 @@ if (print_photons_constants) {
         OPTIONS: global
     } "Checking the velocities"
 }
+
+SCHEDULE PhotonsContainer_final_cleanup at CCTK_SHUTDOWN{
+    LANG: C
+    OPTIONS: global
+} "cleaning everything"
