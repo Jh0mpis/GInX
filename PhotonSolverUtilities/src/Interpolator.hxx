@@ -50,7 +50,7 @@ namespace Interpolator {
  * @return The interpolated value.
  */
 template <int N>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
                      const CCTK_REAL (&values)[N], const CCTK_REAL &x,
                      const CCTK_REAL &plo, const CCTK_REAL &dx) {
@@ -110,7 +110,7 @@ barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
  * @return The interpolated value.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
@@ -222,7 +222,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * @return The interpolated value.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
                      int const &j0, int const &k0, CCTK_REAL const &x,
                      CCTK_REAL const &y, CCTK_REAL const &z,
@@ -270,7 +270,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * @param dx Vector \f$\Delta x\f$  with the space steps value.
  */
 template <int N>
-AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE void
+AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
 der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
                          const int (&points)[N], const CCTK_REAL *weights,
                          const CCTK_REAL (&values)[N], const CCTK_REAL &x,
@@ -392,7 +392,7 @@ der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
  * @param comp Function's component to compute.
  */
 template <int INTERPOLATION_ORDER>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE void
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
 barycentric_derivative_and_interpolate(
     CCTK_REAL &f_xyz, CCTK_REAL &df_xyz_0, CCTK_REAL &df_xyz_1,
     CCTK_REAL &df_xyz_2, amrex::Array4<CCTK_REAL const> const &f, int const &i0,

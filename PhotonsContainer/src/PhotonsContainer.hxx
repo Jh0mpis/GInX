@@ -68,7 +68,7 @@ public:
               const CCTK_REAL &dt, const int &lev) override;
 
   // Given differential equation dU/dt = f(U, dU/dx; t) computes f(U, dU/dx;t)
-  AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE
+  AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3>
       compute_rhs(
           const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> &u,
@@ -139,7 +139,7 @@ public:
  *  @return The right hind side of the differential equation.
  */
 template <typename StructType>
-AMREX_GPU_HOST_DEVICE CCTK_ATTRIBUTE_ALWAYS_INLINE
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
     amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3>
     PhotonsContainer<StructType>::compute_rhs(
         const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> &u,

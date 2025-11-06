@@ -26,7 +26,7 @@
  * @return A vector of size 3 result.
  */
 AMREX_GPU_DEVICE AMREX_GPU_HOST
-    CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray<CCTK_REAL, 3>
+    AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray<CCTK_REAL, 3>
     SMatVecMul(amrex::GpuArray<CCTK_REAL, 6> A,
                amrex::GpuArray<CCTK_REAL, 3> V) {
 
@@ -47,7 +47,7 @@ AMREX_GPU_DEVICE AMREX_GPU_HOST
  * @return A Real number result.
  */
 AMREX_GPU_DEVICE
-AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL
+AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
 VecVecMul(amrex::GpuArray<CCTK_REAL, 3> U, amrex::GpuArray<CCTK_REAL, 3> V) {
 
   return U[0] * V[0] + U[1] * V[1] + U[2] * V[2];
