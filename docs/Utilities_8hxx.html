@@ -117,26 +117,23 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aacdff6aa83092d12a265d0d1b8f92e70"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray&lt; CCTK_REAL, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utilities_8hxx.html#aacdff6aa83092d12a265d0d1b8f92e70">SMatVecMul</a> (amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</td></tr>
-<tr class="separator:aacdff6aa83092d12a265d0d1b8f92e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9422f8c771699b58ed5467ed1c64c378"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utilities_8hxx.html#a9422f8c771699b58ed5467ed1c64c378">VecVecMul</a> (amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</td></tr>
-<tr class="separator:a9422f8c771699b58ed5467ed1c64c378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26c5486af11db8bad5950abbfdf3abe4"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utilities_8hxx.html#a26c5486af11db8bad5950abbfdf3abe4">SMatVecMul</a> (amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</td></tr>
+<tr class="separator:a26c5486af11db8bad5950abbfdf3abe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a681b9c6520b384f44fa55ba2b7e6f961"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Utilities_8hxx.html#a681b9c6520b384f44fa55ba2b7e6f961">VecVecMul</a> (amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</td></tr>
+<tr class="separator:a681b9c6520b384f44fa55ba2b7e6f961"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Code utilities such as matrix and vector multiplications. </p>
 <p >This file contains the definition of some functions that could be helpful at the developing stage. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="aacdff6aa83092d12a265d0d1b8f92e70" name="aacdff6aa83092d12a265d0d1b8f92e70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacdff6aa83092d12a265d0d1b8f92e70">&#9670;&nbsp;</a></span>SMatVecMul()</h2>
+<a id="a26c5486af11db8bad5950abbfdf3abe4" name="a26c5486af11db8bad5950abbfdf3abe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26c5486af11db8bad5950abbfdf3abe4">&#9670;&nbsp;</a></span>SMatVecMul()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul </td>
+          <td class="memname">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul </td>
           <td>(</td>
           <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 6 &gt;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
@@ -153,11 +150,6 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >Symmetric matrix and vector multiplication.</p>
 <p >This function computes the Symmetric matrix and vector multiplication using that the size 3x3 matrices can be stored as a vector of size 6 we can compute its multiplication with any vector.</p>
@@ -172,17 +164,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9422f8c771699b58ed5467ed1c64c378" name="a9422f8c771699b58ed5467ed1c64c378"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9422f8c771699b58ed5467ed1c64c378">&#9670;&nbsp;</a></span>VecVecMul()</h2>
+<a id="a681b9c6520b384f44fa55ba2b7e6f961" name="a681b9c6520b384f44fa55ba2b7e6f961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a681b9c6520b384f44fa55ba2b7e6f961">&#9670;&nbsp;</a></span>VecVecMul()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">AMREX_GPU_DEVICE AMREX_GPU_HOST CCTK_ATTRIBUTE_ALWAYS_INLINE const CCTK_REAL VecVecMul </td>
+          <td class="memname">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL VecVecMul </td>
           <td>(</td>
           <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 3 &gt;&#160;</td>
           <td class="paramname"><em>U</em>, </td>
@@ -199,11 +188,6 @@ Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p >Vector Vector cartesian product.</p>
 <dl class="params"><dt>Parameters</dt><dd>

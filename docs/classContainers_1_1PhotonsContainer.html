@@ -117,12 +117,14 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:af63c3494d32804399595793fe8ec71a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#af63c3494d32804399595793fe8ec71a8">~PhotonsContainer</a> ()=default</td></tr>
+<tr class="separator:af63c3494d32804399595793fe8ec71a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a238395b0e861a0be9e4daab1aba8d2d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">evolve</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</td></tr>
 <tr class="memdesc:a238395b0e861a0be9e4daab1aba8d2d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 4.  <a href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">More...</a><br /></td></tr>
 <tr class="separator:a238395b0e861a0be9e4daab1aba8d2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memItemLeft" align="right" valign="top">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
-<tr class="memdesc:ac82e8ecf5f20496c96089f5ccc13759b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b">More...</a><br /></td></tr>
-<tr class="separator:ac82e8ecf5f20496c96089f5ccc13759b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d7f68a908cac547e3525fdb8910e805"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a8d7f68a908cac547e3525fdb8910e805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">More...</a><br /></td></tr>
+<tr class="separator:a8d7f68a908cac547e3525fdb8910e805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">check_constants</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</td></tr>
 <tr class="memdesc:a3dbd4c2aace62ed55d86c0e722d82268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">More...</a><br /></td></tr>
 <tr class="separator:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +151,34 @@ template&lt;typename StructType &gt; </div>
 </div><div class="memdoc">
 
 <p>Using BaseParticlesContainer constructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af63c3494d32804399595793fe8ec71a8" name="af63c3494d32804399595793fe8ec71a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af63c3494d32804399595793fe8ec71a8">&#9670;&nbsp;</a></span>~PhotonsContainer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StructType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::~<a class="el" href="classContainers_1_1PhotonsContainer.html">PhotonsContainer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -211,8 +241,8 @@ template&lt;typename StructType &gt; </div>
 
 </div>
 </div>
-<a id="ac82e8ecf5f20496c96089f5ccc13759b" name="ac82e8ecf5f20496c96089f5ccc13759b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac82e8ecf5f20496c96089f5ccc13759b">&#9670;&nbsp;</a></span>compute_rhs()</h2>
+<a id="a8d7f68a908cac547e3525fdb8910e805" name="a8d7f68a908cac547e3525fdb8910e805"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d7f68a908cac547e3525fdb8910e805">&#9670;&nbsp;</a></span>compute_rhs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +250,7 @@ template&lt;typename StructType &gt; </div>
 template&lt;typename StructType &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::compute_rhs </td>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::compute_rhs </td>
           <td>(</td>
           <td class="paramtype">const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;&#160;</td>
           <td class="paramname"><em>u</em>, </td>
@@ -413,7 +443,7 @@ t}{2}\right),\)</li>
 <li>\(f_4 = f(U_n + \Delta t f_3, t + \Delta t),\)</li>
 </ul>
 <p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#ac82e8ecf5f20496c96089f5ccc13759b" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
