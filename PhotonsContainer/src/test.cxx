@@ -228,6 +228,10 @@ extern "C" void test(CCTK_ARGUMENTS) {
 
       pc->evolve(lapse, shift, metric, curv, CCTK_DELTA_TIME, lev);
     }
+  }
+
+  for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
+    auto &pc = g_nupcs.at(patch);
     pc->Redistribute();
   }
 }
