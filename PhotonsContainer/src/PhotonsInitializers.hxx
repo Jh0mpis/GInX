@@ -433,7 +433,7 @@ void random_parallel_photons_per_container_initializer(
 
       // Generate a random position
       const amrex::Real ratio[AMREX_SPACEDIM] = {
-          (std::abs(p_hi[0] - p_lo[0]) - 0.7) * amrex::Random() + 0.7,
+          (std::abs(p_hi[0] - p_lo[0]) - 1.4) * 0.5 * amrex::Random() + 0.7,
           amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
           // M_PI / 2., 0.0};
 
