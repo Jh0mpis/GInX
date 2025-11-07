@@ -10,8 +10,8 @@
 
 #include <AMReX_Box.H>
 #include <AMReX_Config.H>
-#include <AMReX_Math.H>
 #include <AMReX_MFIter.H>
+#include <AMReX_Math.H>
 #include <AMReX_REAL.H>
 #include <AMReX_Random.H>
 #include <AMReX_RandomEngine.H>
@@ -23,6 +23,7 @@
 #include "AMReX_Array.H"
 #include "AMReX_GpuDevice.H"
 #include "AMReX_ParallelDescriptor.H"
+#include "AMReX_ParticleContainer.H"
 #include "Interpolator.hxx"
 
 namespace photons_init {
@@ -390,7 +391,6 @@ void random_parallel_photons_per_container_initializer(
     CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
                "Number of particles created at tile %d: %d ", current_tile,
                particles_per_tile);
-    current_tile++;
 
     // get each tile box
     const amrex::Box &tile_box = mfi.tilebox();
@@ -405,10 +405,6 @@ void random_parallel_photons_per_container_initializer(
     const CCTK_REAL tile_y_max = p_lo[1] + (hi.y + 1) * dx[1];
     const CCTK_REAL tile_z_min = p_lo[2] + lo.z * dx[2];
     const CCTK_REAL tile_z_max = p_lo[2] + (hi.z + 1) * dx[2];
-
-    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-               "x (%f %f), y (%f %f), z (%f, %f)", tile_x_min, tile_x_max,
-               tile_y_min, tile_y_max, tile_z_min, tile_z_max);
 
     // Get a reference to the particles
     auto &particles = pc.GetParticles(lev);
@@ -433,14 +429,14 @@ void random_parallel_photons_per_container_initializer(
 
       // Generate a random position
       const amrex::Real ratio[AMREX_SPACEDIM] = {
-          (std::abs(p_hi[0] - p_lo[0]) - 0.7) * amrex::Random() + 0.7,
+          (std::abs(p_hi[0] - p_lo[0]) - 1.4) * 0.5 * amrex::Random() + 0.7,
           amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
-          // M_PI / 2., 0.0};
+      // M_PI / 2., 0.0};
 
       typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
 
       p.id() = ParticleContainerClass::ParticleType::NextID();
-      p.cpu() = proc_id;
+      p.cpu() = amrex::ParallelDescriptor::MyProc();
 
       p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
       p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
@@ -452,6 +448,7 @@ void random_parallel_photons_per_container_initializer(
       arrdata[StructType::vz][pidx] = 0.0;
       arrdata[StructType::ln_E][pidx] = 0;
     }
+    current_tile++;
   }
 
   pc.Redistribute();
