@@ -388,9 +388,6 @@ void random_parallel_photons_per_container_initializer(
     const int particles_per_tile =
         local_particles_size / total_tiles +
         (current_tile < local_particles_size % total_tiles);
-    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
-               "Number of particles created at tile %d: %d ", current_tile,
-               particles_per_tile);
 
     // get each tile box
     const amrex::Box &tile_box = mfi.tilebox();
@@ -449,8 +446,12 @@ void random_parallel_photons_per_container_initializer(
       arrdata[StructType::ln_E][pidx] = 0;
     }
     current_tile++;
+    CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
+               "Number of particles created at tile %d: %d ", current_tile,
+               particles_per_tile);
   }
 
+  pc.SortParticlesForDeposition({1, 1, 1});
   pc.Redistribute();
 
   // Iterating over all the tiles of the particle data structure

@@ -232,9 +232,11 @@ extern "C" void test(CCTK_ARGUMENTS) {
         pc->evolve(lapse, shift, metric, curv, CCTK_DELTA_TIME, lev);
       }
     }
+    amrex::ParallelDescriptor::Barrier();
     amrex::Gpu::streamSynchronize();
     auto t1 = amrex::ParallelDescriptor::second();
-    amrex::Print() << "\n\t[PROFILING] evolve method    \t" << t1 - t0 << " seconds \n";
+    amrex::Print() << "\n\t[PROFILING] evolve method    \t" << t1 - t0
+                   << " seconds \n";
   }
 
   {
@@ -243,9 +245,11 @@ extern "C" void test(CCTK_ARGUMENTS) {
       auto &pc = g_nupcs.at(patch);
       pc->Redistribute();
     }
+    amrex::ParallelDescriptor::Barrier();
     amrex::Gpu::streamSynchronize();
     auto t1 = amrex::ParallelDescriptor::second();
-    amrex::Print() << "\t[PROFILING] Redistribute method\t" << t1 - t0 << " seconds\n\n";
+    amrex::Print() << "\t[PROFILING] Redistribute method\t" << t1 - t0
+                   << " seconds\n\n";
   }
 }
 
