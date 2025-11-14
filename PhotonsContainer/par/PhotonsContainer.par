@@ -19,9 +19,9 @@ CarpetX::xmax = +10.0
 CarpetX::ymax = +10.0
 CarpetX::zmax = +10.0
 
-CarpetX::ncells_x = 320
-CarpetX::ncells_y = 320
-CarpetX::ncells_z = 320
+CarpetX::ncells_x = 256
+CarpetX::ncells_y = 256
+CarpetX::ncells_z = 256
 
 CarpetX::periodic_x = yes
 CarpetX::periodic_y = yes
@@ -38,7 +38,7 @@ CarpetX::max_tile_size_z = 10000000
 CarpetX::ghost_size = 3
 CarpetX::dtfac = 1.0
 
-Cactus::cctk_itlast = 3
+Cactus::cctk_itlast = 256
 
 CarpetX::regrid_error_threshold = 4.
 CarpetX::max_num_levels = 1
@@ -57,9 +57,9 @@ CarpetX::out_tsv_vars = ""
 
 # PhotonsContainer parameters definition
 ParticlesContainer::particle_plot_every = 0
-ParticlesContainer::particle_tsv_every = 10
+ParticlesContainer::particle_tsv_every = 1
 PhotonsContainer::print_photons_constants = 0
-PhotonsContainer::total_photons = 100
+PhotonsContainer::total_photons = 1000
 PhotonsContainer::initial_metric = "iso schwarzschild"
 # PhotonsContainer::photons_per_cell = 5
 # PhotonsContainer::initial_metric = "minkowski"

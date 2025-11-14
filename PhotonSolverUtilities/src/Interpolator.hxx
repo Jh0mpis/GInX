@@ -50,10 +50,11 @@ namespace Interpolator {
  * @return The interpolated value.
  */
 template <int N>
-AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
-barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
-                     const CCTK_REAL (&values)[N], const CCTK_REAL &x,
-                     const CCTK_REAL &plo, const CCTK_REAL &dx) {
+AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
+barycentric_cubic_1d(CCTK_REAL &value, const int (&points)[N],
+                     const CCTK_REAL *weights, const CCTK_REAL (&values)[N],
+                     const CCTK_REAL &x, const CCTK_REAL &plo,
+                     const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
   CCTK_REAL den{0.0};
 
@@ -62,7 +63,8 @@ barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
     CCTK_REAL diff = x - (plo + points[i] * dx);
     const CCTK_REAL tolerance = 1e-12;
     if (diff < tolerance && diff > -tolerance) {
-      return values[i];
+      value = values[i];
+      return;
     }
     // Compute the weights and values
     CCTK_REAL term = weights[i] / diff;
@@ -71,7 +73,7 @@ barycentric_cubic_1d(const int (&points)[N], const CCTK_REAL *weights,
   }
 
   // Return the interpolation
-  return num / den;
+  value = num / den;
 }
 
 /**
@@ -123,8 +125,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
    *
    * Contains the nodes that we are going to use for the orders from 2 to 5.
    */
-  const CCTK_INT all_nodes[14] = {0, 1, -1, 0,  1, -1, 0,
-                                               1, 2, -2, -1, 0, 1,  2};
+  const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
   /**
    * \brief Weights interpolator's array.
@@ -136,19 +137,7 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
-  // const CCTK_INT nodes[order] = {-2, -1, 0, 1,  2};
-  // const CCTK_REAL w[order] = {1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0
-  // / 24.0};
-
-  // Setting the pre-computed weights.
-  // if constexpr (INTERPOLATION_ORDER > 5 || INTERPOLATION_ORDER < 2) {
-  //   CCTK_INFO("Barycentric Lagrange interpolation of desired order is not yet
-  //   "
-  //             "implemented. Available orders: 1, 2, 3.");
-  //   throw std::invalid_argument(
-  //       "Wrong order of barycentric Lagrange interpolation");
-  // }
-
+  //
   // Do the interpolation on x
   CCTK_REAL G[INTERPOLATION_ORDER][INTERPOLATION_ORDER];
   for (int j = 0; j < INTERPOLATION_ORDER; j++) {
@@ -159,8 +148,8 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
         values[i] = f(i0 + nodes[i], j0 + nodes[j], k0 + nodes[k], comp);
         points[i] = i0 + nodes[i];
       }
-      G[j][k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, values, x,
-                                                          plo[0], dx[0]);
+      barycentric_cubic_1d<INTERPOLATION_ORDER>(G[j][k], points, w, values, x,
+                                                plo[0], dx[0]);
     }
   }
 
@@ -173,8 +162,8 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
       values[j] = G[j][k];
       points[j] = j0 + nodes[j];
     }
-    H[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, values, y,
-                                                     plo[1], dx[1]);
+    barycentric_cubic_1d<INTERPOLATION_ORDER>(H[k], points, w, values, y,
+                                              plo[1], dx[1]);
   }
 
   // Do the interpolation on z
@@ -182,8 +171,10 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
   for (int k = 0; k < INTERPOLATION_ORDER; k++) {
     points[k] = k0 + nodes[k];
   }
-  return barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, H, z, plo[2],
-                                                   dx[2]);
+  CCTK_REAL value;
+  barycentric_cubic_1d<INTERPOLATION_ORDER>(value, points, w, H, z, plo[2],
+                                            dx[2]);
+  return value;
 } // barycentric_cubic_3d with component
 
 /**
@@ -270,11 +261,12 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  * @param dx Vector \f$\Delta x\f$  with the space steps value.
  */
 template <int N>
-AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
-der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
-                         const int (&points)[N], const CCTK_REAL *weights,
-                         const CCTK_REAL (&values)[N], const CCTK_REAL &x,
-                         const CCTK_REAL &plo, const CCTK_REAL &dx) {
+AMREX_GPU_DEVICE
+    AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
+    der_barycentric_cubic_1d(CCTK_REAL &f_x, CCTK_REAL &d_f_x,
+                             const int (&points)[N], const CCTK_REAL *weights,
+                             const CCTK_REAL (&values)[N], const CCTK_REAL &x,
+                             const CCTK_REAL &plo, const CCTK_REAL &dx) {
   CCTK_REAL num{0.0};
   CCTK_REAL den{0.0};
   CCTK_REAL den_sqr{0.0};
@@ -407,8 +399,7 @@ barycentric_derivative_and_interpolate(
    *
    * Contains the nodes that we are going to use for the orders from 2 to 5.
    */
-  const CCTK_INT all_nodes[14] = {0, 1, -1, 0,  1, -1, 0,
-                                               1, 2, -2, -1, 0, 1,  2};
+  const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
   /**
    * \brief Weights interpolator's array.
@@ -463,8 +454,8 @@ barycentric_derivative_and_interpolate(
     }
     der_barycentric_cubic_1d<INTERPOLATION_ORDER>(H_xyz[k], H_xdyz[k], points,
                                                   w, values, y, plo[1], dx[1]);
-    H_dxyz[k] = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, d_values,
-                                                          y, plo[1], dx[1]);
+    barycentric_cubic_1d<INTERPOLATION_ORDER>(H_dxyz[k], points, w, d_values, y,
+                                              plo[1], dx[1]);
   }
 
   CCTK_INT points[INTERPOLATION_ORDER];
@@ -476,11 +467,11 @@ barycentric_derivative_and_interpolate(
   der_barycentric_cubic_1d<INTERPOLATION_ORDER>(f_xyz, df_xyz_2, points, w,
                                                 H_xyz, z, plo[2], dx[2]);
   // Computing d/dx f(x, y, z)
-  df_xyz_0 = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, H_dxyz, z,
-                                                       plo[2], dx[2]);
+  barycentric_cubic_1d<INTERPOLATION_ORDER>(df_xyz_0, points, w, H_dxyz, z,
+                                            plo[2], dx[2]);
   // Computing d/dy f(x, y, z)
-  df_xyz_1 = barycentric_cubic_1d<INTERPOLATION_ORDER>(points, w, H_xdyz, z,
-                                                       plo[2], dx[2]);
+  barycentric_cubic_1d<INTERPOLATION_ORDER>(df_xyz_1, points, w, H_xdyz, z,
+                                            plo[2], dx[2]);
 } // barycentric_derivative_and_interpolate
 
 } // namespace Interpolator

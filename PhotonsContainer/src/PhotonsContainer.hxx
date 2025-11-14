@@ -84,6 +84,8 @@ public:
                        const amrex::MultiFab &lapse,
                        const amrex::MultiFab &shift, const int &lev);
 
+  void normalize_velocity(const amrex::MultiFab &metric);
+
   void redistribute_particles();
 }; // PhotonsContainer class
 
@@ -437,6 +439,96 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
   }
 } // PhotonsContainer::evolve
 
+template <typename StructType>
+void PhotonsContainer<StructType>::normalize_velocity(
+    const amrex::MultiFab &metric) {
+
+  int lev = 0;
+
+  // Get the with of the discretization on each direction.
+  const auto dx = this->Geom(lev).CellSizeArray();
+  // Get the lower and higher value over the ParticleContainer Geometry
+  const auto p_lo = this->Geom(lev).ProbLoArray();
+  const auto p_hi = this->Geom(lev).ProbHiArray();
+
+  for (amrex::MFIter mfi = this->MakeMFIter(lev); mfi.isValid(); ++mfi) {
+    // Get a reference to the particles
+    auto &particles = this->GetParticles(lev);
+    auto &particle_tile = this->DefineAndReturnParticleTile(lev, mfi);
+
+    // Determines the current size and the required new size
+    auto current_size = particle_tile.GetArrayOfStructs().size();
+
+    // Gets raw pointers to the two different ways particle data is stored for
+    // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
+    auto *p_struct =
+        particle_tile.GetArrayOfStructs()().data();
+    auto arrdata = particle_tile.GetStructOfArrays().realarray();
+
+    // get the current process id
+    auto const metric_array = metric.array(mfi);
+
+    for (int i = 0; i < current_size; i++) {
+
+      // Start a for loop with Random Number evolution for the velocity
+      const amrex::Real ratio[AMREX_SPACEDIM] = {arrdata[StructType::vx][i],
+                                                 arrdata[StructType::vy][i],
+                                                 arrdata[StructType::vz][i]};
+
+      // Generate a random position
+      const auto &p = p_struct[i];
+
+      const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
+      const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
+      const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
+
+      // Interpolate metric
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 0), // g_11
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 1), // g_12 & g_21
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 2), // g_13 & g_31
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 3), // g_22
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 4), // g_23, g_32
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 5)}; // g_33
+
+      const CCTK_REAL inv_det_gamma =
+          1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
+                 2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -
+                 gamma_x[2] * gamma_x[2] * gamma_x[3] -
+                 gamma_x[4] * gamma_x[4] * gamma_x[0] -
+                 gamma_x[1] * gamma_x[1] * gamma_x[5]);
+
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
+          (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,
+          (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,
+          (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
+
+      // Normalizing the velocity.
+      const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
+                                  ratio[1] * ratio[1] * gamma_inv_x[3] +
+                                  ratio[2] * ratio[2] * gamma_inv_x[5] +
+                                  2.0 * ratio[0] * ratio[1] * gamma_inv_x[1] +
+                                  2.0 * ratio[0] * ratio[2] * gamma_inv_x[2] +
+                                  2.0 * ratio[1] * ratio[2] * gamma_inv_x[4];
+
+      const CCTK_REAL v = std::sqrt(v_squared);
+
+      // Create the particle and add it to the container
+      arrdata[StructType::vx][i] = ratio[0] / v;
+      arrdata[StructType::vy][i] = ratio[1] / v;
+      arrdata[StructType::vz][i] = ratio[2] / v;
+    }
+  }
+}
 /**
  * \brief Computes and print all photons velocities.
  *
