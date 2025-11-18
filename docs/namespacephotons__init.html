@@ -78,21 +78,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab22cea706a52c2ab8487b4bed4b94f2d"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
-<tr class="memitem:ab22cea706a52c2ab8487b4bed4b94f2d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#ab22cea706a52c2ab8487b4bed4b94f2d">random_photons_initializer</a> (ParticleContainerClass &amp;pc, const int &amp;number_of_particles_per_cell, const amrex::MultiFab &amp;metric, const int &amp;lev)</td></tr>
-<tr class="memdesc:ab22cea706a52c2ab8487b4bed4b94f2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes a custom number of particles on each grid cell.  <a href="namespacephotons__init.html#ab22cea706a52c2ab8487b4bed4b94f2d">More...</a><br /></td></tr>
-<tr class="separator:ab22cea706a52c2ab8487b4bed4b94f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9da5feed990e95182291eb403fe3848"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
-<tr class="memitem:ab9da5feed990e95182291eb403fe3848"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#ab9da5feed990e95182291eb403fe3848">random_photons_per_container_initializer</a> (ParticleContainerClass &amp;pc, const int &amp;number_of_particles_per_container, const amrex::MultiFab &amp;metric)</td></tr>
-<tr class="memdesc:ab9da5feed990e95182291eb403fe3848"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes a custom number of particles on each particle container.  <a href="namespacephotons__init.html#ab9da5feed990e95182291eb403fe3848">More...</a><br /></td></tr>
-<tr class="separator:ab9da5feed990e95182291eb403fe3848"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9169a98e974dd1c5c07f6b13d242f87f"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
-<tr class="memitem:a9169a98e974dd1c5c07f6b13d242f87f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#a9169a98e974dd1c5c07f6b13d242f87f">random_parallel_photons_per_container_initializer</a> (ParticleContainerClass &amp;pc, const int &amp;number_of_particles_per_container, const amrex::MultiFab &amp;metric)</td></tr>
-<tr class="separator:a9169a98e974dd1c5c07f6b13d242f87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c1855ac5364bca0250024db8dec4ff9"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
+<tr class="memitem:a2c1855ac5364bca0250024db8dec4ff9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#a2c1855ac5364bca0250024db8dec4ff9">random_parallel_initializer</a> (ParticleContainerClass &amp;pc, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
+<tr class="memdesc:a2c1855ac5364bca0250024db8dec4ff9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes a custom number of particles on each grid cell.  <a href="namespacephotons__init.html#a2c1855ac5364bca0250024db8dec4ff9">More...</a><br /></td></tr>
+<tr class="separator:a2c1855ac5364bca0250024db8dec4ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a9169a98e974dd1c5c07f6b13d242f87f" name="a9169a98e974dd1c5c07f6b13d242f87f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9169a98e974dd1c5c07f6b13d242f87f">&#9670;&nbsp;</a></span>random_parallel_photons_per_container_initializer()</h2>
+<a id="a2c1855ac5364bca0250024db8dec4ff9" name="a2c1855ac5364bca0250024db8dec4ff9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c1855ac5364bca0250024db8dec4ff9">&#9670;&nbsp;</a></span>random_parallel_initializer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -100,52 +93,10 @@ Functions</h2></td></tr>
 template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void photons_init::random_parallel_photons_per_container_initializer </td>
+          <td class="memname">void photons_init::random_parallel_initializer </td>
           <td>(</td>
           <td class="paramtype">ParticleContainerClass &amp;&#160;</td>
           <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>number_of_particles_per_container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab22cea706a52c2ab8487b4bed4b94f2d" name="ab22cea706a52c2ab8487b4bed4b94f2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab22cea706a52c2ab8487b4bed4b94f2d">&#9670;&nbsp;</a></span>random_photons_initializer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void photons_init::random_photons_initializer </td>
-          <td>(</td>
-          <td class="paramtype">ParticleContainerClass &amp;&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>number_of_particles_per_cell</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -157,7 +108,19 @@ template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>lev</em>&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL *&#160;</td>
+          <td class="paramname"><em>real_params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_INT *&#160;</td>
+          <td class="paramname"><em>int_params</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -174,52 +137,6 @@ template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
     <tr><td class="paramname">number_of_particles_per_cell</td><td>The number of particles contained on each cell. </td></tr>
     <tr><td class="paramname">metric</td><td>The 3 dimensional ADM metric. </td></tr>
     <tr><td class="paramname">lev</td><td>AMR discretization level. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab9da5feed990e95182291eb403fe3848" name="ab9da5feed990e95182291eb403fe3848"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9da5feed990e95182291eb403fe3848">&#9670;&nbsp;</a></span>random_photons_per_container_initializer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void photons_init::random_photons_per_container_initializer </td>
-          <td>(</td>
-          <td class="paramtype">ParticleContainerClass &amp;&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>number_of_particles_per_container</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>This function random initializes a custom number of particles on each particle container. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pc</td><td>The particle container that is going to be initialized. </td></tr>
-    <tr><td class="paramname">number_of_particles_per_container</td><td>The number of particles contained on each particle container. </td></tr>
-    <tr><td class="paramname">metric</td><td>The 3 dimensional ADM metric. </td></tr>
   </table>
   </dd>
 </dl>

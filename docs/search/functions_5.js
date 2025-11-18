@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['photonscontainer_5ffinal_5fcleanup_0',['PhotonsContainer_final_cleanup',['../test_8cxx.html#a0987b37f1db24f0e8be9c161e537a822',1,'test.cxx']]],
-  ['print_1',['print',['../test_8cxx.html#afa2b3f15dfca5cc89e4de20edaac8ebb',1,'test.cxx']]]
+  ['normalize_5fvelocity_0',['normalize_velocity',['../classContainers_1_1PhotonsContainer.html#a1606c322695337cd3fe775e69d803287',1,'Containers::PhotonsContainer']]]
 ];

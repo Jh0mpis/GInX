@@ -81,10 +81,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af3c17403dbad8168b9dbc7369719e3d5"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
-<tr class="memitem:af3c17403dbad8168b9dbc7369719e3d5"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#af3c17403dbad8168b9dbc7369719e3d5">barycentric_cubic_1d</a> (const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
-<tr class="memdesc:af3c17403dbad8168b9dbc7369719e3d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in one direction.  <a href="namespaceInterpolator.html#af3c17403dbad8168b9dbc7369719e3d5">More...</a><br /></td></tr>
-<tr class="separator:af3c17403dbad8168b9dbc7369719e3d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec570b3aadbe0f288ac94791d26dba7e"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:aec570b3aadbe0f288ac94791d26dba7e"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#aec570b3aadbe0f288ac94791d26dba7e">barycentric_cubic_1d</a> (CCTK_REAL &amp;value, const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
+<tr class="memdesc:aec570b3aadbe0f288ac94791d26dba7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in one direction.  <a href="namespaceInterpolator.html#aec570b3aadbe0f288ac94791d26dba7e">More...</a><br /></td></tr>
+<tr class="separator:aec570b3aadbe0f288ac94791d26dba7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2b57e6e5cb3371c186e88f2d186c480"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:ab2b57e6e5cb3371c186e88f2d186c480"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceInterpolator.html#ab2b57e6e5cb3371c186e88f2d186c480">barycentric_cubic_3d</a> (amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, int const &amp;i0, int const &amp;j0, int const &amp;k0, CCTK_REAL const &amp;x, CCTK_REAL const &amp;y, CCTK_REAL const &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
 <tr class="memdesc:ab2b57e6e5cb3371c186e88f2d186c480"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction.  <a href="namespaceInterpolator.html#ab2b57e6e5cb3371c186e88f2d186c480">More...</a><br /></td></tr>
@@ -105,8 +105,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Interpolators namespace. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="af3c17403dbad8168b9dbc7369719e3d5" name="af3c17403dbad8168b9dbc7369719e3d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3c17403dbad8168b9dbc7369719e3d5">&#9670;&nbsp;</a></span>barycentric_cubic_1d()</h2>
+<a id="aec570b3aadbe0f288ac94791d26dba7e" name="aec570b3aadbe0f288ac94791d26dba7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec570b3aadbe0f288ac94791d26dba7e">&#9670;&nbsp;</a></span>barycentric_cubic_1d()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -114,8 +114,14 @@ Functions</h2></td></tr>
 template&lt;int N&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL Interpolator::barycentric_cubic_1d </td>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void Interpolator::barycentric_cubic_1d </td>
           <td>(</td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const int(&amp;)&#160;</td>
           <td class="paramname"><em>points</em>[N], </td>
         </tr>
@@ -168,15 +174,15 @@ x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
 <p >where \(N\) is the order of interpolation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">value</td><td>The interpolated value reference. </td></tr>
     <tr><td class="paramname">points</td><td>Vector containing the coordinates of each point. </td></tr>
     <tr><td class="paramname">weights</td><td>The weights of each datapoint. </td></tr>
     <tr><td class="paramname">x</td><td>The value where we are interpolating. </td></tr>
     <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
-    <tr><td class="paramname">plo</td><td>Lower values of the entire domain.</td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The interpolated value. </dd></dl>
 
 </div>
 </div>
@@ -266,7 +272,7 @@ y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
 \]
 </p>
 <p >where \(N\) is the order of interpolation.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceInterpolator.html#af3c17403dbad8168b9dbc7369719e3d5" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceInterpolator.html#aec570b3aadbe0f288ac94791d26dba7e" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
@@ -377,7 +383,7 @@ y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
 \]
 </p>
 <p >where \(N\) is the order of interpolation.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceInterpolator.html#af3c17403dbad8168b9dbc7369719e3d5" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceInterpolator.html#aec570b3aadbe0f288ac94791d26dba7e" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
@@ -659,7 +665,7 @@ x_i}\right)^2}
 </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceInterpolator.html#ab2b57e6e5cb3371c186e88f2d186c480" title="Do a Barycentric interpolation in three direction.">barycentric_cubic_3d</a> </dd>
 <dd>
-<a class="el" href="namespaceInterpolator.html#af3c17403dbad8168b9dbc7369719e3d5" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<a class="el" href="namespaceInterpolator.html#aec570b3aadbe0f288ac94791d26dba7e" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">f_x</td><td>Reference to the final interpolated function value. </td></tr>

@@ -125,9 +125,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8d7f68a908cac547e3525fdb8910e805"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
 <tr class="memdesc:a8d7f68a908cac547e3525fdb8910e805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">More...</a><br /></td></tr>
 <tr class="separator:a8d7f68a908cac547e3525fdb8910e805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">check_constants</a> (CCTK_ARGUMENTS, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const int &amp;lev)</td></tr>
-<tr class="memdesc:a3dbd4c2aace62ed55d86c0e722d82268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and print all photons velocities.  <a href="classContainers_1_1PhotonsContainer.html#a3dbd4c2aace62ed55d86c0e722d82268">More...</a><br /></td></tr>
-<tr class="separator:a3dbd4c2aace62ed55d86c0e722d82268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1606c322695337cd3fe775e69d803287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a1606c322695337cd3fe775e69d803287">normalize_velocity</a> (const amrex::MultiFab &amp;metric, const int level)</td></tr>
+<tr class="memdesc:a1606c322695337cd3fe775e69d803287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize the velocity accordingly to the metric on each particle position.  <a href="classContainers_1_1PhotonsContainer.html#a1606c322695337cd3fe775e69d803287">More...</a><br /></td></tr>
+<tr class="separator:a1606c322695337cd3fe775e69d803287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebba2fa6ea568b7cce9b46af5976d650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#aebba2fa6ea568b7cce9b46af5976d650">redistribute_particles</a> ()</td></tr>
 <tr class="separator:aebba2fa6ea568b7cce9b46af5976d650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -183,64 +183,6 @@ template&lt;typename StructType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3dbd4c2aace62ed55d86c0e722d82268" name="a3dbd4c2aace62ed55d86c0e722d82268"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3dbd4c2aace62ed55d86c0e722d82268">&#9670;&nbsp;</a></span>check_constants()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename StructType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::check_constants </td>
-          <td>(</td>
-          <td class="paramtype">CCTK_ARGUMENTS&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>lapse</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>shift</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>lev</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes and print all photons velocities. </p>
-<p >This function is for checking the photons velocities and distance between 1.0 and v^2.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">metric</td><td>ADM 3 dimension metric. </td></tr>
-    <tr><td class="paramname">lev</td><td>AMR Level of discretization. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a8d7f68a908cac547e3525fdb8910e805" name="a8d7f68a908cac547e3525fdb8910e805"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8d7f68a908cac547e3525fdb8910e805">&#9670;&nbsp;</a></span>compute_rhs()</h2>
 
@@ -452,6 +394,57 @@ t}{2}\right),\)</li>
     <tr><td class="paramname">curv</td><td>Extrinsic curvature. </td></tr>
     <tr><td class="paramname">dt</td><td>Timestep. </td></tr>
     <tr><td class="paramname">lev</td><td>AMR Level of discretization. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1606c322695337cd3fe775e69d803287" name="a1606c322695337cd3fe775e69d803287"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1606c322695337cd3fe775e69d803287">&#9670;&nbsp;</a></span>normalize_velocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename StructType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classContainers_1_1PhotonsContainer.html">Containers::PhotonsContainer</a>&lt; StructType &gt;::normalize_velocity </td>
+          <td>(</td>
+          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
+          <td class="paramname"><em>metric</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Normalize the velocity accordingly to the metric on each particle position. </p>
+<p >This function is made to normalize the velocity given a random initial data using the <a class="el" href="namespacePhotons.html">Photons</a> positions by using that</p>
+<p class="formulaDsp">
+\[
+ P^\mu P_\mu = 0.
+ \]
+</p>
+<p >or equivalently</p>
+<p class="formulaDsp">
+\[
+ V^\alpha V_\alpha = V_\alpha V_\beta \gamma^{\alpha\beta} = 1.
+ \]
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">metric</td><td>ADM 3 dimension metric. </td></tr>
+    <tr><td class="paramname">Current</td><td>refinement level. </td></tr>
   </table>
   </dd>
 </dl>
