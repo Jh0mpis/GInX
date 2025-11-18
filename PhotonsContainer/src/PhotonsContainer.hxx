@@ -63,6 +63,7 @@ public:
 
   ~PhotonsContainer() = default;
 
+  // Evolving all the particles on each container
   void evolve(const amrex::MultiFab &lapse, const amrex::MultiFab &shift,
               const amrex::MultiFab &metric, const amrex::MultiFab &curv,
               const CCTK_REAL &dt, const int &lev) override;
@@ -79,10 +80,8 @@ public:
           const amrex::GpuArray<double, 3> &dx, const int lev,
           const amrex::GpuArray<double, 3> &plo);
 
-  // Computes and print all photons velocities
-  void check_constants(CCTK_ARGUMENTS, const amrex::MultiFab &metric,
-                       const amrex::MultiFab &lapse,
-                       const amrex::MultiFab &shift, const int &lev);
+  // Computes and normalize the velocity
+  void normalize_velocity(const amrex::MultiFab &metric, const int level);
 
   void redistribute_particles();
 }; // PhotonsContainer class
@@ -438,161 +437,112 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
 } // PhotonsContainer::evolve
 
 /**
- * \brief Computes and print all photons velocities.
+ * \brief Normalize the velocity accordingly to the metric on each particle
+ * position.
  *
- * This function is for checking the photons velocities and distance between 1.0
- * and v^2.
+ * This function is made to normalize the velocity given a random initial data
+ * using the Photons positions by using that
+ *
+ *  \f[
+ *  P^\mu P_\mu = 0.
+ *  \f]
+ *
+ *  or equivalently
+ *
+ *  \f[
+ *  V^\alpha V_\alpha = V_\alpha V_\beta \gamma^{\alpha\beta} = 1.
+ *  \f]
  *
  * @param metric ADM 3 dimension metric.
- *  @param lev AMR Level of discretization.
+ * @param Current refinement level.
  */
 template <typename StructType>
-void PhotonsContainer<StructType>::check_constants(
-    CCTK_ARGUMENTS, const amrex::MultiFab &metric, const amrex::MultiFab &lapse,
-    const amrex::MultiFab &shift, const int &lev) {
-  // Get the current iteration number.
-  // const int iteration = cctkGH->cctk_iteration;
-  // CCTK_VINFO("Checking the constants and the velocity error at iteration
-  // %d.",
-  //            iteration);
+void PhotonsContainer<StructType>::normalize_velocity(
+    const amrex::MultiFab &metric, const int level) {
 
-  return; // Commented for the GPU I have to solve it in future commits.
-  // // Initializing the files.
-  // std::ostringstream file_name;
-  // file_name << "Constants_" << amrex::ParallelDescriptor::MyProc() << "_"
-  //           << iteration;
-  // std::ofstream vel_file;
-  // vel_file.open(file_name.str());
-  //
-  // const auto plo0 = this->Geom(0).ProbLoArray();
-  // const auto phi0 = this->Geom(0).ProbHiArray();
-  //
-  // const auto dx = this->Geom(lev).CellSizeArray();
-  // const auto p_lo = this->Geom(lev).ProbLoArray();
-  //
-  // for (Iterator::ParticleIterator<StructType> pti(*this, lev); pti.isValid();
-  //      ++pti) {
-  //   const int np = pti.numParticles();
-  //
-  //   // Get the velocity information
-  //   auto &attribs = pti.GetAttributes();
-  //   CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
-  //   CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
-  //   CCTK_REAL *AMREX_RESTRICT vels_z = attribs[StructType::vz].data();
-  //   CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();
-  //   auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
-  //
-  //   auto const metric_array = metric.array(pti);
-  //   auto const lapse_array = lapse.array(pti);
-  //   auto const shift_array = shift.array(pti);
-  //
-  //   // foreach particle
-  //   amrex::ParallelFor(np, [=, &vel_file] (int i) noexcept {
-  //     const auto p = particles[i];
-  //
-  //     // Get the cell's index at the particle's position.
-  //     const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
-  //     const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
-  //     const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
-  //
-  //     // Interpolate metric
-  //     const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo,
-  //                                 0), // g_11
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo,
-  //                                 1), // g_12 & g_21
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo,
-  //                                 2), // g_13 & g_31
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo,
-  //                                 3), // g_22
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo,
-  //                                 4), // g_23, g_32
-  //         barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo, 5)}; // g_33
-  //
-  //     const CCTK_REAL lapse_x = barycentric_cubic_3d<5>(
-  //         lapse_array, i0, j0, k0, p.pos(0), p.pos(1), p.pos(2), dx, p_lo);
-  //     amrex::GpuArray<CCTK_REAL, 3> shift_x = {
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo, 0),
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo, 1),
-  //         barycentric_cubic_3d<5>(shift_array, i0, j0, k0, p.pos(0),
-  //         p.pos(1),
-  //                                 p.pos(2), dx, p_lo, 2)};
-  //
-  //     // Get the inverse metric.
-  //     const CCTK_REAL inv_det_gamma =
-  //         1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
-  //                2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -
-  //                gamma_x[2] * gamma_x[2] * gamma_x[3] -
-  //                gamma_x[4] * gamma_x[4] * gamma_x[0] -
-  //                gamma_x[1] * gamma_x[1] * gamma_x[5]);
-  //
-  //     const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
-  //         (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) *
-  //         inv_det_gamma, (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5])
-  //         * inv_det_gamma, (gamma_x[1] * gamma_x[4] - gamma_x[2] *
-  //         gamma_x[3]) * inv_det_gamma, (gamma_x[0] * gamma_x[5] - gamma_x[2]
-  //         * gamma_x[2]) * inv_det_gamma, (gamma_x[2] * gamma_x[1] -
-  //         gamma_x[0] * gamma_x[4]) * inv_det_gamma, (gamma_x[0] * gamma_x[3]
-  //         - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
-  //
-  //     const CCTK_REAL v_squared = vels_x[i] * vels_x[i] * gamma_inv_x[0] +
-  //                                 vels_y[i] * vels_y[i] * gamma_inv_x[3] +
-  //                                 vels_z[i] * vels_z[i] * gamma_inv_x[5] +
-  //                                 2.0 * vels_x[i] * vels_y[i] *
-  //                                 gamma_inv_x[1] + 2.0 * vels_x[i] *
-  //                                 vels_z[i] * gamma_inv_x[2] + 2.0 *
-  //                                 vels_y[i] * vels_z[i] * gamma_inv_x[4];
-  //
-  //     const CCTK_REAL E = std::exp(ln_energy[i]);
-  //     const amrex::GpuArray<CCTK_REAL, 3> shift_down =
-  //         SMatVecMul(gamma_x, shift_x);
-  //     const amrex::GpuArray<CCTK_REAL, 3> P_i = {E * vels_x[i], E *
-  //     vels_y[i],
-  //                                                E * vels_z[i]};
-  //     const amrex::GpuArray<CCTK_REAL, 3> P_i_up = SMatVecMul(gamma_inv_x,
-  //     P_i); const amrex::GpuArray<CCTK_REAL, 4> P_mu = {
-  //         (-lapse_x * lapse_x + VecVecMul(shift_x, shift_down)) *
-  //                 (E / lapse_x) +
-  //             VecVecMul(shift_down, P_i_up),
-  //         P_i[0], P_i[1], P_i[2]};
-  //
-  //     const CCTK_REAL R = std::sqrt(p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1)
-  //     +
-  //                                   p.pos(2) * p.pos(2));
-  //     // Write data into a file.
-  //     // V^2 - 1 error
-  //     vel_file << std::setprecision(17) << std::scientific << p.pos(0) <<
-  //     "\t"
-  //              << p.pos(1) << "\t" << p.pos(2) << "\t" << p.id() << "\t"
-  //              << v_squared - 1.0 << "\t"
-  //              << P_mu[0] * (E / lapse_x) + VecVecMul(P_i, P_i_up) << "\t"
-  //              << P_mu[0] << "\t" << p.pos(0) * P_i[1] - p.pos(1) * P_i[0]
-  //              << "\t"
-  //              << R + 1. / (4. * R) + 4. * std::log(2. * R - 1.) -
-  //                     2. * std::log(R)
-  //              << "\n";
-  //   });
-  // }
-  //
-  // vel_file.close();
+  // Get the with of the discretization on each direction.
+  const auto dx = this->Geom(level).CellSizeArray();
+  // Get the lower and higher value over the ParticleContainer Geometry
+  const auto p_lo = this->Geom(level).ProbLoArray();
+  const auto p_hi = this->Geom(level).ProbHiArray();
 
-} // PhotonsContainer::check_constants
+  for (amrex::MFIter mfi = this->MakeMFIter(level); mfi.isValid(); ++mfi) {
+    // Get a reference to the particles
+    auto &particles = this->GetParticles(level);
+    auto &particle_tile = this->DefineAndReturnParticleTile(level, mfi);
+
+    // Determines the current size and the required new size
+    const auto current_size = particle_tile.GetArrayOfStructs().size();
+
+    // Gets raw pointers to the two different ways particle data is stored for
+    // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
+    auto *p_struct = particle_tile.GetArrayOfStructs()().data();
+    auto arrdata = particle_tile.GetStructOfArrays().realarray();
+
+    // get the current process id
+    const auto metric_array = metric.array(mfi);
+
+    for (int i = 0; i < current_size; i++) {
+
+      // Start a for loop with Random Number evolution for the velocity
+      const amrex::Real ratio[AMREX_SPACEDIM] = {arrdata[StructType::vx][i],
+                                                 arrdata[StructType::vy][i],
+                                                 arrdata[StructType::vz][i]};
+
+      // Generate a random position
+      const auto &p = p_struct[i];
+
+      const int i0 = amrex::Math::floor((p.pos(0) - p_lo[0]) / dx[0]);
+      const int j0 = amrex::Math::floor((p.pos(1) - p_lo[1]) / dx[1]);
+      const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
+
+      // Interpolate metric
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 0), // g_11
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 1), // g_12 & g_21
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 2), // g_13 & g_31
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 3), // g_22
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 4), // g_23, g_32
+          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
+                                  p.pos(2), dx, p_lo, 5)}; // g_33
+
+      const CCTK_REAL inv_det_gamma =
+          1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
+                 2. * gamma_x[1] * gamma_x[2] * gamma_x[4] -
+                 gamma_x[2] * gamma_x[2] * gamma_x[3] -
+                 gamma_x[4] * gamma_x[4] * gamma_x[0] -
+                 gamma_x[1] * gamma_x[1] * gamma_x[5]);
+
+      const amrex::GpuArray<CCTK_REAL, 6> gamma_inv_x = {
+          (gamma_x[3] * gamma_x[5] - gamma_x[4] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[4] * gamma_x[2] - gamma_x[1] * gamma_x[5]) * inv_det_gamma,
+          (gamma_x[1] * gamma_x[4] - gamma_x[2] * gamma_x[3]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[5] - gamma_x[2] * gamma_x[2]) * inv_det_gamma,
+          (gamma_x[2] * gamma_x[1] - gamma_x[0] * gamma_x[4]) * inv_det_gamma,
+          (gamma_x[0] * gamma_x[3] - gamma_x[1] * gamma_x[1]) * inv_det_gamma};
+
+      // Normalizing the velocity.
+      const CCTK_REAL v_squared = ratio[0] * ratio[0] * gamma_inv_x[0] +
+                                  ratio[1] * ratio[1] * gamma_inv_x[3] +
+                                  ratio[2] * ratio[2] * gamma_inv_x[5] +
+                                  2.0 * ratio[0] * ratio[1] * gamma_inv_x[1] +
+                                  2.0 * ratio[0] * ratio[2] * gamma_inv_x[2] +
+                                  2.0 * ratio[1] * ratio[2] * gamma_inv_x[4];
+
+      const CCTK_REAL v = std::sqrt(v_squared);
+
+      // Create the particle and add it to the container
+      arrdata[StructType::vx][i] = ratio[0] / v;
+      arrdata[StructType::vy][i] = ratio[1] / v;
+      arrdata[StructType::vz][i] = ratio[2] / v;
+    }
+  }
+} // PhotonsContainer::normalize_velocity
 
 template <typename StructType>
 void PhotonsContainer<StructType>::redistribute_particles() {
