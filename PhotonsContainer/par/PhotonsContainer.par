@@ -19,9 +19,9 @@ CarpetX::xmax = +10.0
 CarpetX::ymax = +10.0
 CarpetX::zmax = +10.0
 
-CarpetX::ncells_x = 160
-CarpetX::ncells_y = 160
-CarpetX::ncells_z = 160
+CarpetX::ncells_x = 256
+CarpetX::ncells_y = 256
+CarpetX::ncells_z = 256
 
 CarpetX::periodic_x = yes
 CarpetX::periodic_y = yes
