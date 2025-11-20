@@ -112,9 +112,9 @@ barycentric_cubic_1d(CCTK_REAL &value, const int (&points)[N],
  */
 template <int INTERPOLATION_ORDER>
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
-barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
-                     int const &j0, int const &k0, CCTK_REAL const &x,
-                     CCTK_REAL const &y, CCTK_REAL const &z,
+barycentric_cubic_3d(const amrex::Array4<CCTK_REAL const> &f, const long int &i0,
+                     const long int &j0, const long int &k0, const CCTK_REAL &x,
+                     const CCTK_REAL &y, const CCTK_REAL &z,
                      const amrex::GpuArray<double, 3> &dx,
                      const amrex::GpuArray<double, 3> &plo, const int &comp) {
   const int order =
@@ -213,9 +213,9 @@ barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
  */
 template <int INTERPOLATION_ORDER>
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL
-barycentric_cubic_3d(amrex::Array4<CCTK_REAL const> const &f, int const &i0,
-                     int const &j0, int const &k0, CCTK_REAL const &x,
-                     CCTK_REAL const &y, CCTK_REAL const &z,
+barycentric_cubic_3d(const amrex::Array4<CCTK_REAL const> &f,const long int &i0,
+                     const long int &j0, const long int &k0, const CCTK_REAL &x,
+                     const CCTK_REAL &y, const CCTK_REAL &z,
                      const amrex::GpuArray<double, 3> &dx,
                      const amrex::GpuArray<double, 3> &plo) {
 
@@ -384,9 +384,9 @@ template <int INTERPOLATION_ORDER>
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
 barycentric_derivative_and_interpolate(
     CCTK_REAL &f_xyz, CCTK_REAL &df_xyz_0, CCTK_REAL &df_xyz_1,
-    CCTK_REAL &df_xyz_2, amrex::Array4<CCTK_REAL const> const &f, int const &i0,
-    int const &j0, int const &k0, CCTK_REAL const &x, CCTK_REAL const &y,
-    CCTK_REAL const &z, const amrex::GpuArray<double, 3> &dx,
+    CCTK_REAL &df_xyz_2, amrex::Array4<CCTK_REAL const> const &f, const long int &i0,
+    const long int &j0, const long int &k0, const CCTK_REAL &x, const CCTK_REAL &y,
+    const CCTK_REAL &z, const amrex::GpuArray<double, 3> &dx,
     const amrex::GpuArray<double, 3> &plo, const int &comp) {
 
   const int order =

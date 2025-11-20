@@ -15,6 +15,7 @@
 #include <cctk.h>
 
 #include "AMReX_Array.H"
+#include "AMReX_CTOParallelForImpl.H"
 #include "AMReX_ParallelDescriptor.H"
 #include "BaseParticleContainer.hxx"
 #include "Interpolator.hxx"
@@ -154,9 +155,9 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
 
   // Compute the cell's index where the particle is at position (u[0], u[1],
   // u[2])
-  const int i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
-  const int j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
-  const int k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
+  const long int i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
+  const long int j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
+  const long int k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
 
   // Interpolate lapse
   // Interpolate partial lapse
@@ -337,6 +338,16 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
           vels_x[i],           vels_y[i],           vels_z[i],
           ln_energy[i]};
 
+      // event horizon check
+      const CCTK_REAL R = particles[i].pos(0) * particles[i].pos(0) +
+                          particles[i].pos(1) * particles[i].pos(1) +
+                          particles[i].pos(2) * particles[i].pos(2);
+
+      if (R < 0.25) {
+        particles[i].id() = -1;
+        return;
+      }
+
       amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
 
       U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -467,8 +478,8 @@ void PhotonsContainer<StructType>::normalize_velocity(
   const auto p_hi = this->Geom(level).ProbHiArray();
 
   for (amrex::MFIter mfi = this->MakeMFIter(level); mfi.isValid(); ++mfi) {
+
     // Get a reference to the particles
-    auto &particles = this->GetParticles(level);
     auto &particle_tile = this->DefineAndReturnParticleTile(level, mfi);
 
     // Determines the current size and the required new size
@@ -482,8 +493,7 @@ void PhotonsContainer<StructType>::normalize_velocity(
     // get the current process id
     const auto metric_array = metric.array(mfi);
 
-    for (int i = 0; i < current_size; i++) {
-
+    amrex::ParallelFor(current_size, [=] AMREX_GPU_DEVICE(int i) noexcept {
       // Start a for loop with Random Number evolution for the velocity
       const amrex::Real ratio[AMREX_SPACEDIM] = {arrdata[StructType::vx][i],
                                                  arrdata[StructType::vy][i],
@@ -540,7 +550,7 @@ void PhotonsContainer<StructType>::normalize_velocity(
       arrdata[StructType::vx][i] = ratio[0] / v;
       arrdata[StructType::vy][i] = ratio[1] / v;
       arrdata[StructType::vz][i] = ratio[2] / v;
-    }
+    });
   }
 } // PhotonsContainer::normalize_velocity
 
