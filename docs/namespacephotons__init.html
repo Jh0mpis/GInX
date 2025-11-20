@@ -133,10 +133,11 @@ template&lt;typename StructType , typename ParticleContainerClass &gt; </div>
 <p>This function random initializes a custom number of particles on each grid cell. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pc</td><td>The particle container that is going to be initialized. </td></tr>
-    <tr><td class="paramname">number_of_particles_per_cell</td><td>The number of particles contained on each cell. </td></tr>
+    <tr><td class="paramname">pc</td><td>The particle container that is going to be initialized. cell. </td></tr>
     <tr><td class="paramname">metric</td><td>The 3 dimensional ADM metric. </td></tr>
-    <tr><td class="paramname">lev</td><td>AMR discretization level. </td></tr>
+    <tr><td class="paramname">level</td><td>AMR refinement level. </td></tr>
+    <tr><td class="paramname">real_params</td><td>Double type array that contains the real parameters needed to initialize the particles. </td></tr>
+    <tr><td class="paramname">int_params</td><td>Integer type array that contains the integer parameters needed to initialize the particles. </td></tr>
   </table>
   </dd>
 </dl>
