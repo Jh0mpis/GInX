@@ -163,55 +163,26 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
   // Interpolate partial lapse
   CCTK_REAL lapse_x;
   amrex::GpuArray<CCTK_REAL, 3> d_lapse_x;
-  barycentric_derivative_and_interpolate<5>(lapse_x, d_lapse_x[0], d_lapse_x[1],
-                                            d_lapse_x[2], lapse, i0, j0, k0,
-                                            u[0], u[1], u[2], dx, plo, 0);
+  d_interpolate_array<5>(lapse_x, d_lapse_x, lapse, i0, j0,
+                                            k0, u[0], u[1], u[2], dx, plo);
 
   // Interpolate shift
   // Interpolate partial shift
   amrex::GpuArray<CCTK_REAL, 3> shift_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
-  barycentric_derivative_and_interpolate<5>(
-      shift_x[0], d_shift_x[0][0], d_shift_x[1][0], d_shift_x[2][0], shift, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<5>(
-      shift_x[1], d_shift_x[0][1], d_shift_x[1][1], d_shift_x[2][1], shift, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<5>(
-      shift_x[2], d_shift_x[0][2], d_shift_x[1][2], d_shift_x[2][2], shift, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 2);
+  d_interpolate_array<5>(shift_x, d_shift_x, shift, i0, j0, k0, u[0], u[1],
+                         u[2], dx, plo);
 
   // Interpolate metric
   // Interpolate partial metric
   amrex::GpuArray<CCTK_REAL, 6> gamma_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[0], d_gamma_x[0][0], d_gamma_x[1][0], d_gamma_x[2][0], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 0);
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[1], d_gamma_x[0][1], d_gamma_x[1][1], d_gamma_x[2][1], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 1);
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[2], d_gamma_x[0][2], d_gamma_x[1][2], d_gamma_x[2][2], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 2);
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[3], d_gamma_x[0][3], d_gamma_x[1][3], d_gamma_x[2][3], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 3);
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[4], d_gamma_x[0][4], d_gamma_x[1][4], d_gamma_x[2][4], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 4);
-  barycentric_derivative_and_interpolate<5>(
-      gamma_x[5], d_gamma_x[0][5], d_gamma_x[1][5], d_gamma_x[2][5], metric, i0,
-      j0, k0, u[0], u[1], u[2], dx, plo, 5);
+  d_interpolate_array<5>(gamma_x, d_gamma_x, metric, i0, j0, k0, u[0], u[1],
+                         u[2], dx, plo);
 
   // Interpolate Curvature
-  const amrex::GpuArray<CCTK_REAL, 6> curv_x = {
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 0),
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 1),
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 2),
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 3),
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 4),
-      barycentric_cubic_3d<5>(curv, i0, j0, k0, u[0], u[1], u[2], dx, plo, 5)};
+  amrex::GpuArray<CCTK_REAL, 6> curv_x;
+  interpolate_array<5>(curv_x, curv, i0, j0, k0, u[0], u[1], u[2], dx, plo);
 
   // Compute the inverse of the metric.
   const CCTK_REAL inv_det_gamma =
@@ -507,19 +478,9 @@ void PhotonsContainer<StructType>::normalize_velocity(
       const int k0 = amrex::Math::floor((p.pos(2) - p_lo[2]) / dx[2]);
 
       // Interpolate metric
-      const amrex::GpuArray<CCTK_REAL, 6> gamma_x = {
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 0), // g_11
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 1), // g_12 & g_21
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 2), // g_13 & g_31
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 3), // g_22
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 4), // g_23, g_32
-          barycentric_cubic_3d<5>(metric_array, i0, j0, k0, p.pos(0), p.pos(1),
-                                  p.pos(2), dx, p_lo, 5)}; // g_33
+      amrex::GpuArray<CCTK_REAL, 6> gamma_x;
+      interpolate_array<5>(gamma_x, metric_array, i0, j0, k0, p.pos(0),
+                           p.pos(1), p.pos(2), dx, p_lo);
 
       const CCTK_REAL inv_det_gamma =
           1.0 / (gamma_x[0] * gamma_x[3] * gamma_x[5] +
