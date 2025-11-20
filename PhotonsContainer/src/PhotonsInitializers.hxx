@@ -34,15 +34,19 @@ using namespace Interpolator;
  * grid cell
  *
  * @param pc The particle container that is going to be initialized.
- * @param number_of_particles_per_cell The number of particles contained on each
  * cell.
  * @param metric The 3 dimensional ADM metric.
- * @param lev AMR discretization level.
+ * @param level AMR refinement level.
+ * @param real_params Double type array that contains the real parameters needed
+ * to initialize the particles.
+ * @param int_params Integer type array that contains the integer parameters
+ * needed to initialize the particles.
  */
 template <typename StructType, typename ParticleContainerClass>
-void random_parallel_initializer(
-    ParticleContainerClass &pc, const amrex::MultiFab &metric, const int &level,
-    const CCTK_REAL *real_params, const CCTK_INT *int_params) {
+void random_parallel_initializer(ParticleContainerClass &pc,
+                                 const amrex::MultiFab &metric,
+                                 const int &level, const CCTK_REAL *real_params,
+                                 const CCTK_INT *int_params) {
 
   CCTK_INFO("Initializing particles using the "
             "random_parallel_photons_per_container_initializer");
@@ -73,7 +77,7 @@ void random_parallel_initializer(
   // Iterating over all the tiles of the particle data structure
   for (amrex::MFIter mfi = pc.MakeMFIter(level); mfi.isValid(); ++mfi) {
 
-    const int particles_per_tile =
+    const unsigned int particles_per_tile =
         local_particles_size / total_tiles +
         (current_tile < local_particles_size % total_tiles);
 
@@ -96,37 +100,49 @@ void random_parallel_initializer(
 
     // Gets raw pointers to the two different ways particle data is stored for
     // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
-    typename ParticleContainerClass::ParticleType *p_struct =
-        particle_tile.GetArrayOfStructs()().data();
+    auto *p_struct = particle_tile.GetArrayOfStructs()().data();
     auto arrdata = particle_tile.GetStructOfArrays().realarray();
 
-    for (int i = 0; i < particles_per_tile; i++) {
-      // Start a for loop with Random Number evolution
-      int pidx = old_size + i;
-
-      // Generate a random position
-      const amrex::Real ratio[AMREX_SPACEDIM] = {
-          (std::abs(p_hi[0] - p_lo[0]) - (bh_mass * 0.5 + 0.2) * 2.) * 0.5 *
-                  amrex::Random() +
-              bh_mass * 0.5 + 0.2,
-          amrex::Random() * M_PI, amrex::Random() * 2. * M_PI};
-      // M_PI / 2., 0.0};
-
-      typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
-
-      p.id() = ParticleContainerClass::ParticleType::NextID();
-      p.cpu() = proc_id;
-
-      p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
-      p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
-      p.pos(2) = ratio[0] * std::cos(ratio[1]);
-
-      // Create the particle and add it to the container
-      arrdata[StructType::vx][pidx] = 2. * amrex::Random() - 1.0;
-      arrdata[StructType::vy][pidx] = 2. * amrex::Random() - 1.0;
-      arrdata[StructType::vz][pidx] = 2. * amrex::Random() - 1.0;
-      arrdata[StructType::ln_E][pidx] = 0;
+    std::vector<long> particle_ids(particles_per_tile);
+    for (int i = 0; i < particles_per_tile; ++i) {
+      particle_ids[i] = ParticleContainerClass::ParticleType::NextID();
     }
+
+    // Copy IDs to GPU (AMReX handles this automatically if needed)
+    amrex::Gpu::DeviceVector<long> d_particle_ids(particle_ids.size());
+    amrex::Gpu::copyAsync(amrex::Gpu::hostToDevice, particle_ids.begin(),
+                          particle_ids.end(), d_particle_ids.begin());
+    const long *id_ptr = d_particle_ids.data();
+
+    amrex::ParallelForRNG(
+        particles_per_tile,
+        [=] AMREX_GPU_DEVICE(int i,
+                             amrex::RandomEngine const &engine) noexcept {
+          // Start a for loop with Random Number evolution
+          int pidx = old_size + i;
+
+          // Generate a random position
+          const amrex::Real ratio[AMREX_SPACEDIM] = {
+              (std::abs(p_hi[0] - p_lo[0]) - (bh_mass * 0.5 + 0.2) * 2.) * 0.5 *
+                      Random(engine) +
+                  bh_mass * 0.5 + 0.2,
+              Random(engine) * M_PI, Random(engine) * 2. * M_PI};
+
+          auto &p = p_struct[pidx];
+
+          p.id() = id_ptr[i];
+          p.cpu() = proc_id;
+
+          p.pos(0) = ratio[0] * std::sin(ratio[1]) * std::cos(ratio[2]);
+          p.pos(1) = ratio[0] * std::sin(ratio[1]) * std::sin(ratio[2]);
+          p.pos(2) = ratio[0] * std::cos(ratio[1]);
+
+          // Create the particle and add it to the container
+          arrdata[StructType::vx][pidx] = 2. * Random(engine) - 1.0;
+          arrdata[StructType::vy][pidx] = 2. * Random(engine) - 1.0;
+          arrdata[StructType::vz][pidx] = 2. * Random(engine) - 1.0;
+          arrdata[StructType::ln_E][pidx] = 0;
+        });
     CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,
                "Number of particles created at tile %d: %d ", current_tile,
                particles_per_tile);

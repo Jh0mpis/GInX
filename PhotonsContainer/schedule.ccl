@@ -28,7 +28,7 @@ if (CCTK_Equals(initial_metric, "minkowski")) {
 }
 
 
-SCHEDULE setup AT CCTK_POSTINITIAL {
+SCHEDULE setup AT CCTK_POSTINITIAL after initial_metric {
     LANG: C
     OPTIONS: global
 } "setup"
