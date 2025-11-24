@@ -1,54 +1,34 @@
-if (CCTK_Equals(initial_metric, "minkowski")) {
-    SCHEDULE init_minkowski AT CCTK_INITIAL {
-        LANG: C
-        OPTIONS: local
-        WRITES: ADMBaseX::metric(everywhere)
-        WRITES: ADMBaseX::lapse(everywhere)
-        WRITES: ADMBaseX::shift(everywhere)
-        WRITES: ADMBaseX::curv(everywhere)
-    } "Minkowski Fields setup"
-} else if (CCTK_Equals(initial_metric, "iso schwarzschild")) {
-    SCHEDULE init_iso_schwarzschild AT CCTK_INITIAL {
-        LANG: C
-        OPTIONS: local
-        WRITES: ADMBaseX::metric(everywhere)
-        WRITES: ADMBaseX::lapse(everywhere)
-        WRITES: ADMBaseX::shift(everywhere)
-        WRITES: ADMBaseX::curv(everywhere)
-    } "Fields setup"
-} else if (CCTK_Equals(initial_metric, "schwarzschild")) {
-    SCHEDULE init_schwarzschild AT CCTK_INITIAL {
-        LANG: C
-        OPTIONS: local
-        WRITES: ADMBaseX::metric(everywhere)
-        WRITES: ADMBaseX::lapse(everywhere)
-        WRITES: ADMBaseX::shift(everywhere)
-        WRITES: ADMBaseX::curv(everywhere)
-    } "Fields setup"
-}
+SCHEDULE PhotonsContainer_init_metric AT CCTK_INITIAL {
+    LANG: C
+    OPTIONS: local
+    WRITES: ADMBaseX::metric(everywhere)
+    WRITES: ADMBaseX::lapse(everywhere)
+    WRITES: ADMBaseX::shift(everywhere)
+    WRITES: ADMBaseX::curv(everywhere)
+} "Fields setup"
 
 
-SCHEDULE setup AT CCTK_POSTINITIAL after initial_metric {
+SCHEDULE PhotonsContainer_setup AT CCTK_POSTINITIAL {
     LANG: C
     OPTIONS: global
 } "setup"
 
 if ((particle_plot_every>0)||(particle_tsv_every>0) ){
-    SCHEDULE print AT CCTK_POSTINITIAL AFTER setup
+    SCHEDULE PhotonsContainer_print AT CCTK_POSTINITIAL AFTER setup
     {
         LANG: C
         OPTIONS: global
     } "print the particles"
 }
 
-SCHEDULE test AT evol
+SCHEDULE PhotonsContainer_evolve AT evol
 {
     LANG: C
     OPTIONS: global
 } "testing evolution"
 
 if ((particle_plot_every||particle_tsv_every) ) {
-    SCHEDULE print AT evol AFTER test
+    SCHEDULE PhotonsContainer_print AT evol AFTER PhotonsContainer_evolve
     {
         LANG: C
         OPTIONS: global

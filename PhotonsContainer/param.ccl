@@ -1,26 +1,43 @@
-INT photons_per_cell "Number of photons per cell unit"{
-    0:*
+# Particles to create
+INT num_photons "Total number of photons" {
+    0:* :: ""
 } 0
 
-INT total_photons "Number of photons per cell unit"{
-    1:*
-} 1
+INT num_photons_pc "Photons per cell" {
+    0:* :: ""
+} 0
 
-REAL black_hole_mass "Black hole mass" {
-    0:*
-} 1.0
+# Variables to use for the initialize the particles (can be used in custom codes)
 
-KEYWORD initial_metric "metric to initialize" {
+KEYWORD initializer "available initializer function to be called" {
+    "box" :: "Random uniform distributed particles filling the box."
+    "spherical" :: "Random Spherically distributed particles."
+    "none" :: "Don't use any particle initializer"
+} "none"
+
+REAL init_params_d[10] "double type parameters needed to pass to the initializer function" {
+    *:* :: ""
+} 0.0
+
+REAL init_params_i[10] "int type parameters needed to pass to the initializer function" {
+    *:* :: ""
+} 0
+
+# Variables to use for the initialize the metric (can be used in custom codes)
+
+KEYWORD metric "metric to initialize" {
     "minkowski" :: "Minkowski metric"
-    "iso schwarzschild" :: "Isotropic Schwarzswchild metric"
+    "iso" :: "Isotropic Schwarzswchild metric"
     "schwarzschild" :: "Schwarzswchild metric"
     "none" :: "Not initialize using a metric"
-} "iso schwarzschild" 
+} "none" 
 
-RESTRICTED: INT print_photons_constants "Output the constants computed for all the photons" STEERABLE=always
-{
-   0 :: "never output Plot"
-   1:* :: "every that many iterations"
+REAL metric_params_d[10] "double type parameters needed to pass to the metric initializer" {
+    *:* :: ""
+} 0.0
+
+REAL metric_params_i[10]  "int type parameters needed to pass to the metric initializer" {
+    *:* :: ""
 } 0
 
 SHARES: ParticlesContainer

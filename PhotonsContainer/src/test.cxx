@@ -6,6 +6,7 @@
 #include <AMReX_ParallelDescriptor.H>
 #include <CParameters.h>
 
+#include <cstring>
 #include <driver.hxx>
 
 #include <cctk_Arguments.h>
@@ -18,11 +19,10 @@
 #include <ostream>
 
 using ParticleData = Photons::PhotonsData;
-
 using PC = Containers::PhotonsContainer<ParticleData>;
-std::vector<std::unique_ptr<PC>> g_nupcs;
+std::vector<std::unique_ptr<PC>> photons;
 
-extern "C" void setup(CCTK_ARGUMENTS) {
+extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
 
@@ -30,180 +30,42 @@ extern "C" void setup(CCTK_ARGUMENTS) {
   const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
   assert(gi_metric >= 0 && "Failed to get the metric group index");
 
-  const CCTK_REAL real_parameters[] = {black_hole_mass};
-  const CCTK_INT int_parameters[] = {total_photons};
+  const CCTK_INT int_parameters[] = {
+      num_photons * (photons.size() < CarpetX::ghext->num_patches())};
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
-    g_nupcs.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
+    if (photons.size() < CarpetX::ghext->num_patches()) {
+      photons.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
+    }
 
-    auto &pc = g_nupcs.at(patch);
+    auto &pc = photons.at(patch);
+    pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
+                   init_params_d, int_parameters);
+  }
+
+  for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
+    auto &pc = photons.at(patch);
     auto &pd = CarpetX::ghext->patchdata.at(patch);
-
     for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
+
       const auto &ld = pd.leveldata.at(lev);
       const auto &gd_metric = *ld.groupdata.at(gi_metric);
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
 
-      pc->initialize(
-          photons_init::random_parallel_initializer<ParticleData, PC>, metric,
-          lev, real_parameters, int_parameters);
+      pc->normalize_velocity(metric, lev);
     }
   }
 }
 
-extern "C" void init_minkowski(CCTK_ARGUMENTS) {
-  DECLARE_CCTK_PARAMETERS;
-  DECLARE_CCTK_ARGUMENTSX_init_minkowski;
-
-  CCTK_INFO("Initializing Minkowski coordinates");
-
-  // Initialize the metric, lapse, beta and K
-  grid.loop_all_device<0, 0, 0>(grid.nghostzones,
-                                [=] CCTK_DEVICE(const Loop::PointDesc &p)
-                                    CCTK_ATTRIBUTE_ALWAYS_INLINE {
-                                      alp(p.I) = 1.0;
-                                      betax(p.I) = 0.0;
-                                      betay(p.I) = 0.0;
-                                      betaz(p.I) = 0.0;
-                                      gxx(p.I) = 1.0;
-                                      gxy(p.I) = 0.0;
-                                      gxz(p.I) = 0.0;
-                                      gyy(p.I) = 1.0;
-                                      gyz(p.I) = 0.0;
-                                      gzz(p.I) = 1.0;
-                                      kxx(p.I) = 0.0;
-                                      kxy(p.I) = 0.0;
-                                      kxz(p.I) = 0.0;
-                                      kyy(p.I) = 0.0;
-                                      kyz(p.I) = 0.0;
-                                      kzz(p.I) = 0.0;
-                                    });
-
-  CCTK_INFO("FIELDS INITIALIZED");
-}
-
-extern "C" void init_iso_schwarzschild(CCTK_ARGUMENTS) {
-  DECLARE_CCTK_PARAMETERS;
-  DECLARE_CCTK_ARGUMENTSX_init_iso_schwarzschild;
-
-  CCTK_INFO("Initializing Schwarzschild using Isotropic coordinates");
-
-  // Initialize the metric, lapse, beta and K
-  grid.loop_all_device<0, 0, 0>(
-      grid.nghostzones,
-      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-        auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-
-        const auto psi = 1.0 + black_hole_mass / (2.0 * R);
-        const auto psi_2 = psi * psi;
-        const auto psi_4 = psi_2 * psi_2;
-
-        if (R >= 0.5) {
-          alp(p.I) = (1.0 - black_hole_mass / (2.0 * R)) /
-                     (1.0 + black_hole_mass / (2.0 * R));
-          gxx(p.I) = psi_4;
-          gyy(p.I) = psi_4;
-          gzz(p.I) = psi_4;
-        } else {
-          alp(p.I) = 0.;
-          gxx(p.I) = 10e-12;
-          gyy(p.I) = 10e-12;
-          gzz(p.I) = 10e-12;
-        }
-
-        betax(p.I) = 0.0;
-        betay(p.I) = 0.0;
-        betaz(p.I) = 0.0;
-
-        gxy(p.I) = 0.0;
-        gxz(p.I) = 0.0;
-        gyz(p.I) = 0.0;
-
-        kxx(p.I) = 0.0;
-        kxy(p.I) = 0.0;
-        kxz(p.I) = 0.0;
-        kyy(p.I) = 0.0;
-        kyz(p.I) = 0.0;
-        kzz(p.I) = 0.0;
-      });
-}
-
-extern "C" void init_schwarzschild(CCTK_ARGUMENTS) {
-  DECLARE_CCTK_PARAMETERS;
-  DECLARE_CCTK_ARGUMENTSX_init_schwarzschild;
-
-  CCTK_INFO("Initializing Schwarzschild using Schwarzschild coordinates");
-
-  // Initialize the metric, lapse, beta and K
-  grid.loop_all_device<0, 0, 0>(
-      grid.nghostzones,
-      [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-        auto R = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-        auto r2 = p.x * p.x + p.y * p.y;
-
-        if (R < 10e-10) {
-          R = 10e-10;
-        }
-
-        if (r2 < 10e-10) {
-          r2 = 10e-10;
-        }
-
-        auto f = 1.0 - 0.5 / R;
-        auto f_inv = 1.0 / f;
-
-        const auto den = R * R * r2;
-
-        if (R > 0.5) {
-          alp(p.I) = std::sqrt(f);
-          gxx(p.I) = (p.z * p.z * p.x * p.x + R * R * p.y * p.y +
-                      p.x * p.x * r2 * f_inv) /
-                     den;
-          gyy(p.I) = (p.z * p.z * p.y * p.y + R * R * p.x * p.x +
-                      p.y * p.y * r2 * f_inv) /
-                     den;
-          gzz(p.I) = (p.z * p.z * p.z * p.z + R * R * R * R -
-                      2. * p.z * p.z * R * R + p.z * p.z * r2 * f_inv) /
-                     den;
-          gxy(p.I) = (p.z * p.z * p.x * p.y - R * R * p.x * p.y +
-                      p.x * p.y * r2 * f_inv) /
-                     den;
-          gxz(p.I) = (p.z * p.z * p.z * p.x - p.z * p.x * R * R +
-                      p.x * p.z * r2 * f_inv) /
-                     den;
-          gyz(p.I) = (p.z * p.z * p.z * p.y - p.z * p.y * R * R +
-                      p.z * p.y * r2 * f_inv) /
-                     den;
-        } else {
-          alp(p.I) = 0.0;
-          gxx(p.I) = 10e-12;
-          gyy(p.I) = 10e-12;
-          gzz(p.I) = 10e-12;
-          gxy(p.I) = 0.0;
-          gxz(p.I) = 0.0;
-          gyz(p.I) = 0.0;
-        }
-
-        betax(p.I) = 0.0;
-        betay(p.I) = 0.0;
-        betaz(p.I) = 0.0;
-
-        kxx(p.I) = 0.0;
-        kxy(p.I) = 0.0;
-        kxz(p.I) = 0.0;
-        kyy(p.I) = 0.0;
-        kyz(p.I) = 0.0;
-        kzz(p.I) = 0.0;
-      });
-}
-
-extern "C" void test(CCTK_ARGUMENTS) {
+extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
 
   const CCTK_REAL dt = CCTK_DELTA_TIME;
 
+  CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING, "Patches: %d size: %d",
+             CarpetX::ghext->num_patches(), photons.size());
   const int tl = 0;
   const int gi_lapse = CCTK_GroupIndex("ADMBaseX::lapse");
   const int gi_shift = CCTK_GroupIndex("ADMBaseX::shift");
@@ -215,7 +77,7 @@ extern "C" void test(CCTK_ARGUMENTS) {
   assert(gi_curv >= 0 && "Failed to get the curvature group index");
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
-    auto &pc = g_nupcs.at(patch);
+    auto &pc = photons.at(patch);
     auto &pd = CarpetX::ghext->patchdata.at(patch);
     for (int lev = 0; lev < pd.leveldata.size(); ++lev) {
       const auto &ld = pd.leveldata.at(lev);
@@ -233,18 +95,18 @@ extern "C" void test(CCTK_ARGUMENTS) {
   }
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
-    auto &pc = g_nupcs.at(patch);
+    auto &pc = photons.at(patch);
     pc->Redistribute();
   }
 }
 
-extern "C" void print(CCTK_ARGUMENTS) {
+extern "C" void PhotonsContainer_print(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
 
   CCTK_INFO("Printing particles to files");
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
-    auto &pc = g_nupcs.at(patch);
+    auto &pc = photons.at(patch);
     pc->outputParticlesPlot(CCTK_PASS_CTOC, particle_plot_every,
                             std::string(out_dir));
     pc->outputParticlesAscii(CCTK_PASS_CTOC, particle_tsv_every,
@@ -254,6 +116,6 @@ extern "C" void print(CCTK_ARGUMENTS) {
 
 extern "C" int PhotonsContainer_final_cleanup() {
   amrex::Gpu::Device::synchronize();
-  g_nupcs.clear();
+  photons.clear();
   return 0;
 }
