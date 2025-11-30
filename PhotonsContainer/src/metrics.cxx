@@ -62,7 +62,7 @@ extern "C" void PhotonsContainer_init_metric(CCTK_ARGUMENTS) {
           const double psi_2 = psi * psi;
           const double psi_4 = psi_2 * psi_2;
 
-          if (R >= 0.5) {
+          if (R >= 0.5 * black_hole_mass) {
             alp(p.I) = (1.0 - black_hole_mass / (2.0 * R)) /
                        (1.0 + black_hole_mass / (2.0 * R));
             gxx(p.I) = psi_4;

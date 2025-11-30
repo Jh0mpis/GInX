@@ -64,8 +64,6 @@ extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
 
   const CCTK_REAL dt = CCTK_DELTA_TIME;
 
-  CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING, "Patches: %d size: %d",
-             CarpetX::ghext->num_patches(), photons.size());
   const int tl = 0;
   const int gi_lapse = CCTK_GroupIndex("ADMBaseX::lapse");
   const int gi_shift = CCTK_GroupIndex("ADMBaseX::shift");
