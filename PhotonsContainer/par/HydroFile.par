@@ -1,0 +1,187 @@
+################################################################################
+# Scaling test of BBHDisk simulation
+################################################################################
+
+ActiveThorns = "
+    ADMBaseX
+    AsterMasks
+    AsterX
+    AsterSeeds
+    BoxInBox
+    CarpetX
+    Cowling
+    HydroBaseX
+    #IOUtil
+    ODESolvers
+    TmunuBaseX
+    #AnalyticalSpacetimeX
+    #Z4c
+    ParticlesContainer
+    PhotonsContainer
+    PhotonSolverUtilities
+"
+
+$nlevels = 12
+$ncells  = 256
+$xmin    = -8192.0
+$xmax    = +8192.0
+$itlast  = 256
+$dtfac   = 0.5
+
+CarpetX::max_grid_size_x = 128
+CarpetX::max_grid_size_y = 128
+CarpetX::max_grid_size_z = 128
+
+CarpetX::blocking_factor_x = 8
+CarpetX::blocking_factor_y = 8
+CarpetX::blocking_factor_z = 8
+
+CarpetX::max_tile_size_x = 1024000
+CarpetX::max_tile_size_y = 1024000
+CarpetX::max_tile_size_z = 1024000
+
+Cactus::terminate = "iteration"
+Cactus::cctk_itlast = $itlast
+Cactus::presync_mode = "mixed-error"
+
+CarpetX::verbose = no
+CarpetX::poison_undefined_values = no
+
+CarpetX::use_subcycling_wip = no
+CarpetX::restrict_during_sync = no
+
+CarpetX::xmin = $xmin
+CarpetX::ymin = $xmin
+CarpetX::zmin = $xmin
+CarpetX::xmax = $xmax
+CarpetX::ymax = $xmax
+CarpetX::zmax = $xmax
+CarpetX::ncells_x = $ncells
+CarpetX::ncells_y = $ncells
+CarpetX::ncells_z = $ncells
+
+CarpetX::boundary_x = "neumann"
+CarpetX::boundary_y = "neumann"
+CarpetX::boundary_z = "neumann"
+CarpetX::boundary_upper_x = "neumann"
+CarpetX::boundary_upper_y = "neumann"
+CarpetX::boundary_upper_z = "neumann"
+
+CarpetX::max_num_levels = $nlevels
+CarpetX::regrid_every = 4096  # 2^12
+CarpetX::regrid_error_threshold = 0.9
+
+CarpetX::prolongation_type = "poly-eno3lfb" #"poly-cons3lfb" #"ddf"
+CarpetX::prolongation_order = 5
+CarpetX::ghost_size = 3
+CarpetX::dtfac = $dtfac
+
+ODESolvers::verbose = no
+ODESolvers::method = "RK4"
+
+BoxInBox::num_regions = 3
+BoxInBox::shape_1 = "cube"
+BoxInBox::num_levels_1 = $nlevels
+BoxInBox::position_x_1 = -6.508727e+00
+BoxInBox::position_y_1 = -7.591869e+00
+BoxInBox::radius_1 = [-1., 6., 6., 6., 6., 6., 6., 6., 6., 6., 3., 1.5]
+BoxInBox::shape_2 = "cube"
+BoxInBox::num_levels_2 = $nlevels
+BoxInBox::position_x_2 = 6.508727e+00
+BoxInBox::position_y_2 = 7.591869e+00
+BoxInBox::radius_2 = [-1., 6., 6., 6., 6., 6., 6., 6., 6., 6., 3., 1.5]
+BoxInBox::shape_3 = "cube"
+BoxInBox::num_levels_3 = $nlevels - 2
+BoxInBox::position_x_3 = 0.0
+BoxInBox::radius_x_3 = [-1., 4096., 2048., 1024., 512., 256., 128., 64., 32., 20.]
+BoxInBox::radius_y_3 = [-1., 4096., 2048., 1024., 512., 256., 128., 64., 32., 20.]
+BoxInBox::radius_z_3 = [-1., 4096., 2048., 1024., 512., 256., 128., 64., 32., 20.]
+
+ADMBaseX::initial_data    = "Cartesian Minkowski"
+ADMBaseX::initial_lapse   = "one"
+ADMBaseX::initial_shift   = "zero"
+ADMBaseX::initial_dtlapse = "none"
+ADMBaseX::initial_dtshift = "none"
+
+#ADMBaseX::initial_data       = "analytical_spacetime"
+#ADMBaseX::initial_lapse      = "analytical_spacetime"
+#ADMBaseX::initial_shift      = "analytical_spacetime"
+
+#Z4c::calc_ADM_vars = no                  # for Weyl
+#Z4c::calc_ADMRHS_vars = no               # for Weyl
+#Z4c::calc_constraints = yes
+#Z4c::chi_floor = 1.0e-6
+#Z4c::alphaG_floor = 1.0e-8
+#Z4c::epsdiss = 0.32
+#Z4c::boundary_conditions = "radiative"
+
+#AnalyticalSpacetimeX::analytical_metric_type = "SuperposedBBH" #"BoostedBH"
+#AnalyticalSpacetimeX::traj_read_table = "yes"
+#AnalyticalSpacetimeX::traj_print_every = 128 #10
+#AnalyticalSpacetimeX::traj_print = "no" #"yes"
+#AnalyticalSpacetimeX::traj_table_name = "/work/09228/jkalinan/vista/initial_data/CircularOrbit_pp08_q1_sep20.h5"
+#AnalyticalSpacetimeX::AST_adjust_mass1 = 1.0
+#AnalyticalSpacetimeX::AST_adjust_mass2 = 1.0
+#AnalyticalSpacetimeX::set_positions = "yes"
+#AnalyticalSpacetimeX::AST_cutoff_floor = 1e-1
+#AnalyticalSpacetimeX::AST_a1_buffer = 0.01
+#AnalyticalSpacetimeX::AST_a2_buffer = 0.01
+#AnalyticalSpacetimeX::move_every = 128 #1
+#AnalyticalSpacetimeX::evolve_metric_every = 128 #1
+#AnalyticalSpacetimeX::set_analytic_metric_always = "yes"
+
+AsterSeeds::test_type = "BBHCloud"
+AsterSeeds::initial_distribution = "constant"
+AsterSeeds::zr_0 = 0.0
+AsterSeeds::rad_ztheta_0 = 0.0
+AsterSeeds::rad_zphi_0 = 0.0
+AsterSeeds::rho_disk = 1.0
+AsterSeeds::disk_width = 10.0
+AsterSeeds::press_disk = 0.001
+AsterSeeds::isentropic = "yes"
+AsterSeeds::add_magnetic_fields = "yes"
+AsterSeeds::nrho = 1.5
+AsterSeeds::npress = 2.5
+AsterSeeds::B_initial = 0.001
+
+AsterX::debug_mode = "no" #"yes"
+AsterX::flux_type = "HLLE"
+AsterX::vector_potential_gauge = "generalized Lorentz" #"algebraic"
+AsterX::lorenz_damp_fac = 2.0 # 1.5/largest dt
+AsterX::local_spatial_order = 4
+AsterX::local_estimate_error = "no"
+AsterX::update_tmunu = "no"
+AsterX::recon_type = "z_vec"
+AsterX::use_uct = "yes"
+AsterX::use_entropy_fix = "yes"
+
+ReconX::reconstruction_method = "PPM"
+ReconX::ppm_zone_flattening = "yes"
+ReconX::ppm_shock_detection = "no"
+
+Con2PrimFactory::c2p_prime = "Noble"
+Con2PrimFactory::c2p_second = "Palenzuela"
+Con2PrimFactory::c2p_tol = 1e-8
+Con2PrimFactory::max_iter = 100
+Con2PrimFactory::rho_abs_min = 1e-7
+Con2PrimFactory::atmo_tol = 1e-2
+Con2PrimFactory::unit_test = "no"
+Con2PrimFactory::B_lim = 1e8
+Con2PrimFactory::vw_lim = 10 #1e8
+Con2PrimFactory::Ye_lenient = "yes"
+Con2PrimFactory::eps_atmo = 1e-10
+Con2PrimFactory::cons_error_limit = 1e-4
+Con2PrimFactory::use_z = "yes"
+
+EOSX::evolution_eos = "IdealGas"
+EOSX::gl_gamma = 4./3.
+EOSX::poly_gamma = 4./3.
+EOSX::poly_k = 4.249572342020723e-03
+EOSX::rho_max = 10
+EOSX::rho_min = 1e-10
+EOSX::eps_max = 10 #1e8
+EOSX::eps_min = 1e-10
+
+PhotonsContainer::num_photons = 100000000
+PhotonsContainer::initializer = "box"
+PhotonsContainer::metric = "none"

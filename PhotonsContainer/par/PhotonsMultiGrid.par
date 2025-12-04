@@ -85,7 +85,7 @@ CarpetX::out_tsv_vars = ""
 # PhotonsContainer parameters definition
 ParticlesContainer::particle_plot_every = 0
 ParticlesContainer::particle_tsv_every = 0
-PhotonsContainer::num_photons = 500000000
+PhotonsContainer::num_photons = 100000
 PhotonsContainer::metric = "iso"
 PhotonsContainer::metric_params_d = [1.0]
 # PhotonsContainer::photons_per_cell = 5
