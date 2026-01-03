@@ -1,13 +1,3 @@
-SCHEDULE PhotonsContainer_init_metric AT CCTK_INITIAL {
-    LANG: C
-    OPTIONS: local
-    WRITES: ADMBaseX::metric(everywhere)
-    WRITES: ADMBaseX::lapse(everywhere)
-    WRITES: ADMBaseX::shift(everywhere)
-    WRITES: ADMBaseX::curv(everywhere)
-} "Fields setup"
-
-
 SCHEDULE PhotonsContainer_setup AT CCTK_POSTINITIAL {
     LANG: C
     OPTIONS: global
@@ -25,7 +15,7 @@ SCHEDULE PhotonsContainer_evolve AT evol
 {
     LANG: C
     OPTIONS: global
-} "testing evolution"
+} "Photons evolution"
 
 if ((particle_plot_every||particle_tsv_every) ) {
     SCHEDULE PhotonsContainer_print AT evol AFTER PhotonsContainer_evolve

@@ -8,7 +8,6 @@ INT num_photons_pc "Photons per cell" {
 } 0
 
 # Variables to use for the initialize the particles (can be used in custom codes)
-
 KEYWORD initializer "available initializer function to be called" {
     "box" :: "Random uniform distributed particles filling the box."
     "spherical" :: "Random Spherically distributed particles."
@@ -23,27 +22,45 @@ REAL init_params_i[10] "int type parameters needed to pass to the initializer fu
     *:* :: ""
 } 0
 
-# Variables to use for the initialize the metric (can be used in custom codes)
-
-KEYWORD metric "metric to initialize" {
-    "minkowski" :: "Minkowski metric"
-    "iso" :: "Isotropic Schwarzswchild metric"
-    "schwarzschild" :: "Schwarzswchild metric"
-    "none" :: "Not initialize using a metric"
-} "none" 
-
-REAL metric_params_d[10] "double type parameters needed to pass to the metric initializer" {
-    *:* :: ""
-} 0.0
-
-REAL metric_params_i[10]  "int type parameters needed to pass to the metric initializer" {
-    *:* :: ""
-} 0
-
 SHARES: ParticlesContainer
 
+# Base Output Variables
 USES INT particle_plot_every
 USES INT particle_tsv_every
+
+# Base Banned regions parameters
+USES INT banned_regions
+
+## Region 1
+USES REAL region_1_position[3]
+USES REAL region_1_radius
+## Region 2
+USES REAL region_2_position[3]
+USES REAL region_2_radius
+## Region 3
+USES REAL region_3_position[3]
+USES REAL region_3_radius
+## Region 4
+USES REAL region_4_position[3]
+USES REAL region_4_radius
+## Region 5
+USES REAL region_5_position[3]
+USES REAL region_5_radius
+## Region 6
+USES REAL region_6_position[3]
+USES REAL region_6_radius
+## Region 7
+USES REAL region_7_position[3]
+USES REAL region_7_radius
+## Region 8
+USES REAL region_8_position[3]
+USES REAL region_8_radius
+## Region 9
+USES REAL region_9_position[3]
+USES REAL region_9_radius
+## Region 10
+USES REAL region_10_position[3]
+USES REAL region_10_radius
 
 SHARES: IO
 
