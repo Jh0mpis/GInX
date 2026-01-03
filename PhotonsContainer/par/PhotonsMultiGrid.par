@@ -85,8 +85,15 @@ CarpetX::out_tsv_vars = ""
 # PhotonsContainer parameters definition
 ParticlesContainer::particle_plot_every = 0
 ParticlesContainer::particle_tsv_every = 0
-PhotonsContainer::num_photons = 100000
 PhotonsContainer::metric = "iso"
 PhotonsContainer::metric_params_d = [1.0]
-# PhotonsContainer::photons_per_cell = 5
-# PhotonsContainer::initial_metric = "minkowski"
+
+# ParticlesContainer parameters definition
+ParticlesContainer::banned_regions = 1
+ParticlesContainer::region_1_position = [0.0, 0.0, 0.0]
+ParticlesContainer::region_1_radius = 0.5
+ParticlesContainer::metric = "Isotropic Schwarzschild"
+ParticlesContainer::metric_params_d = [1.0]
+
+# PhotonsContainer parameters definition
+PhotonsContainer::num_photons = 100000

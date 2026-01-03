@@ -182,6 +182,9 @@ EOSX::rho_min = 1e-10
 EOSX::eps_max = 10 #1e8
 EOSX::eps_min = 1e-10
 
-PhotonsContainer::num_photons = 100000000
+# ParticlesContainer parameters definition
+ParticlesContainer::metric = "none"
+
+# PhotonsContainer parameters definition
+PhotonsContainer::num_photons = 10000000
 PhotonsContainer::initializer = "box"
-PhotonsContainer::metric = "none"
