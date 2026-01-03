@@ -132,7 +132,7 @@ barycentric_cubic_3d(const amrex::Array4<CCTK_REAL const> &f,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
@@ -407,7 +407,7 @@ barycentric_derivative_and_interpolate(CCTK_REAL &f_xyz, CCTK_REAL &df_xyz_0,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
@@ -513,7 +513,7 @@ interpolate_array(amrex::GpuArray<CCTK_REAL, 6> &array6,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
@@ -608,7 +608,7 @@ d_interpolate_array(amrex::GpuArray<CCTK_REAL, 6> &array6,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
@@ -720,7 +720,7 @@ d_interpolate_array(amrex::GpuArray<CCTK_REAL, 3> &array3,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
@@ -831,7 +831,7 @@ d_interpolate_array(CCTK_REAL &array, amrex::GpuArray<CCTK_REAL, 3> &d_array,
    * Contains the weights that we are going to use for the orders from 2 to 5.
    */
   const CCTK_REAL all_weights[14] = {
-      -1.,  1.,        0.5,        1.,         -0.5, -1.0 / 6.0, 0.5,
+      -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
   const CCTK_INT *nodes = &all_nodes[order];
   const CCTK_REAL *w = &all_weights[order];
