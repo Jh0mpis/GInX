@@ -49,7 +49,7 @@ using namespace Interpolator;
  * \brief PhotonsContainer class definition.
  *
  * The following class define the needed functions to evolve the position and
- * velocity of the photons in the simmulation.
+ * velocity of the photons in the simulation.
  */
 template <typename StructType>
 class PhotonsContainer
@@ -92,7 +92,7 @@ public:
 // ##############################################################################
 
 /**
- * \brief Computes the right hind side of the geodesic differential equation.
+ * \brief Computes the right hand side of the geodesic differential equation.
  *
  * Given differential equation \f[\frac{d}{dt}U = f\left(U, \frac{dU}{dx};
  * t\right)\f] computes
@@ -153,34 +153,29 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
   amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> rhs = {
       0., 0., 0., 0., 0., 0., 0.};
 
-  // Compute the cell's index where the particle is at position (u[0], u[1],
-  // u[2])
   const long int i0 = amrex::Math::floor((u[0] - plo[0]) / dx[0]);
   const long int j0 = amrex::Math::floor((u[1] - plo[1]) / dx[1]);
   const long int k0 = amrex::Math::floor((u[2] - plo[2]) / dx[2]);
 
-  // Interpolate lapse
-  // Interpolate partial lapse
+  // Interpolate lapse & partial lapse at \vect{x}
   CCTK_REAL lapse_x;
   amrex::GpuArray<CCTK_REAL, 3> d_lapse_x;
-  d_interpolate_array<5>(lapse_x, d_lapse_x, lapse, i0, j0,
-                                            k0, u[0], u[1], u[2], dx, plo);
+  d_interpolate_array<5>(lapse_x, d_lapse_x, lapse, i0, j0, k0, u[0], u[1],
+                         u[2], dx, plo);
 
-  // Interpolate shift
-  // Interpolate partial shift
+  // Interpolate shift & partial shift at \vect{x}
   amrex::GpuArray<CCTK_REAL, 3> shift_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 3>, 3> d_shift_x;
   d_interpolate_array<5>(shift_x, d_shift_x, shift, i0, j0, k0, u[0], u[1],
                          u[2], dx, plo);
 
-  // Interpolate metric
-  // Interpolate partial metric
+  // Interpolate metric & partial metric at \vect{x}
   amrex::GpuArray<CCTK_REAL, 6> gamma_x;
   amrex::GpuArray<amrex::GpuArray<CCTK_REAL, 6>, 3> d_gamma_x;
   d_interpolate_array<5>(gamma_x, d_gamma_x, metric, i0, j0, k0, u[0], u[1],
                          u[2], dx, plo);
 
-  // Interpolate Curvature
+  // Interpolate Curvature at \vect{x}
   amrex::GpuArray<CCTK_REAL, 6> curv_x;
   interpolate_array<5>(curv_x, curv, i0, j0, k0, u[0], u[1], u[2], dx, plo);
 
@@ -287,7 +282,7 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
 
     const int np = pti.numParticles();
 
-    // Get the information relate to the velocities.
+    // Get the information relate to the velocities and energy.
     auto &attribs = pti.GetAttributes();
     CCTK_REAL *AMREX_RESTRICT vels_x = attribs[StructType::vx].data();
     CCTK_REAL *AMREX_RESTRICT vels_y = attribs[StructType::vy].data();
@@ -295,12 +290,13 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
     CCTK_REAL *AMREX_RESTRICT ln_energy = attribs[StructType::ln_E].data();
     auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
-    // Get the array of each parameters.
+    // Get the array of each parameter.
     auto const lapse_array = lapse.array(pti);
     auto const shift_array = shift.array(pti);
     auto const metric_array = metric.array(pti);
     auto const curv_array = curv.array(pti);
 
+    // Needed for GPU
     auto self = this;
 
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
@@ -309,19 +305,22 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
           vels_x[i],           vels_y[i],           vels_z[i],
           ln_energy[i]};
 
-      // event horizon check
-      const CCTK_REAL R = particles[i].pos(0) * particles[i].pos(0) +
-                          particles[i].pos(1) * particles[i].pos(1) +
-                          particles[i].pos(2) * particles[i].pos(2);
+      bool out_of_bounds = false;
 
-      if (R < 0.25) {
-        particles[i].id() = -1;
-        return;
-      }
+      // This is going to be moved to other function
+      // ------------------------------------------------------------------- //
+      // const CCTK_REAL R = particles[i].pos(0) * particles[i].pos(0) +
+      //                     particles[i].pos(1) * particles[i].pos(1) +
+      //                     particles[i].pos(2) * particles[i].pos(2);
+      //
+      // if (R < 16. * dx[0] * dx[0]) {
+      //   particles[i].id() = -1;
+      //   return;
+      // }
+      // ------------------------------------------------------------------- //
 
-      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp;
-
-      U_tmp = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+      amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U_tmp = {
+          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
       // f1 = rhs(u , t) for the runge kutta 4 step
       auto k_odd =
@@ -336,9 +335,11 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       U_tmp[5] = U[5] + 0.5 * dt * k_odd[5];
       U_tmp[6] = U[6] + 0.5 * dt * k_odd[6];
 
-      if ((U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx) ||
-          (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly) ||
-          (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz)) {
+      out_of_bounds |= (U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx);
+      out_of_bounds |= (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly);
+      out_of_bounds |= (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz);
+
+      if (out_of_bounds) {
         particles[i].id() = -1;
         return;
       }
@@ -365,15 +366,17 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       vels_z[i] += (1. / 6.) * dt * (k_odd[5] + 2. * k_even[5]);
       ln_energy[i] += (1. / 6.) * dt * (k_odd[6] + 2. * k_even[6]);
 
-      if ((U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx) ||
-          (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly) ||
-          (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz)) {
+      out_of_bounds |= (U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx);
+      out_of_bounds |= (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly);
+      out_of_bounds |= (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz);
+
+      if (out_of_bounds) {
         particles[i].id() = -1;
         return;
       }
 
       // f3 = rhs(u + 0.5 * dt * f2, t) for the runge kutta 4 step
-      k_odd = self->compute_rhs(U_tmp, 0.0, lapse_array, shift_array,
+      k_odd = self->compute_rhs(U_tmp, 0.5 * dt, lapse_array, shift_array,
                                 metric_array, curv_array, dt, dx, lev, plo0);
 
       U_tmp[0] = U[0] + dt * k_odd[0];
@@ -384,15 +387,17 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       U_tmp[5] = U[5] + dt * k_odd[5];
       U_tmp[6] = U[6] + dt * k_odd[6];
 
-      if ((U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx) ||
-          (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly) ||
-          (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz)) {
+      out_of_bounds |= (U_tmp[0] > boundarie_hx) || (U_tmp[0] < boundarie_lx);
+      out_of_bounds |= (U_tmp[1] > boundarie_hy) || (U_tmp[1] < boundarie_ly);
+      out_of_bounds |= (U_tmp[2] > boundarie_hz) || (U_tmp[2] < boundarie_lz);
+
+      if (out_of_bounds) {
         particles[i].id() = -1;
         return;
       }
 
       // f4 = rhs(u + dt * f3, t) for the runge kutta 4 step
-      k_even = self->compute_rhs(U_tmp, 0.0, lapse_array, shift_array,
+      k_even = self->compute_rhs(U_tmp, dt, lapse_array, shift_array,
                                  metric_array, curv_array, dt, dx, lev, plo0);
 
       // Update particles with the f3 and f4 from RK4
@@ -404,13 +409,14 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
       vels_z[i] += (1. / 6.) * dt * (2. * k_odd[5] + k_even[5]);
       ln_energy[i] += (1. / 6.) * dt * (2. * k_odd[6] + k_even[6]);
 
-      // Check if is outside of the grid
-      if ((particles[i].pos(0) > boundarie_hx) ||
-          (particles[i].pos(0) < boundarie_lx) ||
-          (particles[i].pos(1) > boundarie_hy) ||
-          (particles[i].pos(1) < boundarie_ly) ||
-          (particles[i].pos(2) > boundarie_hz) ||
-          (particles[i].pos(2) < boundarie_lz)) {
+      out_of_bounds |= (particles[i].pos(0) > boundarie_hx) ||
+                       (particles[i].pos(0) < boundarie_lx);
+      out_of_bounds |= (particles[i].pos(1) > boundarie_hy) ||
+                       (particles[i].pos(1) < boundarie_ly);
+      out_of_bounds |= (particles[i].pos(2) > boundarie_hz) ||
+                       (particles[i].pos(2) < boundarie_lz);
+
+      if (out_of_bounds) {
         particles[i].id() = -1;
         return;
       }
@@ -507,7 +513,6 @@ void PhotonsContainer<StructType>::normalize_velocity(
 
       const CCTK_REAL v = std::sqrt(v_squared);
 
-      // Create the particle and add it to the container
       arrdata[StructType::vx][i] = ratio[0] / v;
       arrdata[StructType::vy][i] = ratio[1] / v;
       arrdata[StructType::vz][i] = ratio[2] / v;

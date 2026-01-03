@@ -252,7 +252,7 @@ void random_uniform_initializer(ParticleContainerClass &pc,
           } while ((p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
                     p.pos(2) * p.pos(2)) <
                    (bh_mass * 0.5 + 0.2) * (bh_mass * 0.5 + 0.2));
-
+                
           // Create the particle and add it to the container
           arrdata[StructType::vx][pidx] = 2. * Random(engine) - 1.0;
           arrdata[StructType::vy][pidx] = 2. * Random(engine) - 1.0;

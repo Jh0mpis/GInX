@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <loop_device.hxx>
-#include <ostream>
 
 using ParticleData = Photons::PhotonsData;
 using PC = Containers::PhotonsContainer<ParticleData>;
@@ -32,6 +31,7 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
 
   const CCTK_INT int_parameters[] = {
       num_photons * (photons.size() < CarpetX::ghext->num_patches())};
+  const CCTK_REAL real_parameters[] = {4. * init_params_d[0]};
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
@@ -41,7 +41,7 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
 
     auto &pc = photons.at(patch);
     pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
-                   init_params_d, int_parameters);
+                   real_parameters, int_parameters);
   }
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
@@ -92,8 +92,34 @@ extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
     }
   }
 
+  // Bounds check
+  const CCTK_REAL regions_x[10] = {region_1_position[0], region_2_position[0],
+                                   region_3_position[0], region_4_position[0],
+                                   region_5_position[0], region_6_position[0],
+                                   region_7_position[0], region_8_position[0],
+                                   region_9_position[0], region_10_position[0]};
+  const CCTK_REAL regions_y[10] = {region_1_position[1], region_2_position[1],
+                                   region_3_position[1], region_4_position[1],
+                                   region_5_position[1], region_6_position[1],
+                                   region_7_position[1], region_8_position[1],
+                                   region_9_position[1], region_10_position[1]};
+  const CCTK_REAL regions_z[10] = {region_1_position[2], region_2_position[2],
+                                   region_3_position[2], region_4_position[2],
+                                   region_5_position[2], region_6_position[2],
+                                   region_7_position[2], region_8_position[2],
+                                   region_9_position[2], region_10_position[2]};
+  const CCTK_REAL regions_radius[10] = {
+      region_1_radius, region_2_radius, region_3_radius, region_4_radius,
+      region_5_radius, region_6_radius, region_7_radius, region_8_radius,
+      region_9_radius, region_10_radius};
+
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     auto &pc = photons.at(patch);
+    auto &pd = CarpetX::ghext->patchdata.at(patch);
+    for (int lev = 0; (lev < pd.leveldata.size()) & banned_regions; ++lev) {
+      pc->check_banned_zones(lev, banned_regions, regions_x, regions_y,
+                             regions_z, regions_radius);
+    }
     pc->Redistribute();
   }
 }
