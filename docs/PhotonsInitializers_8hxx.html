@@ -146,10 +146,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2c1855ac5364bca0250024db8dec4ff9"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
-<tr class="memitem:a2c1855ac5364bca0250024db8dec4ff9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#a2c1855ac5364bca0250024db8dec4ff9">photons_init::random_parallel_initializer</a> (ParticleContainerClass &amp;pc, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
-<tr class="memdesc:a2c1855ac5364bca0250024db8dec4ff9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes a custom number of particles on each grid cell.  <a href="namespacephotons__init.html#a2c1855ac5364bca0250024db8dec4ff9">More...</a><br /></td></tr>
-<tr class="separator:a2c1855ac5364bca0250024db8dec4ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75311064e9ba4ad4167c7aeac5e263be"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
+<tr class="memitem:a75311064e9ba4ad4167c7aeac5e263be"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#a75311064e9ba4ad4167c7aeac5e263be">photons_init::random_spherical_initializer</a> (ParticleContainerClass &amp;pc, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
+<tr class="memdesc:a75311064e9ba4ad4167c7aeac5e263be"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes particles spherically distributed around a sphere of radius real_params[0]*0.5 + 0.2.  <a href="namespacephotons__init.html#a75311064e9ba4ad4167c7aeac5e263be">More...</a><br /></td></tr>
+<tr class="separator:a75311064e9ba4ad4167c7aeac5e263be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49eb848084d96d1673137c3a37e4f914"><td class="memTemplParams" colspan="2">template&lt;typename StructType , typename ParticleContainerClass &gt; </td></tr>
+<tr class="memitem:a49eb848084d96d1673137c3a37e4f914"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacephotons__init.html#a49eb848084d96d1673137c3a37e4f914">photons_init::random_uniform_initializer</a> (ParticleContainerClass &amp;pc, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
+<tr class="memdesc:a49eb848084d96d1673137c3a37e4f914"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function random initializes particles uniformly distributed around a sphere of radius real_params[0]*0.5 + 0.2.  <a href="namespacephotons__init.html#a49eb848084d96d1673137c3a37e4f914">More...</a><br /></td></tr>
+<tr class="separator:a49eb848084d96d1673137c3a37e4f914"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >PhotonsContainer initialization functions. </p>

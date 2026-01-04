@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['g_5fnupcs_0',['g_nupcs',['../test_8cxx.html#a0db41a054cfdd4deaa1a92c8a8bd0220',1,'test.cxx']]]
+  ['name_0',['name',['../structPhotons_1_1PhotonsData.html#af78332f4696533d9df12337118e0fbf2',1,'Photons::PhotonsData']]]
 ];

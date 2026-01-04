@@ -87,14 +87,25 @@ Index</h1>
 <li>Files Structure</li>
 <li>How to run it<ul>
 <li>Installation with a compiled Einstein Toolkit</li>
-<li>Parameters file</li>
+<li>Parameters file<ul>
+<li>Initialization</li>
+</ul>
+</li>
 <li>Create-run and running it</li>
 </ul>
 </li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Geodesics Integrator X</h1>
-<p >The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and running it on GPU. This thorn contains the following utilities:</p>
+<p >The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and both CPU and GPU.</p>
+<p >Using the four ADM parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define the following tensors for any particle in GR:</p>
+<p >$$p^\mu = E(n^\alpha + V^\alpha),$$</p>
+<p >where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation</p>
+<p >$$p^\mu \nabla_\mu p^\nu = 0,$$</p>
+<p >along with the ADM properties we can find the following differential equation system for the position $X^i$, velocity $V_i = V^j\gamma_{ji}$ and $\ln(E)$ for each particle, this is:</p>
+<p >$$\frac{d X^i}{dt} = \alpha \gamma^{ij}V_j - \beta^i,$$ $$\frac{d V_i}{dt} = -\partial_i \alpha + \left(\gamma^{kj}V_k\partial_j\alpha - \alpha K_{jk}\gamma^{jl}\gamma^{km}V_mV_l\right)V_i + \frac{1}{2}\alpha \gamma^{jl}\gamma^{km}V_lV_m\partial_i\gamma_{jk} + V_j\partial_i\beta^j,$$ $$\frac{d\ln E}{dt} = \alpha K_{jk}\gamma^{lj}\gamma^{mk}V_lV_m - V_l\gamma^{lj}\partial_j\alpha.$$</p>
+<p >Those are the variables that we are evolving for the particles and the equations we are solving.</p>
+<p >This thorn contains the following utilities:</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 Photons Container</h2>
 <p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>), is defined. This class contains the method for compute the right hand side part for the Rung-Kutta method evolution.</p>
@@ -116,9 +127,12 @@ Files Structure</h1>
 <div class="fragment"><div class="line">GeodesicIntegratorX/</div>
 <div class="line">├── PhotonsContainer</div>
 <div class="line">│   ├── configuration.ccl</div>
+<div class="line">│   ├── doc</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── par</div>
-<div class="line">│   │   └── PhotonsContainer.par</div>
+<div class="line">│   │   ├── HydroFile.par</div>
+<div class="line">│   │   ├── PhotonsContainer.par</div>
+<div class="line">│   │   └── PhotonsMultiGrid.par</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
 <div class="line">│   └── src</div>
@@ -134,60 +148,80 @@ Files Structure</h1>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
 <div class="line">│   └── src</div>
-<div class="line">│       ├── include</div>
-<div class="line">│       │   ├── Discretizer.hxx</div>
-<div class="line">│       │   ├── Interpolator.hxx</div>
-<div class="line">│       │   ├── make.code.defn</div>
-<div class="line">│       │   └── Utilities.hxx</div>
-<div class="line">│       └── make.code.defn</div>
+<div class="line">│       ├── Discretizer.hxx</div>
+<div class="line">│       ├── Interpolator.hxx</div>
+<div class="line">│       ├── make.code.defn</div>
+<div class="line">│       └── Utilities.hxx</div>
 <div class="line">└── README.md</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
 How to run it</h1>
-<blockquote class="doxtable">
-<p >&zwj;[!NOTE] This way of build and run the code is just provisional. This could change in further versions. </p>
-</blockquote>
+<p >In order to run and include the thorn inside your EinsteinToolkit project you have to compile it first and then build it using a compiled EinsteinToolkit.</p>
 <h2><a class="anchor" id="autotoc_md7"></a>
 Installation with a compiled Einstein Toolkit</h2>
-<p >In order to compile the new thorn into a Einstein Toolkit build we can use the same approach used in <a href="https://github.com/EinsteinToolkit/jupyter-et/blob/master/tutorial-server/notebooks/CreatingANewThorn-HeatEqn.ipynb">CreatingANewThorn-HeatEqn.ipynb</a> at the <code>EinsteinToolkit\jupyter-et</code> github repository. The first step is to clone the repository and its dependency into <code>Cactus/arrangements/</code>:</p>
-<div class="fragment"><div class="line">git clone -b dev git@github.com:Jh0mpis/ParticlesUtilities.git</div>
-<div class="line">git clone -b dev git@github.com:Jh0mpis/GeodesicIntegratorX.git</div>
-</div><!-- fragment --><p >Next step is to include the Thorn and its utilities into the <code>Cactus/configs/sim/ThornList</code> file and add the following lines:</p>
-<div class="fragment"><div class="line"># Null GeodesicIntegratorX Utilities</div>
+<p >You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:</p>
+<div class="fragment"><div class="line"># PUtilX &lt;- Dependency</div>
+<div class="line">!TARGET   = $ARR</div>
+<div class="line">!TYPE     = git</div>
+<div class="line">!URL      = https://github.com/Jh0mpis/ParticlesUtilities.git</div>
+<div class="line">!REPO_BRANCH = dev</div>
+<div class="line">!REPO_PATH = $2</div>
+<div class="line">!CHECKOUT =</div>
 <div class="line">ParticlesUtilities/ParticlesContainer</div>
+<div class="line"> </div>
+<div class="line"># GInX thorn</div>
+<div class="line">!TARGET   = $ARR</div>
+<div class="line">!TYPE     = git</div>
+<div class="line">!URL      = https://github.com/Jh0mpis/GeodesicIntegratorX.git</div>
+<div class="line">!REPO_BRANCH = dev</div>
+<div class="line">!REPO_PATH = $2</div>
+<div class="line">!CHECKOUT =</div>
 <div class="line">GeodesicIntegratorX/PhotonSolverUtilities</div>
 <div class="line">GeodesicIntegratorX/PhotonsContainer</div>
-</div><!-- fragment --><p >After this change we need to re-build <code>Cactus</code> by running</p>
-<div class="fragment"><div class="line">./simfactory/bin/sim build -j2</div>
-</div><!-- fragment --><p >This is going to compile the new thorns and all its dependencies.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><p >and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:</p>
+<div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ...</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Parameters file</h2>
-<p >In order to run the <code><a class="el" href="test_8cxx.html">test.cxx</a></code> defined inside the <code>GeodesicIntegratorX</code> thorn we need to use a <code>param.par</code> file. The <code>param.ccl</code> file allows to define the following parameters:</p>
+<p >Al the parameters are defined inside of the <code>PhotonsContainer</code> thorn, plus the one shared with the <code>BaseParticleContainer</code> Thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more details.</p>
+<h3><a class="anchor" id="autotoc_md9"></a>
+Initialization</h3>
+<p >The parameters used for the initialization of the particles are the following ones:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">photons_per_cell   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Number of photons per cell unit on the simulation.   </td><td class="markdownTableBodyNone">[1, $\infty$)   </td><td class="markdownTableBodyNone">1    </td></tr>
+<td class="markdownTableBodyNone">num_photons   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Total number of photons in the simulation.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">black_hole_mass   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Schwarzschild metric black hole mass.   </td><td class="markdownTableBodyNone">[0, $\infty$)   </td><td class="markdownTableBodyNone">1.0    </td></tr>
+<td class="markdownTableBodyNone">initializer   </td><td class="markdownTableBodyNone">KEYWORD   </td><td class="markdownTableBodyNone">Available initializer function to be called.   </td><td class="markdownTableBodyNone">box, spherical, none   </td><td class="markdownTableBodyNone">none    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">initial_metric   </td><td class="markdownTableBodyNone">KEYWORD   </td><td class="markdownTableBodyNone">Metric to be initialized.   </td><td class="markdownTableBodyNone">"none", "minkowski", "iso schwarzschild"   </td><td class="markdownTableBodyNone">"iso schwarzschild"   </td></tr>
+<td class="markdownTableBodyNone">init_params_d   </td><td class="markdownTableBodyNone">REAL[10]   </td><td class="markdownTableBodyNone">double type parameters needed to pass to the initializer function.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">init_params_i   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">integer type parameters needed to pass to the initializer function.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
-<p ><em><b>Shared with <code>ParticlesContainer</code>:</b></em></p>
+<h3><a class="anchor" id="autotoc_md10"></a>
+Variables shared with ParticlesUtilities</h3>
+<p >The thorn shares the following parameters with the ParticlesUtilities thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more info.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">particle_plot_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using amrex print utilities.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">particle_tsv_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using ascii.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0   </td></tr>
+<td class="markdownTableBodyNone">particle_tsv_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using ascii.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">banned_regions   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Number of banned regions for the simulation.   </td><td class="markdownTableBodyNone">[0, 10]   </td><td class="markdownTableBodyNone">0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">region_&lt;n&gt;_position   </td><td class="markdownTableBodyNone">REAL[3]   </td><td class="markdownTableBodyNone">Size 3 array containing the coordinates of the banned region center.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">region_&lt;n&gt;_radius   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Banned region's radius.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0   </td></tr>
 </table>
-<p >An example of how to define those parameters along with the CarpetX parameters can be seen into <a href="./PhotonsContainer/par/PhotonsContainer.par">./PhotonsContainer/par/PhotonsContainer.par</a>.</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Create-run and running it</h2>
 <p >Once we have everything setted up we can create and run the simulation using the simfactory <code>create-run</code> command:</p>
-<div class="fragment"><div class="line">rm -rf /simulations/folder/path/run-name # If exists any previous run</div>
-<div class="line">./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+<div class="fragment"><div class="line">./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par other-options</div>
+</div><!-- fragment --><p >Once you create your run, you could submit a new one by running</p>
+<div class="fragment"><div class="line">./simfactory/bin/sim run run-name --parfile=/parfile/path/parfile-name.par other-options</div>
+</div><!-- fragment --><p >It is going to create a new simulation on the same folder created before. If any of the previous commands fails you can always run the executable directly. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

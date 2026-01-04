@@ -8,7 +8,7 @@ INT num_photons_pc "Photons per cell" {
 } 0
 
 # Variables to use for the initialize the particles (can be used in custom codes)
-KEYWORD initializer "available initializer function to be called" {
+KEYWORD initializer "Available initializer function to be called" {
     "box" :: "Random uniform distributed particles filling the box."
     "spherical" :: "Random Spherically distributed particles."
     "none" :: "Don't use any particle initializer"

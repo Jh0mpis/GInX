@@ -15,11 +15,30 @@ The following readme presents a description of the project, to see the full docu
 - [How to run it](#how-to-run-it)
     - [Installation with a compiled Einstein Toolkit](#installation-with-a-compiled-einstein-toolkit)
     - [Parameters file](#parameters-file)
+        - [Initialization](#initialization)
     - [Create-run and running it](#create-run-and-running-it)
 
 ## Geodesics Integrator X
 
-The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and running it on GPU. This thorn contains the following utilities:
+The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and both CPU and GPU.
+
+Using the four ADM parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define the following tensors for any particle in GR:
+
+$$p^\mu = E(n^\alpha + V^\alpha),$$
+
+where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation 
+
+$$p^\mu \nabla_\mu p^\nu = 0,$$
+
+along with the ADM properties we can find the following differential equation system for the position $X^i$, velocity $V_i = V^j\gamma_{ji}$ and $\ln(E)$ for each particle, this is:
+
+$$\frac{d X^i}{dt} = \alpha \gamma^{ij}V_j - \beta^i,$$
+$$\frac{d V_i}{dt} = -\partial_i \alpha  + \left(\gamma^{kj}V_k\partial_j\alpha  - \alpha K_{jk}\gamma^{jl}\gamma^{km}V_mV_l\right)V_i + \frac{1}{2}\alpha \gamma^{jl}\gamma^{km}V_lV_m\partial_i\gamma_{jk} + V_j\partial_i\beta^j,$$
+$$\frac{d\ln E}{dt} = \alpha K_{jk}\gamma^{lj}\gamma^{mk}V_lV_m - V_l\gamma^{lj}\partial_j\alpha.$$
+
+Those are the variables that we are evolving for the particles and the equations we are solving.
+
+This thorn contains the following utilities:
 
 ### Photons Container
 
@@ -46,9 +65,12 @@ This folder includes the utilities needed to compute the right hand side of the 
 GeodesicIntegratorX/
 ├── PhotonsContainer
 │   ├── configuration.ccl
+│   ├── doc
 │   ├── interface.ccl
 │   ├── par
-│   │   └── PhotonsContainer.par
+│   │   ├── HydroFile.par
+│   │   ├── PhotonsContainer.par
+│   │   └── PhotonsMultiGrid.par
 │   ├── param.ccl
 │   ├── schedule.ccl
 │   └── src
@@ -64,70 +86,88 @@ GeodesicIntegratorX/
 │   ├── param.ccl
 │   ├── schedule.ccl
 │   └── src
-│       ├── include
-│       │   ├── Discretizer.hxx
-│       │   ├── Interpolator.hxx
-│       │   ├── make.code.defn
-│       │   └── Utilities.hxx
-│       └── make.code.defn
+│       ├── Discretizer.hxx
+│       ├── Interpolator.hxx
+│       ├── make.code.defn
+│       └── Utilities.hxx
 └── README.md
 ```
 
 ##  How to run it
 
-> [!NOTE]
-> This way of build and run the code is just provisional. This could change in further versions.
+In order to run and include the thorn inside your EinsteinToolkit project you have to compile it first and then build it using a compiled EinsteinToolkit.
 
 ### Installation with a compiled Einstein Toolkit
 
-In order to compile the new thorn into a Einstein Toolkit build we can use the same approach used in [CreatingANewThorn-HeatEqn.ipynb](https://github.com/EinsteinToolkit/jupyter-et/blob/master/tutorial-server/notebooks/CreatingANewThorn-HeatEqn.ipynb) at the `EinsteinToolkit\jupyter-et` github repository. The first step is to clone the repository and its dependency into `Cactus/arrangements/`:
+You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:
 
 ```bash
-git clone -b dev git@github.com:Jh0mpis/ParticlesUtilities.git
-git clone -b dev git@github.com:Jh0mpis/GeodesicIntegratorX.git
-```
-
-Next step is to include the Thorn and its utilities into the `Cactus/configs/sim/ThornList` file and add the following lines:
-
-```bash
-# Null GeodesicIntegratorX Utilities
+# PUtilX <- Dependency
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://github.com/Jh0mpis/ParticlesUtilities.git
+!REPO_BRANCH = dev
+!REPO_PATH = $2
+!CHECKOUT =
 ParticlesUtilities/ParticlesContainer
+
+# GInX thorn
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://github.com/Jh0mpis/GeodesicIntegratorX.git
+!REPO_BRANCH = dev
+!REPO_PATH = $2
+!CHECKOUT =
 GeodesicIntegratorX/PhotonSolverUtilities
 GeodesicIntegratorX/PhotonsContainer
 ```
 
-After this change we need to re-build `Cactus` by running
+and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:
 
 ```bash
-./simfactory/bin/sim build -j2
+./simfactory/bin/sim build -j4 ...
 ```
-
-This is going to compile the new thorns and all its dependencies.
 
 ### Parameters file
 
-In order to run the `test.cxx` defined inside the `GeodesicIntegratorX` thorn we need to use a `param.par` file. The `param.ccl` file allows to define the following parameters:
+Al the parameters are defined inside of the `PhotonsContainer` thorn, plus the one shared with the `BaseParticleContainer` Thorn, check [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/) for more details.
 
-| Parameter        | Type    | Description                                        | Range                                    | Default             |
-| ---------------- | ------- | -------------------------------------------------- | ---------------------------------------- | ------------------- |
-| photons_per_cell | INTEGER | Number of photons per cell unit on the simulation. | [1, $\infty$)                            | 1                   |
-| black_hole_mass  | REAL    | Schwarzschild metric black hole mass.              | [0, $\infty$)                            | 1.0                 |
-| initial_metric   | KEYWORD | Metric to be initialized.                          | "none", "minkowski", "iso schwarzschild" | "iso schwarzschild" |
+#### Initialization
 
-***Shared with `ParticlesContainer`:***
+The parameters used for the initialization of the particles are the following ones:
+
+| Parameter           | Type        | Description                                                         | Range                                                                         | Default             |
+| ------------------- | ----------- | -------------------------------------------------- | ---------------------------------------- | ------------------- |
+| num_photons         | INTEGER     | Total number of photons in the simulation.                          | any                  | 0    |
+| initializer         | KEYWORD     | Available initializer function to be called.                        | box, spherical, none | none |
+| init_params_d       | REAL[10]    | double type parameters needed to pass to the initializer function.  | any                  | 0.0  |
+| init_params_i       | INTEGER[10] | integer type parameters needed to pass to the initializer function. | any                  | 0    |
+
+
+#### Variables shared with ParticlesUtilities
+
+The thorn shares the following parameters with the ParticlesUtilities thorn, check [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/) for more info.
 
 | Parameter           | Type    | Description                                                                                          | Range                          | Default |
 | ------------------- | ------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ | ------- |
 | particle_plot_every | INTEGER | The number of step where the simulation should print the particles data using amrex print utilities. | [0, $\infty$) 0 means no print | 0       |
 | particle_tsv_every  | INTEGER | The number of step where the simulation should print the particles data using ascii.                 | [0, $\infty$) 0 means no print | 0       |
-
-An example of how to define those parameters along with the CarpetX parameters can be seen into [./PhotonsContainer/par/PhotonsContainer.par](./PhotonsContainer/par/PhotonsContainer.par).
+| banned_regions      | INTEGER | Number of banned regions for the simulation.                         | [0, 10]                               | 0                    |
+| region_<n>_position | REAL[3] | Size 3 array containing the coordinates of the banned region center. | any                                   | 0.0                  |
+| region_<n>_radius   | REAL | Banned region's radius.                                                 | any                                   | 0.0                  |
 
 ### Create-run and running it
 
 Once we have everything setted up we can create and run the simulation using the simfactory `create-run` command:
 
 ```bash
-rm -rf /simulations/folder/path/run-name # If exists any previous run
-./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par
+./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par other-options
 ```
+
+Once you create your run, you could submit a new one by running 
+
+```bash
+./simfactory/bin/sim run run-name --parfile=/parfile/path/parfile-name.par other-options
+```
+
+It is going to create a new simulation on the same folder created before. If any of the previous commands fails you can always run the executable directly.

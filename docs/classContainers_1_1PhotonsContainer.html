@@ -123,7 +123,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a238395b0e861a0be9e4daab1aba8d2d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evolving using Runge-Kutta 4.  <a href="classContainers_1_1PhotonsContainer.html#a238395b0e861a0be9e4daab1aba8d2d9">More...</a><br /></td></tr>
 <tr class="separator:a238395b0e861a0be9e4daab1aba8d2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d7f68a908cac547e3525fdb8910e805"><td class="memItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">compute_rhs</a> (const amrex::GpuArray&lt; CCTK_REAL, StructType::n_attributes+3 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
-<tr class="memdesc:a8d7f68a908cac547e3525fdb8910e805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hind side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">More...</a><br /></td></tr>
+<tr class="memdesc:a8d7f68a908cac547e3525fdb8910e805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the right hand side of the geodesic differential equation.  <a href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805">More...</a><br /></td></tr>
 <tr class="separator:a8d7f68a908cac547e3525fdb8910e805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1606c322695337cd3fe775e69d803287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContainers_1_1PhotonsContainer.html#a1606c322695337cd3fe775e69d803287">normalize_velocity</a> (const amrex::MultiFab &amp;metric, const int level)</td></tr>
 <tr class="memdesc:a1606c322695337cd3fe775e69d803287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize the velocity accordingly to the metric on each particle position.  <a href="classContainers_1_1PhotonsContainer.html#a1606c322695337cd3fe775e69d803287">More...</a><br /></td></tr>
@@ -134,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename StructType&gt;<br />
 class Containers::PhotonsContainer&lt; StructType &gt;</div><p ><a class="el" href="classContainers_1_1PhotonsContainer.html" title="PhotonsContainer class definition.">PhotonsContainer</a> class definition. </p>
-<p >The following class define the needed functions to evolve the position and velocity of the photons in the simmulation. </p>
+<p >The following class define the needed functions to evolve the position and velocity of the photons in the simulation. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aa0463738f45c8445189d89505fcfaab6" name="aa0463738f45c8445189d89505fcfaab6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa0463738f45c8445189d89505fcfaab6">&#9670;&nbsp;</a></span>Base</h2>
@@ -259,7 +259,7 @@ template&lt;typename StructType &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Computes the right hind side of the geodesic differential equation. </p>
+<p>Computes the right hand side of the geodesic differential equation. </p>
 <p >Given differential equation </p><p class="formulaDsp">
 \[\frac{d}{dt}U = f\left(U, \frac{dU}{dx};
 t\right)\]
@@ -385,7 +385,7 @@ t}{2}\right),\)</li>
 <li>\(f_4 = f(U_n + \Delta t f_3, t + \Delta t),\)</li>
 </ul>
 <p >And checking if it goes outside of the grid boundaries.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805" title="Computes the right hind side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classContainers_1_1PhotonsContainer.html#a8d7f68a908cac547e3525fdb8910e805" title="Computes the right hand side of the geodesic differential equation.">compute_rhs()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lapse</td><td>ADM lapse function. </td></tr>
