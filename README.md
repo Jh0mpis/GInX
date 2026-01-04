@@ -26,7 +26,7 @@ Using the four ADM parameters used for 3+1 numerical relativity simulations ($\a
 
 $$p^\mu = E(n^\alpha + V^\alpha),$$
 
-where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation 
+where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = -p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation 
 
 $$p^\mu \nabla_\mu p^\nu = 0,$$
 
