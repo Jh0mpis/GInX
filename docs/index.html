@@ -100,7 +100,7 @@ Geodesics Integrator X</h1>
 <p >The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and both CPU and GPU.</p>
 <p >Using the four ADM parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define the following tensors for any particle in GR:</p>
 <p >$$p^\mu = E(n^\alpha + V^\alpha),$$</p>
-<p >where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation</p>
+<p >where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = -p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation</p>
 <p >$$p^\mu \nabla_\mu p^\nu = 0,$$</p>
 <p >along with the ADM properties we can find the following differential equation system for the position $X^i$, velocity $V_i = V^j\gamma_{ji}$ and $\ln(E)$ for each particle, this is:</p>
 <p >$$\frac{d X^i}{dt} = \alpha \gamma^{ij}V_j - \beta^i,$$ $$\frac{d V_i}{dt} = -\partial_i \alpha + \left(\gamma^{kj}V_k\partial_j\alpha - \alpha K_{jk}\gamma^{jl}\gamma^{km}V_mV_l\right)V_i + \frac{1}{2}\alpha \gamma^{jl}\gamma^{km}V_lV_m\partial_i\gamma_{jk} + V_j\partial_i\beta^j,$$ $$\frac{d\ln E}{dt} = \alpha K_{jk}\gamma^{lj}\gamma^{mk}V_lV_m - V_l\gamma^{lj}\partial_j\alpha.$$</p>

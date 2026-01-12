@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['interpolator_0',['Interpolator',['../namespaceInterpolator.html',1,'']]]
+  ['ginx_0',['GInX',['../namespaceGInX.html',1,'']]]
 ];
