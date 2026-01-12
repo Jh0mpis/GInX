@@ -9,6 +9,7 @@ The integration of null geodesic equations within the 3+1 formalism of general r
 The following readme presents a description of the project, to see the full documentation of the code you can check [GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GeodesicIntegratorX/index.html)
 
 - [Geodesics Integrator X](#geodesics-integrator-x)
+    - [Concrete Container](#concrete-container)
     - [Photons Container](#photons-container)
     - [Photons Solver Utilities](#photons-solver-utilities)
 - [Files Structure](#files-structure)
@@ -40,9 +41,14 @@ Those are the variables that we are evolving for the particles and the equations
 
 This thorn contains the following utilities:
 
+### Concrete Container
+
+The concrete container is an intermediate layer between the `BaseParticleContainer` abstract class (This class is implemented in [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/)) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method `normalize_velocity` that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the `ConcreteContainer.hxx` where the abstract class is defined.
+
+
 ### Photons Container
 
-This folder contains the `PhotonsContainer.hxx` header file where the Particle container for photons class, that inherits from `BaseParticleContainer` abstract class (This class is implemented in [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/)), is defined. This class contains the method for compute the right hand side part for the Rung-Kutta method evolution.
+This folder contains the `PhotonsContainer.hxx` header file where the Particle container for photons class, that inherits from `ConcreteContainer` abstract class and define the abstract method for the null particles normalization, i.e. `V_iV^i = 1`.
 
 This also contains the `Photons.hxx` file that contains the definition of the struct used for the Photons evolution.
 
@@ -63,29 +69,39 @@ This folder includes the utilities needed to compute the right hand side of the 
 
 ```bash
 GeodesicIntegratorX/
-├── PhotonsContainer
+├── ConcreteContainer/
 │   ├── configuration.ccl
-│   ├── doc
+│   ├── doc/
 │   ├── interface.ccl
-│   ├── par
+│   ├── par/
+│   ├── param.ccl
+│   ├── schedule.ccl
+│   └── src/
+│       ├── ConcreteContainer.hxx
+│       └── make.code.defn
+├── PhotonsContainer/
+│   ├── configuration.ccl
+│   ├── doc/
+│   ├── interface.ccl
+│   ├── par/
 │   │   ├── HydroFile.par
 │   │   ├── PhotonsContainer.par
 │   │   └── PhotonsMultiGrid.par
 │   ├── param.ccl
 │   ├── schedule.ccl
-│   └── src
+│   └── src/
 │       ├── make.code.defn
 │       ├── PhotonsContainer.hxx
 │       ├── Photons.hxx
 │       ├── PhotonsInitializers.hxx
 │       └── test.cxx
-├── PhotonSolverUtilities
+├── PhotonSolverUtilities/
 │   ├── configuration.ccl
-│   ├── doc
+│   ├── doc/
 │   ├── interface.ccl
 │   ├── param.ccl
 │   ├── schedule.ccl
-│   └── src
+│   └── src/
 │       ├── Discretizer.hxx
 │       ├── Interpolator.hxx
 │       ├── make.code.defn
@@ -114,11 +130,12 @@ ParticlesUtilities/ParticlesContainer
 # GInX thorn
 !TARGET   = $ARR
 !TYPE     = git
-!URL      = https://github.com/Jh0mpis/GeodesicIntegratorX.git
+!URL      = https://github.com/Jh0mpis/GInX.git
 !REPO_BRANCH = dev
 !REPO_PATH = $2
 !CHECKOUT =
 GeodesicIntegratorX/PhotonSolverUtilities
+GeodesicIntegratorX/ConcreteContainer
 GeodesicIntegratorX/PhotonsContainer
 ```
 
