@@ -49,7 +49,7 @@ void random_spherical_initializer(ParticleContainerClass &pc,
             "random_spherical_photons_per_container_initializer");
 
   const CCTK_INT level = 0;
-  const CCTK_REAL bh_mass = real_params[0];
+  const CCTK_REAL radius = real_params[0];
 
   // Get the with of the discretization on each direction.
   const auto dx = pc.Geom(level).CellSizeArray();
@@ -121,9 +121,9 @@ void random_spherical_initializer(ParticleContainerClass &pc,
 
           // Generate a random position
           const amrex::Real ratio[AMREX_SPACEDIM] = {
-              (std::abs(p_hi[0] - p_lo[0]) - (bh_mass * 0.5 + 0.2) * 2.) * 0.5 *
+              (std::abs(p_hi[0] - p_lo[0]) - (radius * 0.5 + 0.2) * 2.) * 0.5 *
                       Random(engine) +
-                  bh_mass * 0.5 + 0.2,
+                  radius * 0.5 + 0.2,
               Random(engine) * M_PI, Random(engine) * 2. * M_PI};
 
           auto &p = p_struct[pidx];
@@ -174,7 +174,7 @@ void random_uniform_initializer(ParticleContainerClass &pc,
             "random_uniform_photons_per_container_initializer");
 
   const CCTK_INT level = 0;
-  const CCTK_REAL bh_mass = real_params[0];
+  const CCTK_REAL radius = real_params[0];
 
   // Get the lower and higher value over the ParticleContainer Geometry
   const auto p_lo = pc.Geom(level).ProbLoArray();
@@ -248,10 +248,10 @@ void random_uniform_initializer(ParticleContainerClass &pc,
           do {
             p.pos(0) = Random(engine) * (p_hi[0] - p_lo[0]) + p_lo[0];
             p.pos(1) = Random(engine) * (p_hi[1] - p_lo[1]) + p_lo[1];
-            p.pos(2) = Random(engine) * (p_hi[2] - p_lo[2]) + p_lo[2];
+            p.pos(2) = Random(engine) * 2.0 * 0.078125 - 0.078125; //Random(engine) * (p_hi[2] - p_lo[2]) + p_lo[2];
           } while ((p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
                     p.pos(2) * p.pos(2)) <
-                   (bh_mass * 0.5 + 0.2) * (bh_mass * 0.5 + 0.2));
+                   (radius) * (radius));
                 
           // Create the particle and add it to the container
           arrdata[StructType::vx][pidx] = 2. * Random(engine) - 1.0;

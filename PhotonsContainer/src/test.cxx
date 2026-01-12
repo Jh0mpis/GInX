@@ -37,11 +37,11 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
     if (photons.size() < CarpetX::ghext->num_patches()) {
       photons.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
-    }
 
     auto &pc = photons.at(patch);
     pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
-                   real_parameters, int_parameters);
+                   init_params_d, int_parameters);
+    }
   }
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
@@ -53,6 +53,7 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
       const auto &gd_metric = *ld.groupdata.at(gi_metric);
       const amrex::MultiFab &metric = *gd_metric.mfab[tl];
 
+      pc->Redistribute();
       pc->normalize_velocity(metric, lev);
     }
   }

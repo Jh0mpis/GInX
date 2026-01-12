@@ -2,10 +2,9 @@
 
 IMPLEMENTS: PhotonsContainer
 
-INHERITS: ADMBaseX AMReX ParticlesContainer PhotonSolverUtilities Loop
+INHERITS: ADMBaseX AMReX ConcreteContainer PhotonSolverUtilities Loop
 
-USES INCLUDE HEADER: BaseParticleContainer.hxx
-USES INCLUDE HEADER: Initializers.hxx
+USES INCLUDE HEADER: ConcreteContainer.hxx
 USES INCLUDE HEADER: driver.hxx
 USES INCLUDE HEADER: loop_device.hxx
 USES INCLUDE HEADER: Discretizer.hxx
