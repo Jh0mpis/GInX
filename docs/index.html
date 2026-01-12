@@ -77,9 +77,10 @@ $(function() {
 <p ><b>Keywords: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.</b></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Index</h1>
-<p >The following readme presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GeodesicIntegratorX/index.html">GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
+<p >The following readme presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GInX/">GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
 <ul>
 <li>Geodesics Integrator X<ul>
+<li>Concrete Container</li>
 <li>Photons Container</li>
 <li>Photons Solver Utilities</li>
 </ul>
@@ -107,14 +108,17 @@ Geodesics Integrator X</h1>
 <p >Those are the variables that we are evolving for the particles and the equations we are solving.</p>
 <p >This thorn contains the following utilities:</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
+Concrete Container</h2>
+<p >The concrete container is an intermediate layer between the <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method <code>normalize_velocity</code> that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the <code><a class="el" href="ConcreteContainer_8hxx.html" title="ConcreteContainer class definition.">ConcreteContainer.hxx</a></code> where the abstract class is defined.</p>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Photons Container</h2>
-<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>), is defined. This class contains the method for compute the right hand side part for the Rung-Kutta method evolution.</p>
+<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>ConcreteContainer</code> abstract class and define the abstract method for the null particles normalization, i.e. <code>V_iV^i = 1</code>.</p>
 <p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the <a class="el" href="namespacePhotons.html">Photons</a> evolution.</p>
 <p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions.">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
 <blockquote class="doxtable">
 <p >&zwj;[!NOTE] Contains the <code><a class="el" href="test_8cxx.html">test.cxx</a></code> file, this files contain an example of how to use the PhotonsContainer and its methods, can be used as an example in the future or has to be removed and included in the documentation. </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Photons Solver Utilities</h2>
 <p >This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:</p>
 <ul>
@@ -122,41 +126,51 @@ Photons Solver Utilities</h2>
 <li><code><a class="el" href="Interpolator_8hxx.html" title="Interpolators definitions.">Interpolator.hxx</a></code>: This file contains different interpolators like barycentric interpolator.</li>
 <li><code><a class="el" href="Utilities_8hxx.html" title="Code utilities such as matrix and vector multiplications.">Utilities.hxx</a></code>: This file contains different product of symmetric 3x3 matrices and vectors.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Files Structure</h1>
 <div class="fragment"><div class="line">GeodesicIntegratorX/</div>
-<div class="line">├── PhotonsContainer</div>
+<div class="line">├── ConcreteContainer/</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc</div>
+<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
-<div class="line">│   ├── par</div>
+<div class="line">│   ├── par/</div>
+<div class="line">│   ├── param.ccl</div>
+<div class="line">│   ├── schedule.ccl</div>
+<div class="line">│   └── src/</div>
+<div class="line">│       ├── ConcreteContainer.hxx</div>
+<div class="line">│       └── make.code.defn</div>
+<div class="line">├── PhotonsContainer/</div>
+<div class="line">│   ├── configuration.ccl</div>
+<div class="line">│   ├── doc/</div>
+<div class="line">│   ├── interface.ccl</div>
+<div class="line">│   ├── par/</div>
 <div class="line">│   │   ├── HydroFile.par</div>
 <div class="line">│   │   ├── PhotonsContainer.par</div>
 <div class="line">│   │   └── PhotonsMultiGrid.par</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
-<div class="line">│   └── src</div>
+<div class="line">│   └── src/</div>
 <div class="line">│       ├── make.code.defn</div>
 <div class="line">│       ├── PhotonsContainer.hxx</div>
 <div class="line">│       ├── Photons.hxx</div>
 <div class="line">│       ├── PhotonsInitializers.hxx</div>
 <div class="line">│       └── test.cxx</div>
-<div class="line">├── PhotonSolverUtilities</div>
+<div class="line">├── PhotonSolverUtilities/</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc</div>
+<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
-<div class="line">│   └── src</div>
+<div class="line">│   └── src/</div>
 <div class="line">│       ├── Discretizer.hxx</div>
 <div class="line">│       ├── Interpolator.hxx</div>
 <div class="line">│       ├── make.code.defn</div>
 <div class="line">│       └── Utilities.hxx</div>
 <div class="line">└── README.md</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md7"></a>
 How to run it</h1>
 <p >In order to run and include the thorn inside your EinsteinToolkit project you have to compile it first and then build it using a compiled EinsteinToolkit.</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Installation with a compiled Einstein Toolkit</h2>
 <p >You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:</p>
 <div class="fragment"><div class="line"># PUtilX &lt;- Dependency</div>
@@ -171,18 +185,19 @@ Installation with a compiled Einstein Toolkit</h2>
 <div class="line"># GInX thorn</div>
 <div class="line">!TARGET   = $ARR</div>
 <div class="line">!TYPE     = git</div>
-<div class="line">!URL      = https://github.com/Jh0mpis/GeodesicIntegratorX.git</div>
+<div class="line">!URL      = https://github.com/Jh0mpis/GInX.git</div>
 <div class="line">!REPO_BRANCH = dev</div>
 <div class="line">!REPO_PATH = $2</div>
 <div class="line">!CHECKOUT =</div>
 <div class="line">GeodesicIntegratorX/PhotonSolverUtilities</div>
+<div class="line">GeodesicIntegratorX/ConcreteContainer</div>
 <div class="line">GeodesicIntegratorX/PhotonsContainer</div>
 </div><!-- fragment --><p >and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:</p>
 <div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ...</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
 Parameters file</h2>
 <p >Al the parameters are defined inside of the <code>PhotonsContainer</code> thorn, plus the one shared with the <code>BaseParticleContainer</code> Thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more details.</p>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md10"></a>
 Initialization</h3>
 <p >The parameters used for the initialization of the particles are the following ones:</p>
 <table class="markdownTable">
@@ -197,7 +212,7 @@ Initialization</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">init_params_i   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">integer type parameters needed to pass to the initializer function.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md11"></a>
 Variables shared with ParticlesUtilities</h3>
 <p >The thorn shares the following parameters with the ParticlesUtilities thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more info.</p>
 <table class="markdownTable">
@@ -214,7 +229,7 @@ Variables shared with ParticlesUtilities</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">region_&lt;n&gt;_radius   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Banned region's radius.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Create-run and running it</h2>
 <p >Once we have everything setted up we can create and run the simulation using the simfactory <code>create-run</code> command:</p>
 <div class="fragment"><div class="line">./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par other-options</div>
