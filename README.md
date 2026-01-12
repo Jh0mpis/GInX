@@ -6,7 +6,7 @@ The integration of null geodesic equations within the 3+1 formalism of general r
 
 ## Index
 
-The following readme presents a description of the project, to see the full documentation of the code you can check [GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GeodesicIntegratorX/index.html)
+The following readme presents a description of the project, to see the full documentation of the code you can check [GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GInX/)
 
 - [Geodesics Integrator X](#geodesics-integrator-x)
     - [Concrete Container](#concrete-container)
