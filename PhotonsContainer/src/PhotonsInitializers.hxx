@@ -248,7 +248,11 @@ void random_uniform_initializer(ParticleContainerClass &pc,
           do {
             p.pos(0) = Random(engine) * (p_hi[0] - p_lo[0]) + p_lo[0];
             p.pos(1) = Random(engine) * (p_hi[1] - p_lo[1]) + p_lo[1];
-            p.pos(2) = Random(engine) * 2.0 * 0.078125 - 0.078125; //Random(engine) * (p_hi[2] - p_lo[2]) + p_lo[2];
+            // p.pos(1) = Random(engine) * 2. * (0.078125) - 0.078125;
+            // p.pos(1) = 0.0;
+            // p.pos(2) = 0.0;
+            p.pos(2) = Random(engine) * (p_hi[2] - p_lo[2]) + p_lo[2];
+            // p.pos(2) = 0.0;
           } while ((p.pos(0) * p.pos(0) + p.pos(1) * p.pos(1) +
                     p.pos(2) * p.pos(2)) <
                    (radius) * (radius));
@@ -256,7 +260,10 @@ void random_uniform_initializer(ParticleContainerClass &pc,
           // Create the particle and add it to the container
           arrdata[StructType::vx][pidx] = 2. * Random(engine) - 1.0;
           arrdata[StructType::vy][pidx] = 2. * Random(engine) - 1.0;
+          // arrdata[StructType::vy][pidx] = 0.0;
+          // arrdata[StructType::vz][pidx] = 0.0;
           arrdata[StructType::vz][pidx] = 2. * Random(engine) - 1.0;
+          // arrdata[StructType::vz][pidx] = 0.0;
           arrdata[StructType::ln_E][pidx] = 0;
         });
     CCTK_VWarn(1, __LINE__, __FILE__, CCTK_THORNSTRING,

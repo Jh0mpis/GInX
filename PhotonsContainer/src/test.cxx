@@ -31,7 +31,6 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
 
   const CCTK_INT int_parameters[] = {
       num_photons * (photons.size() < CarpetX::ghext->num_patches())};
-  const CCTK_REAL real_parameters[] = {4. * init_params_d[0]};
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);

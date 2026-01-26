@@ -13,22 +13,23 @@ Cactus::presync_mode = "mixed-error"
 CarpetX::verbose = yes
 CarpetX::poison_undefined_values = yes
 
-# 32 , 64  , 128  , 256   , 512    , 1024
-# 2.5, 1.25, 0.625, 0.3125, 0.15625, 0.078125
-$ncells  = 1024
-$zlim = 0.078125
+# 128   , 256    , 512     , 1024
+# 1.25 , 0.625 , 0.3125 , 0.15625
+$ncells  = 256
+$zlim = 2.5
+$dtfrac = 1.0
 
-CarpetX::xmin = -10
-CarpetX::ymin = -10
-CarpetX::zmin = -$zlim
+CarpetX::xmin = 0.0
+CarpetX::ymin = 0.0
+CarpetX::zmin = 0.0
 CarpetX::xmax = +10
 CarpetX::ymax = +10
-CarpetX::zmax = +$zlim
+CarpetX::zmax = +10
 
 
 CarpetX::ncells_x = $ncells
 CarpetX::ncells_y = $ncells
-CarpetX::ncells_z = 8
+CarpetX::ncells_z = $ncells
 
 CarpetX::periodic_x = yes
 CarpetX::periodic_y = yes
@@ -43,9 +44,10 @@ CarpetX::max_tile_size_y = 10000000
 CarpetX::max_tile_size_z = 10000000
 
 CarpetX::ghost_size = 3
-CarpetX::dtfac = 0.5
+CarpetX::dtfac = $dtfrac
 
-Cactus::cctk_itlast = $ncells
+Cactus::cctk_itlast = $ncells/4
+#Cactus::cctk_itlast = 1
 
 #CarpetX::regrid_error_threshold = 0.9
 #CarpetX::max_num_levels = 4
@@ -84,9 +86,11 @@ ParticlesContainer::particle_tsv_every = 1
 ParticlesContainer::banned_regions = 1
 ParticlesContainer::region_1_position = [0.0, 0.0, 0.0]
 ParticlesContainer::region_1_radius = 3.0
+#ParticlesContainer::metric = "Isotropic Schwarzschild"
+#ParticlesContainer::metric = "Painleve"
 ParticlesContainer::metric = "Kerr-Shild"
 ParticlesContainer::metric_params_d = [0.5, 0.1]
 
 # PhotonsContainer parameters definition
-PhotonsContainer::num_photons = 2000
+PhotonsContainer::num_photons = 5000
 PhotonsContainer::init_params_d = [3.0]

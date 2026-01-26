@@ -226,6 +226,27 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
       lapse_x * VecVecMul(SMatVecMul(curv_x, V_up), V_up) -
       VecVecMul(V_up, d_lapse_x);
 
+  // const amrex::GpuArray<CCTK_REAL, 6> d_gamma_rhs = {
+  //     rhs[0] * d_gamma_x[0][0] + rhs[1] * d_gamma_x[1][0] +
+  //         rhs[2] * d_gamma_x[2][0],
+  //     rhs[0] * d_gamma_x[0][1] + rhs[1] * d_gamma_x[1][1] +
+  //         rhs[2] * d_gamma_x[2][1],
+  //     rhs[0] * d_gamma_x[0][2] + rhs[1] * d_gamma_x[1][2] +
+  //         rhs[2] * d_gamma_x[2][2],
+  //     rhs[0] * d_gamma_x[0][3] + rhs[1] * d_gamma_x[1][3] +
+  //         rhs[2] * d_gamma_x[2][3],
+  //     rhs[0] * d_gamma_x[0][4] + rhs[1] * d_gamma_x[1][4] +
+  //         rhs[2] * d_gamma_x[2][4],
+  //     rhs[0] * d_gamma_x[0][5] + rhs[1] * d_gamma_x[1][5] +
+  //         rhs[2] * d_gamma_x[2][5],
+  // };
+  //
+  // const CCTK_REAL V_term =
+  //     2.0 * (V_up[0] * rhs[3] + V_up[1] * rhs[4] + V_up[2] * rhs[5]);
+  // const CCTK_REAL dgamma_term = VecVecMul(V_up, SMatVecMul(d_gamma_rhs, V_up));
+  //
+  //   std::cout<<u[0]<<", "<<u[1]<<", "<<u[2]<<", "<<V_term - dgamma_term<<"\n";
+
   return rhs;
 
 } // ConcreteContainer::compute_rhs
@@ -301,7 +322,6 @@ void ConcreteContainer<DerivedContainer, StructType>::evolve(
     auto self = this;
 
     amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
-
       const amrex::GpuArray<CCTK_REAL, StructType::n_attributes + 3> U = {
           particles[i].pos(0), particles[i].pos(1), particles[i].pos(2),
           vels_x[i],           vels_y[i],           vels_z[i],
