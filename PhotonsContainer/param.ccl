@@ -1,3 +1,7 @@
+# test.cxx switch [temporal solution]
+BOOLEAN run_test "Run test.cxx file" {
+} true
+
 # Particles to create
 INT num_photons "Total number of photons" {
     0:* :: ""

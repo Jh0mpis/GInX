@@ -25,6 +25,10 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
 
+  if (!run_test) {
+    return;
+  }
+
   const int tl = 0;
   const int gi_metric = CCTK_GroupIndex("ADMBaseX::metric");
   assert(gi_metric >= 0 && "Failed to get the metric group index");
@@ -37,9 +41,9 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
     if (photons.size() < CarpetX::ghext->num_patches()) {
       photons.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
 
-    auto &pc = photons.at(patch);
-    pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
-                   init_params_d, int_parameters);
+      auto &pc = photons.at(patch);
+      pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
+                     init_params_d, int_parameters);
     }
   }
 
@@ -61,6 +65,10 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
 extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
+
+  if (!run_test) {
+    return;
+  }
 
   const CCTK_REAL dt = CCTK_DELTA_TIME;
 
@@ -126,6 +134,10 @@ extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
 
 extern "C" void PhotonsContainer_print(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
+
+  if (!run_test) {
+    return;
+  }
 
   CCTK_INFO("Printing particles to files");
 
