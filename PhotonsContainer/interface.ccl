@@ -10,3 +10,6 @@ USES INCLUDE HEADER: loop_device.hxx
 USES INCLUDE HEADER: Discretizer.hxx
 USES INCLUDE HEADER: Interpolator.hxx
 USES INCLUDE HEADER: Utilities.hxx
+
+INCLUDES HEADER: PhotonsContainer.hxx IN PhotonsContainer.hxx
+INCLUDES HEADER: Photons.hxx IN Photons.hxx
