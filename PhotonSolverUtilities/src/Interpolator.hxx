@@ -22,7 +22,7 @@
 /**
  * \brief Interpolators namespace.
  */
-namespace Interpolator {
+namespace GInX {
 
 // #############################################################################
 //                   Barycentric Lagrange Interpolator
