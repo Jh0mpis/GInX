@@ -70,10 +70,10 @@ $(function() {
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Geodesics Integrator tool for <a class="el" href="namespacePhotons.html">Photons</a> in GRMHD using Adaptive Mesh Refinement </div></div>
+  <div class="headertitle"><div class="title">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><a class="anchor" id="md__home_jh0mpis_MHPC_Project_GeodesicIntegratorX_README"></a> The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for photons in a generic GRMHD background using Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with CUDA support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.</p>
+<div class="textblock"><p ><a class="anchor" id="md__home_jh0mpis_MHPC_Project_GInX_README"></a> The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for photons in a generic GRMHD background using Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with CUDA support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.</p>
 <p ><b>Keywords: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.</b></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Index</h1>
@@ -109,11 +109,11 @@ Geodesics Integrator X</h1>
 <p >This thorn contains the following utilities:</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 Concrete Container</h2>
-<p >The concrete container is an intermediate layer between the <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method <code>normalize_velocity</code> that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the <code><a class="el" href="ConcreteContainer_8hxx.html" title="ConcreteContainer class definition.">ConcreteContainer.hxx</a></code> where the abstract class is defined.</p>
+<p >The concrete container is an intermediate layer between the <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method <code>normalize_velocity</code> that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the <code>ConcreteContainer.hxx</code> where the abstract class is defined.</p>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Photons Container</h2>
 <p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>ConcreteContainer</code> abstract class and define the abstract method for the null particles normalization, i.e. <code>V_iV^i = 1</code>.</p>
-<p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the <a class="el" href="namespacePhotons.html">Photons</a> evolution.</p>
+<p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the Photons evolution.</p>
 <p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions.">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
 <blockquote class="doxtable">
 <p >&zwj;[!NOTE] Contains the <code><a class="el" href="test_8cxx.html">test.cxx</a></code> file, this files contain an example of how to use the PhotonsContainer and its methods, can be used as an example in the future or has to be removed and included in the documentation. </p>
@@ -122,7 +122,7 @@ Photons Container</h2>
 Photons Solver Utilities</h2>
 <p >This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:</p>
 <ul>
-<li><code><a class="el" href="Discretizer_8hxx.html" title="First derivatives computations.">Discretizer.hxx</a></code>: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.</li>
+<li><code>Discretizer.hxx</code>: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.</li>
 <li><code><a class="el" href="Interpolator_8hxx.html" title="Interpolators definitions.">Interpolator.hxx</a></code>: This file contains different interpolators like barycentric interpolator.</li>
 <li><code><a class="el" href="Utilities_8hxx.html" title="Code utilities such as matrix and vector multiplications.">Utilities.hxx</a></code>: This file contains different product of symmetric 3x3 matrices and vectors.</li>
 </ul>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ginx_0',['GInX',['../namespaceGInX.html',1,'']]]
+  ['initializer_0',['Initializer',['../namespaceInitializer.html',1,'']]],
+  ['iterator_1',['Iterator',['../namespaceIterator.html',1,'']]]
 ];

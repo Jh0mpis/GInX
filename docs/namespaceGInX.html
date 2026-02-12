@@ -71,17 +71,1075 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">GInX Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Interpolators namespace.  
+<a href="namespaceGInX.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGInX_1_1ConcreteContainer.html">ConcreteContainer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGInX_1_1ConcreteContainer.html" title="ConcreteContainer class definition.">ConcreteContainer</a> class definition.  <a href="classGInX_1_1ConcreteContainer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGInX_1_1PhotonsContainer.html">PhotonsContainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGInX_1_1PhotonsContainer.html" title="PhotonsContainer class definition.">PhotonsContainer</a> class definition.  <a href="classGInX_1_1PhotonsContainer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGInX_1_1PhotonsData.html">PhotonsData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to managing null geodesic particles.  <a href="structGInX_1_1PhotonsData.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad744a8f7b68cc63b5c022621bc3e6287"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:ad744a8f7b68cc63b5c022621bc3e6287"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287">barycentric_cubic_1d</a> (CCTK_REAL &amp;value, const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
+<tr class="memdesc:ad744a8f7b68cc63b5c022621bc3e6287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in one direction.  <a href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287">More...</a><br /></td></tr>
+<tr class="separator:ad744a8f7b68cc63b5c022621bc3e6287"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
+<tr class="memdesc:adfd08d53d8297e3aa9cb563b7988dceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction.  <a href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">More...</a><br /></td></tr>
+<tr class="separator:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a960b4e6e86b9ecb6bf5b503c60f75a92">barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction for a scalar function.  <a href="namespaceGInX.html#a960b4e6e86b9ecb6bf5b503c60f75a92">More...</a><br /></td></tr>
+<tr class="separator:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85bec232155e7318b0f0e56da2f9b3fd"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:a85bec232155e7318b0f0e56da2f9b3fd"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd">der_barycentric_cubic_1d</a> (CCTK_REAL &amp;f_x, CCTK_REAL &amp;d_f_x, const int(&amp;points)[N], const CCTK_REAL *weights, const CCTK_REAL(&amp;values)[N], const CCTK_REAL &amp;x, const CCTK_REAL &amp;plo, const CCTK_REAL &amp;dx)</td></tr>
+<tr class="memdesc:a85bec232155e7318b0f0e56da2f9b3fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation and its derivative in one direction.  <a href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd">More...</a><br /></td></tr>
+<tr class="separator:a85bec232155e7318b0f0e56da2f9b3fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af55fb33d2acf90ff1796a5d77a9cc0fe"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:af55fb33d2acf90ff1796a5d77a9cc0fe"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#af55fb33d2acf90ff1796a5d77a9cc0fe">barycentric_derivative_and_interpolate</a> (CCTK_REAL &amp;f_xyz, CCTK_REAL &amp;df_xyz_0, CCTK_REAL &amp;df_xyz_1, CCTK_REAL &amp;df_xyz_2, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
+<tr class="memdesc:af55fb33d2acf90ff1796a5d77a9cc0fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation and its derivatives in three directions.  <a href="namespaceGInX.html#af55fb33d2acf90ff1796a5d77a9cc0fe">More...</a><br /></td></tr>
+<tr class="separator:af55fb33d2acf90ff1796a5d77a9cc0fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867f9a1c855ae25ab9cd3e7f5a8ba4a4"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:a867f9a1c855ae25ab9cd3e7f5a8ba4a4"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a867f9a1c855ae25ab9cd3e7f5a8ba4a4">interpolate_array</a> (amrex::GpuArray&lt; CCTK_REAL, 6 &gt; &amp;array6, const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a867f9a1c855ae25ab9cd3e7f5a8ba4a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do the barycentric interpolation for a 3 dimensional and symmetric matrix.  <a href="namespaceGInX.html#a867f9a1c855ae25ab9cd3e7f5a8ba4a4">More...</a><br /></td></tr>
+<tr class="separator:a867f9a1c855ae25ab9cd3e7f5a8ba4a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf09cb2139af4f1fdeb5bb7f2f7b61eb"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:aaf09cb2139af4f1fdeb5bb7f2f7b61eb"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#aaf09cb2139af4f1fdeb5bb7f2f7b61eb">d_interpolate_array</a> (amrex::GpuArray&lt; CCTK_REAL, 6 &gt; &amp;array6, amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 6 &gt;, 3 &gt; &amp;d_array6, const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:aaf09cb2139af4f1fdeb5bb7f2f7b61eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do the barycentric interpolation for a 3 dimensional and symmetric matrix and its derivatives.  <a href="namespaceGInX.html#aaf09cb2139af4f1fdeb5bb7f2f7b61eb">More...</a><br /></td></tr>
+<tr class="separator:aaf09cb2139af4f1fdeb5bb7f2f7b61eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21561618044e2f7d591b243d54e5e7a7"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:a21561618044e2f7d591b243d54e5e7a7"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a21561618044e2f7d591b243d54e5e7a7">d_interpolate_array</a> (amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;array3, amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 3 &gt;, 3 &gt; &amp;d_array3, const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a21561618044e2f7d591b243d54e5e7a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do the barycentric interpolation for a 3 dimensional and symmetric vector and its derivatives.  <a href="namespaceGInX.html#a21561618044e2f7d591b243d54e5e7a7">More...</a><br /></td></tr>
+<tr class="separator:a21561618044e2f7d591b243d54e5e7a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ac01528b553189bbc9c1d8fb61696f5"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
+<tr class="memitem:a7ac01528b553189bbc9c1d8fb61696f5"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a7ac01528b553189bbc9c1d8fb61696f5">d_interpolate_array</a> (CCTK_REAL &amp;array, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;d_array, const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
+<tr class="memdesc:a7ac01528b553189bbc9c1d8fb61696f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do the barycentric interpolation for a scalar function its derivatives.  <a href="namespaceGInX.html#a7ac01528b553189bbc9c1d8fb61696f5">More...</a><br /></td></tr>
+<tr class="separator:a7ac01528b553189bbc9c1d8fb61696f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Interpolators namespace. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad744a8f7b68cc63b5c022621bc3e6287" name="ad744a8f7b68cc63b5c022621bc3e6287"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad744a8f7b68cc63b5c022621bc3e6287">&#9670;&nbsp;</a></span>barycentric_cubic_1d()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::barycentric_cubic_1d </td>
+          <td>(</td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int(&amp;)&#160;</td>
+          <td class="paramname"><em>points</em>[N], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL *&#160;</td>
+          <td class="paramname"><em>weights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>values</em>[N], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do a Barycentric interpolation in one direction. </p>
+<p >This function computes the interpolation of a function on just one direction using a barycentric Lagrange interpolation by doing:</p>
+<p class="formulaDsp">
+\[
+f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
+x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
+\]
+</p>
+<p >where \(N\) is the order of interpolation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The interpolated value reference. </td></tr>
+    <tr><td class="paramname">points</td><td>Vector containing the coordinates of each point. </td></tr>
+    <tr><td class="paramname">weights</td><td>The weights of each datapoint. </td></tr>
+    <tr><td class="paramname">x</td><td>The value where we are interpolating. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a960b4e6e86b9ecb6bf5b503c60f75a92" name="a960b4e6e86b9ecb6bf5b503c60f75a92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a960b4e6e86b9ecb6bf5b503c60f75a92">&#9670;&nbsp;</a></span>barycentric_cubic_3d() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL GInX::barycentric_cubic_3d </td>
+          <td>(</td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do a Barycentric interpolation in three direction for a scalar function. </p>
+<p >This function computes the interpolation of a function on three directions using a barycentric Lagrange interpolation by doing:</p>
+<p class="formulaDsp">
+\[
+f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+z_i}\frac{v_j}{y
+- y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
+\frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
+\frac{\sum\limits_{i=0}^N\frac{u_i}{z -
+z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
+\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
+x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
+y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
+\]
+</p>
+<p >where \(N\) is the order of interpolation.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The interpolated value. </dd></dl>
+
+</div>
+</div>
+<a id="adfd08d53d8297e3aa9cb563b7988dceb" name="adfd08d53d8297e3aa9cb563b7988dceb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd08d53d8297e3aa9cb563b7988dceb">&#9670;&nbsp;</a></span>barycentric_cubic_3d() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL GInX::barycentric_cubic_3d </td>
+          <td>(</td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>comp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do a Barycentric interpolation in three direction. </p>
+<p >This function computes the interpolation of a function on three directions using a barycentric Lagrange interpolation by doing:</p>
+<p class="formulaDsp">
+\[
+f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+z_i}\frac{v_j}{y
+- y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
+\frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
+\frac{\sum\limits_{i=0}^N\frac{u_i}{z -
+z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
+\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
+x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
+y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
+\]
+</p>
+<p >where \(N\) is the order of interpolation.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+    <tr><td class="paramname">comp</td><td>Function's component to compute.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The interpolated value. </dd></dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
+<a id="af55fb33d2acf90ff1796a5d77a9cc0fe" name="af55fb33d2acf90ff1796a5d77a9cc0fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af55fb33d2acf90ff1796a5d77a9cc0fe">&#9670;&nbsp;</a></span>barycentric_derivative_and_interpolate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::barycentric_derivative_and_interpolate </td>
+          <td>(</td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>f_xyz</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>df_xyz_0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>df_xyz_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>df_xyz_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">amrex::Array4&lt; CCTK_REAL const &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>comp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do a Barycentric interpolation and its derivatives in three directions. </p>
+<p >This function computes the interpolation of a function on three directions using a barycentric Lagrange interpolation by doing:</p>
+<p class="formulaDsp">
+\[
+f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
+z_i}\frac{v_j}{y
+- y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
+\frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
+\frac{\sum\limits_{i=0}^N\frac{u_i}{z -
+z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
+\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
+x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
+y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
+\]
+</p>
+<p >where \(N\) is the order of interpolation.</p>
+<p >But at the same time computes the gradient of the same function by doing:</p>
+<p class="formulaDsp">
+\[
+\frac{\partial}{\partial x}f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N
+\frac{u_i}{z - z_i}\frac{v_j}{y
+- y_j}\frac{d}{dx}\left(\frac{\frac{w_k}{x - x_k}}{\sum\limits_{l =
+0}^N\frac{w_l}{x - x_l}}\right)f(x_k, y_j, x_i)}{\sum\limits_{i,j = 0}^N
+\frac{u_i}{z - z_i}\frac{v_j}{y - y_j}},
+\]
+</p>
+<p class="formulaDsp">
+\[
+\frac{\partial}{\partial y}f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N
+\frac{u_i}{z - z_i}\frac{d}{dy}\left(\frac{\frac{v_j}{y -
+y_j}}{\sum\limits_{l = 0}^N\frac{v_l}{y - y_l}}\right)\frac{w_k}{x -
+x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,k = 0}^N
+\frac{u_i}{z - z_i}\frac{w_k}{x - x_k}},
+\]
+</p>
+<p class="formulaDsp">
+\[
+\frac{\partial}{\partial z}f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N
+\frac{d}{dz}\left(\frac{\frac{u_i}{z - z_i}}{\sum\limits_{l =
+0}^N\frac{u_l}{z - z_l}}\right)\frac{v_j}{y
+- y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,k = 0}^N
+\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}}.
+\]
+</p>
+<p >by calling the function <a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd" title="Do a Barycentric interpolation and its derivative in one direction.">der_barycentric_cubic_1d()</a>.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd" title="Do a Barycentric interpolation and its derivative in one direction.">der_barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f_xyz</td><td>Reference to the interpolated value, i.e., \(f(x,y,z)\). </td></tr>
+    <tr><td class="paramname">df_xyz_0</td><td>Reference to the interpolated derivative value on the direction 0, i.e., \(\partial_xf(x,y,z)\). </td></tr>
+    <tr><td class="paramname">df_xyz_1</td><td>Reference to the interpolated derivative value on the direction 1, i.e., \(\partial_yf(x,y,z)\). </td></tr>
+    <tr><td class="paramname">df_xyz_2</td><td>Reference to the interpolated derivative value on the direction 2, i.e., \(\partial_zf(x,y,z)\). </td></tr>
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+    <tr><td class="paramname">comp</td><td>Function's component to compute. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
+<a id="a21561618044e2f7d591b243d54e5e7a7" name="a21561618044e2f7d591b243d54e5e7a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21561618044e2f7d591b243d54e5e7a7">&#9670;&nbsp;</a></span>d_interpolate_array() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::d_interpolate_array </td>
+          <td>(</td>
+          <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>array3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 3 &gt;, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>d_array3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do the barycentric interpolation for a 3 dimensional and symmetric vector and its derivatives. </p>
+<p >This function computes the interpolation for a 3 dimensional and symmetric vector and its derivatives, such as the induced shift vector in just one call using the der_barycentric_cubic_1d function similarly to the barycentric_derivative_and_interpolate function.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#af55fb33d2acf90ff1796a5d77a9cc0fe" title="Do a Barycentric interpolation and its derivatives in three directions.">barycentric_derivative_and_interpolate</a> </dd>
+<dd>
+<a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd" title="Do a Barycentric interpolation and its derivative in one direction.">der_barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">array6</td><td>Reference to the GpuArray of size 3 that is going to store the interpolated values. </td></tr>
+    <tr><td class="paramname">d_array6</td><td>Reference to GpuArray of size 3 x 3 that stores all the derivatives values. </td></tr>
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
+<a id="aaf09cb2139af4f1fdeb5bb7f2f7b61eb" name="aaf09cb2139af4f1fdeb5bb7f2f7b61eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf09cb2139af4f1fdeb5bb7f2f7b61eb">&#9670;&nbsp;</a></span>d_interpolate_array() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::d_interpolate_array </td>
+          <td>(</td>
+          <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>array6</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">amrex::GpuArray&lt; amrex::GpuArray&lt; CCTK_REAL, 6 &gt;, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>d_array6</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do the barycentric interpolation for a 3 dimensional and symmetric matrix and its derivatives. </p>
+<p >This function computes the interpolation for a 3 dimensional and symmetric matrix and its derivatives, such as the induced metric and the extrinsic curvature tensor in just one call using the der_barycentric_cubic_1d function similarly to the barycentric_derivative_and_interpolate function.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#af55fb33d2acf90ff1796a5d77a9cc0fe" title="Do a Barycentric interpolation and its derivatives in three directions.">barycentric_derivative_and_interpolate</a> </dd>
+<dd>
+<a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd" title="Do a Barycentric interpolation and its derivative in one direction.">der_barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">array6</td><td>Reference to the GpuArray of size 6 that is going to store the interpolated values. </td></tr>
+    <tr><td class="paramname">d_array6</td><td>Reference to the GpuArray of size 6 x 3 that stores all the derivatives values. </td></tr>
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
+<a id="a7ac01528b553189bbc9c1d8fb61696f5" name="a7ac01528b553189bbc9c1d8fb61696f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ac01528b553189bbc9c1d8fb61696f5">&#9670;&nbsp;</a></span>d_interpolate_array() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::d_interpolate_array </td>
+          <td>(</td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>d_array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do the barycentric interpolation for a scalar function its derivatives. </p>
+<p >This function computes the interpolation for scalar function and its derivatives, such as the lapse function in just one call using the der_barycentric_cubic_1d function similar to the barycentric_derivative_and_interpolate function.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#af55fb33d2acf90ff1796a5d77a9cc0fe" title="Do a Barycentric interpolation and its derivatives in three directions.">barycentric_derivative_and_interpolate</a> </dd>
+<dd>
+<a class="el" href="namespaceGInX.html#a85bec232155e7318b0f0e56da2f9b3fd" title="Do a Barycentric interpolation and its derivative in one direction.">der_barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">array6</td><td>reference to the CCTK_REAL variable that is going to store the interpolated value. </td></tr>
+    <tr><td class="paramname">d_array6</td><td>Reference to the GpuArray of size 3 that stores all the derivatives values. </td></tr>
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
+<a id="a85bec232155e7318b0f0e56da2f9b3fd" name="a85bec232155e7318b0f0e56da2f9b3fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85bec232155e7318b0f0e56da2f9b3fd">&#9670;&nbsp;</a></span>der_barycentric_cubic_1d()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::der_barycentric_cubic_1d </td>
+          <td>(</td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>f_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>d_f_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int(&amp;)&#160;</td>
+          <td class="paramname"><em>points</em>[N], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL *&#160;</td>
+          <td class="paramname"><em>weights</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>values</em>[N], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do a Barycentric interpolation and its derivative in one direction. </p>
+<p >This function computes the interpolation of a function on just one direction using a barycentric Lagrange interpolation by doing:</p>
+<p class="formulaDsp">
+\[
+f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
+x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
+\]
+</p>
+<p >where \(N\) is the order of interpolation.</p>
+<p >And at the same time computes the derivative on the desired direction by doing:</p>
+<p class="formulaDsp">
+\[
+f&#39;(x) = \sum\limits_{i = 0}^N f(x_i)\frac{d}{dx}\left(\frac{\frac{w_i}{x -
+x_i}}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}\right) = \sum\limits_{i =
+0}^N f(x_i)\frac{\frac{w_j}{(x-x_j)}\sum\limits_{m =
+0}^N\frac{w_m}{(x-x_m)^2} - \frac{w_j}{(x-x_j)^2}\sum\limits_{i = 0}^N
+\frac{w_i}{x - x_i}}{\left(\sum\limits_{i = 0}^N \frac{w_i}{x -
+x_i}\right)^2}
+\]
+</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction.">barycentric_cubic_3d</a> </dd>
+<dd>
+<a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f_x</td><td>Reference to the final interpolated function value. </td></tr>
+    <tr><td class="paramname">d_f_x</td><td>Reference to the final interpolated derivative function value. </td></tr>
+    <tr><td class="paramname">points</td><td>Vector containing the coordinates of each point. </td></tr>
+    <tr><td class="paramname">weights</td><td>The weights of each datapoint. </td></tr>
+    <tr><td class="paramname">x</td><td>The value where we are interpolating. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a867f9a1c855ae25ab9cd3e7f5a8ba4a4" name="a867f9a1c855ae25ab9cd3e7f5a8ba4a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a867f9a1c855ae25ab9cd3e7f5a8ba4a4">&#9670;&nbsp;</a></span>interpolate_array()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int INTERPOLATION_ORDER&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void GInX::interpolate_array </td>
+          <td>(</td>
+          <td class="paramtype">amrex::GpuArray&lt; CCTK_REAL, 6 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>array6</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::Array4&lt; CCTK_REAL const &gt; &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>i0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>j0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const long int &amp;&#160;</td>
+          <td class="paramname"><em>k0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const amrex::GpuArray&lt; double, 3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>plo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Do the barycentric interpolation for a 3 dimensional and symmetric matrix. </p>
+<p >This function computes the interpolation for a 3 dimensional and symmetric matrix, such as the induced metric and the extrinsic curvature tensor in just one call using the barycentric_cubic_1d function similar to the barycentric_cubic_3d function.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction.">barycentric_cubic_3d</a> </dd>
+<dd>
+<a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">array6</td><td>Reference to GpuArray of size 6 that is going to store the interpolated values. </td></tr>
+    <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
+    <tr><td class="paramname">i0</td><td>Basis cell index accordingly to x. </td></tr>
+    <tr><td class="paramname">j0</td><td>Basis cell index accordingly to y. </td></tr>
+    <tr><td class="paramname">k0</td><td>Basis cell index accordingly to z. </td></tr>
+    <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
+    <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p >Nodes interpolator's array.</p>
+<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
+<p >Weights interpolator's array.</p>
+<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

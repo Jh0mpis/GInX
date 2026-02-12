@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['discretize_0',['Discretize',['../namespaceDiscretize.html',1,'']]]
+  ['ginx_0',['GInX',['../namespaceGInX.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ephotonscontainer_0',['~PhotonsContainer',['../classContainers_1_1PhotonsContainer.html#af63c3494d32804399595793fe8ec71a8',1,'Containers::PhotonsContainer']]]
+  ['vecvecmul_0',['VecVecMul',['../Utilities_8hxx.html#a681b9c6520b384f44fa55ba2b7e6f961',1,'Utilities.hxx']]]
 ];

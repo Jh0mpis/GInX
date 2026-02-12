@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['_7econcretecontainer_0',['~ConcreteContainer',['../classGInX_1_1ConcreteContainer.html#ad9eafd60553eb845ff87cf8763848058',1,'GInX::ConcreteContainer']]],
-  ['_7ephotonscontainer_1',['~PhotonsContainer',['../classContainers_1_1PhotonsContainer.html#af63c3494d32804399595793fe8ec71a8',1,'Containers::PhotonsContainer']]]
+  ['smatvecmul_0',['SMatVecMul',['../Utilities_8hxx.html#a26c5486af11db8bad5950abbfdf3abe4',1,'Utilities.hxx']]],
+  ['spherical_5finitializer_1',['spherical_initializer',['../namespaceInitializer.html#ae8aeb63985a49a30c30759d64db26446',1,'Initializer']]]
 ];

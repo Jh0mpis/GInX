@@ -1,17 +1,6 @@
 var searchData=
 [
-  ['particledata_0',['ParticleData',['../test_8cxx.html#aab883a1ae1840223fd993a474b67b7d2',1,'test.cxx']]],
-  ['pc_1',['PC',['../test_8cxx.html#a4d218b000a7a6aa7ed8dbd49a76c98d5',1,'test.cxx']]],
-  ['photons_2',['Photons',['../namespacePhotons.html',1,'']]],
-  ['photons_3',['photons',['../test_8cxx.html#a8535443186981e52968f0ea4fc5aa668',1,'test.cxx']]],
-  ['photons_2ehxx_4',['Photons.hxx',['../Photons_8hxx.html',1,'']]],
-  ['photons_5finit_5',['photons_init',['../namespacephotons__init.html',1,'']]],
-  ['photonscontainer_6',['PhotonsContainer',['../classContainers_1_1PhotonsContainer.html',1,'Containers']]],
-  ['photonscontainer_2ehxx_7',['PhotonsContainer.hxx',['../PhotonsContainer_8hxx.html',1,'']]],
-  ['photonscontainer_5fevolve_8',['PhotonsContainer_evolve',['../test_8cxx.html#a842579d22cc8519a2eb289001656e1ec',1,'test.cxx']]],
-  ['photonscontainer_5ffinal_5fcleanup_9',['PhotonsContainer_final_cleanup',['../test_8cxx.html#a0987b37f1db24f0e8be9c161e537a822',1,'test.cxx']]],
-  ['photonscontainer_5fprint_10',['PhotonsContainer_print',['../test_8cxx.html#a859ced193d3f6cb793f234ab4bf12fea',1,'test.cxx']]],
-  ['photonscontainer_5fsetup_11',['PhotonsContainer_setup',['../test_8cxx.html#ae305a28039c2e91ec0a6cb0a6153bf93',1,'test.cxx']]],
-  ['photonsdata_12',['PhotonsData',['../structPhotons_1_1PhotonsData.html',1,'Photons']]],
-  ['photonsinitializers_2ehxx_13',['PhotonsInitializers.hxx',['../PhotonsInitializers_8hxx.html',1,'']]]
+  ['n_5fattributes_0',['n_attributes',['../structGInX_1_1PhotonsData.html#aff00038494247a5c33a4caf9186085e0affd800d50cc2aee9cb9b120b722a8358',1,'GInX::PhotonsData::n_attributes()'],['../classBaseContainer_1_1BaseParticleContainer.html#a558cf6b4332bce50ec7268b5041017ff',1,'BaseContainer::BaseParticleContainer::n_attributes()'],['../structParticles_1_1BaseParticleData.html#a4a0363e4c44f97a90ee18d51a0a80ad3a017d3eb1e43ae81e11269e4e4693042e',1,'Particles::BaseParticleData::n_attributes()'],['../structParticles_1_1PhotonsData.html#a4d874a0520a04af8a7122606867778c6afeab1637695b43cb6bcf981a079714c9',1,'Particles::PhotonsData::n_attributes()'],['../structParticles_1_1MassiveParticleData.html#a0d96357f96976f4832e5bac8a193f500a66b5a756fb474c4fbc488cdf39667263',1,'Particles::MassiveParticleData::n_attributes()']]],
+  ['name_1',['name',['../structGInX_1_1PhotonsData.html#a66b13bce46cab889cdc280a1ea854931',1,'GInX::PhotonsData::name()'],['../classBaseContainer_1_1BaseParticleContainer.html#aebfb59cc226f15a7e7f0b152eaa697c0',1,'BaseContainer::BaseParticleContainer::name()'],['../structParticles_1_1BaseParticleData.html#adc00606d10de136058b9fb3f43f85abb',1,'Particles::BaseParticleData::name()'],['../structParticles_1_1PhotonsData.html#a0a522d78119fafacc59e62836e85eccc',1,'Particles::PhotonsData::name()'],['../structParticles_1_1MassiveParticleData.html#a73d1a99505b4c1400847ef5999736e32',1,'Particles::MassiveParticleData::name()']]],
+  ['normalize_5fvelocity_2',['normalize_velocity',['../classGInX_1_1PhotonsContainer.html#a35354365e90d2ea2dfb0894bc159a1ec',1,'GInX::PhotonsContainer']]]
 ];

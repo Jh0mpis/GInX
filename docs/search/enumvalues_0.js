@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ln_5fe_0',['ln_E',['../structPhotons_1_1PhotonsData.html#a5669ed80053e9b3dd9f623c58bdb2068a0edb5ccdbd20ac69aaced259fe13e10a',1,'Photons::PhotonsData']]]
+  ['e_0',['E',['../structParticles_1_1PhotonsData.html#a4d874a0520a04af8a7122606867778c6ad08dfe1ec1fb1c12c2ccbedace9b4982',1,'Particles::PhotonsData::E()'],['../structParticles_1_1MassiveParticleData.html#a0d96357f96976f4832e5bac8a193f500a97ffc7d4337235c78d61546e0f0ed583',1,'Particles::MassiveParticleData::E()']]]
 ];
