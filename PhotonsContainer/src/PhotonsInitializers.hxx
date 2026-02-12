@@ -25,9 +25,7 @@
 #include "AMReX_ParallelDescriptor.H"
 #include "Interpolator.hxx"
 
-namespace photons_init {
-
-using namespace Interpolator;
+using namespace GInX;
 
 /**
  * \brief This function random initializes particles spherically distributed
@@ -271,7 +269,5 @@ void random_uniform_initializer(ParticleContainerClass &pc,
   CCTK_VINFO("%d particles created", pc.TotalNumberOfParticles());
 
 } // random_uniform_initializer
-
-} // namespace photons_init
 
 #endif // !PHOTON_INITIALIZERS

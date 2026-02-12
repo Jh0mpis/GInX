@@ -9,8 +9,8 @@
 #ifndef PHOTONS_HXX
 #define PHOTONS_HXX
 
-namespace Photons {
-/** 
+namespace GInX {
+/**
  * \brief Struct to managing null geodesic particles.
  */
 struct PhotonsData {
@@ -26,10 +26,10 @@ struct PhotonsData {
     vx = 0,       /**< Velocity's lower index on the x direction.*/
     vy,           /**< Velocity's lower index on the y direction.*/
     vz,           /**< Velocity's lower index on the z direction.*/
-    ln_E,            /**< Ln Energy value.*/
+    ln_E,         /**< Ln Energy value.*/
     n_attributes, /**< Total number of attributes*/
   }; // enum
 }; // struct PhotonsData
 
-} // namespace Photons
+} // namespace GInX
 #endif // !PHOTONS_HXX

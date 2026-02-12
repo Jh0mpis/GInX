@@ -44,7 +44,7 @@ CarpetX::max_tile_size_z = 10000000
 CarpetX::ghost_size = 3
 CarpetX::dtfac = $dtfrac
 
-Cactus::cctk_itlast = $ncells/4
+Cactus::cctk_itlast = $ncells
 
 IO::out_dir = $parfile
 IO::out_every = 1
@@ -60,16 +60,16 @@ CarpetX::out_tsv_vars = ""
 
 # ParticlesContainer parameters definition
 ParticlesContainer::particle_plot_every = 0
-ParticlesContainer::particle_tsv_every = 1
+ParticlesContainer::particle_tsv_every = $ncells
 ParticlesContainer::banned_regions = 1
 ParticlesContainer::region_1_position = [0.0, 0.0, 0.0]
 ParticlesContainer::region_1_radius = 3.0
 #ParticlesContainer::metric = "Isotropic Schwarzschild"
-#ParticlesContainer::metric = "Painleve"
-ParticlesContainer::metric = "Kerr-Schild"
+ParticlesContainer::metric = "Painleve"
+#ParticlesContainer::metric = "Kerr-Schild"
 ParticlesContainer::metric_params_d = [0.5, 0.1]
 
 # PhotonsContainer parameters definition
 PhotonsContainer::num_photons = 5000
 PhotonsContainer::init_params_d = [3.0]
-PhotonsContainer::run_test = false
+PhotonsContainer::particles_mass = 0.01

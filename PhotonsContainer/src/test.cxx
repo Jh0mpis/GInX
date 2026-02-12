@@ -17,8 +17,8 @@
 #include <iostream>
 #include <loop_device.hxx>
 
-using ParticleData = Photons::PhotonsData;
-using PC = Containers::PhotonsContainer<ParticleData>;
+using ParticleData = GInX::PhotonsData;
+using PC = GInX::PhotonsContainer<ParticleData>;
 std::vector<std::unique_ptr<PC>> photons;
 
 extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
@@ -39,10 +39,11 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
     if (photons.size() < CarpetX::ghext->num_patches()) {
-      photons.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
+      photons.push_back(
+          std::make_unique<PC>(patchdata.amrcore.get(), particles_mass));
 
       auto &pc = photons.at(patch);
-      pc->initialize(photons_init::random_uniform_initializer<ParticleData, PC>,
+      pc->initialize(random_uniform_initializer<ParticleData, PC>,
                      init_params_d, int_parameters);
     }
   }
@@ -140,13 +141,12 @@ extern "C" void PhotonsContainer_print(CCTK_ARGUMENTS) {
   }
 
   CCTK_INFO("Printing particles to files");
+  const int it = cctkGH->cctk_iteration;
 
   for (int patch = 0; patch < CarpetX::ghext->num_patches(); ++patch) {
     auto &pc = photons.at(patch);
-    pc->outputParticlesPlot(CCTK_PASS_CTOC, particle_plot_every,
-                            std::string(out_dir));
-    pc->outputParticlesAscii(CCTK_PASS_CTOC, particle_tsv_every,
-                             std::string(out_dir));
+    pc->outputParticlesPlot(it, particle_plot_every, std::string(out_dir));
+    pc->outputParticlesAscii(it, particle_tsv_every, std::string(out_dir));
   }
 }
 

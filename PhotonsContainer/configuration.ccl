@@ -1,5 +1,5 @@
 # Configuration definitions for thorn particles
 
-REQUIRES AMREX NSIMD ConcreteContainer PhotonSolverUtilities Loop
+REQUIRES AMREX NSIMD ParticlesContainer PhotonSolverUtilities Loop
 
-Provides PhotonsContainer{}
+Provides PhotonsContainer {}
