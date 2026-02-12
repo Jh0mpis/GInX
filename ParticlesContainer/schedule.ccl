@@ -1,0 +1,8 @@
+SCHEDULE ParticlesContainer_init_metric AT CCTK_INITIAL {
+    LANG: C
+    OPTIONS: local
+    WRITES: ADMBaseX::metric(everywhere)
+    WRITES: ADMBaseX::lapse(everywhere)
+    WRITES: ADMBaseX::shift(everywhere)
+    WRITES: ADMBaseX::curv(everywhere)
+} "Fields setup"
