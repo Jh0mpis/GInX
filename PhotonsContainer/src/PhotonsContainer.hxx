@@ -50,7 +50,7 @@ namespace GInX {
  */
 template <typename StructType>
 class PhotonsContainer
-    : public BaseContainer::BaseParticleContainer<PhotonsContainer<StructType>,
+    : public BaseParticleContainer<PhotonsContainer<StructType>,
                                                   StructType> {
 protected:
   CCTK_REAL mass = 0.;
@@ -60,7 +60,7 @@ public:
    * \brief Using BaseParticlesContainer constructor
    */
   using Base =
-      BaseContainer::BaseParticleContainer<PhotonsContainer<StructType>,
+      BaseParticleContainer<PhotonsContainer<StructType>,
                                            StructType>;
   using Base::Base;
 
@@ -282,7 +282,7 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
   const CCTK_REAL boundarie_hz = phi0[2] - 0.0 * dx[2];
   const CCTK_REAL boundarie_lz = plo0[2] + 0.0 * dx[2];
 
-  for (Iterator::ParticleIterator<StructType> pti(*this, lev); pti.isValid();
+  for (ParticleIterator<StructType> pti(*this, lev); pti.isValid();
        ++pti) {
 
     const int np = pti.numParticles();
