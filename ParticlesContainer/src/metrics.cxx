@@ -1,9 +1,9 @@
 /**
  * \file metrics.cxx
- * \brief Available metrics functions to initialize.
+ * \brief Available metrics initialization function.
  *
- *  This file contains the function that initialize all the available metrics
- * depending on the user's parameter input.
+ * This file contains the function that initialize all the available metrics
+ * depending on the user's parameter file.
  */
 #include <cctk.h>
 
@@ -21,16 +21,16 @@
 #include <loop_device.hxx>
 
 /**
- * \brief initialize the fields data using the chosen metric.
+ * \brief Initialize the field's data using the chosen metric.
  *
  * This function initializes the \f$\alpha\f$, \f$\vec{\beta}\f$,
- * \f$\gamma_{\mu\nu}\f$ and \f$K_{\mu\nu}\f$ ADM elements needed for the
- * geodesics evolution.
+ * \f$\gamma_{\mu\nu}\f$, and \f$K_{\mu\nu}\f$ ADM elements needed for
+ * geodesic evolution.
  *
- * - The chose of the metric that are going to be initialized is defined by the
- * KEYWORD parameter 'metric'.
- * - Any extra parameter can be passed by using the size 10 double
- * 'metric_params_d' and integer 'metric_params_i' arrays.
+ * - The chosen metric is managed by the parameter file using KEYWORD 
+ *   parameter 'metric'.
+ * - Any extra parameter is introduced using the size 10 double 
+ *   'metric_params_d' and integer 'metric_params_i' arrays.
  */
 extern "C" void ParticlesContainer_init_metric(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;

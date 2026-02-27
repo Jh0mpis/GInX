@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GeodesicIntegratorX: /home/jh0mpis/MHPC-Project/GInX/PhotonSolverUtilities/src/Interpolator.hxx File Reference</title>
+<title>GInX: /home/jh0mpis/MHPC-Project/GInX/PhotonSolverUtilities/src/Interpolator.hxx File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -28,9 +32,9 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">GeodesicIntegratorX
+   <div id="projectname">GInX
    </div>
-   <div id="projectbrief">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</div>
+   <div id="projectbrief">Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using AMReX.</div>
   </td>
  </tr>
  </tbody>
@@ -54,6 +58,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('Interpolator_8hxx.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,11 +89,6 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_1ca346650303ffcb6d1a2bcc8f569f7f.html">PhotonSolverUtilities</a></li><li class="navelem"><a class="el" href="dir_7f1fdfce3632de3cadfafa2af1f21d71.html">src</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
@@ -81,7 +97,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Interpolators definitions.  
+<p>Barycentric Lagrange interpolation related functions definitions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;AMReX_Box.H&quot;</code><br />
 <code>#include &quot;AMReX_Config.H&quot;</code><br />
@@ -101,7 +117,7 @@ $(function() {
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Interpolator_8hxx__incl.png" border="0" usemap="#a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxx" alt=""/></div>
 <map name="a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxx" id="a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxx">
-<area shape="rect" title="Interpolators definitions." alt="" coords="761,5,964,61"/>
+<area shape="rect" title="Barycentric Lagrange interpolation related functions definitions." alt="" coords="761,5,964,61"/>
 <area shape="rect" title=" " alt="" coords="5,109,120,136"/>
 <area shape="rect" title=" " alt="" coords="144,109,275,136"/>
 <area shape="rect" title=" " alt="" coords="299,109,429,136"/>
@@ -122,10 +138,10 @@ $(function() {
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Interpolator_8hxx__dep__incl.png" border="0" usemap="#a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxxdep" alt=""/></div>
 <map name="a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxxdep" id="a_2home_2jh0mpis_2MHPC-Project_2GInX_2PhotonSolverUtilities_2src_2Interpolator_8hxxdep">
-<area shape="rect" title="Interpolators definitions." alt="" coords="143,5,345,61"/>
+<area shape="rect" title="Barycentric Lagrange interpolation related functions definitions." alt="" coords="143,5,345,61"/>
 <area shape="rect" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition." alt="" coords="5,109,232,165"/>
 <area shape="rect" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions." alt="" coords="256,109,483,165"/>
-<area shape="rect" href="test_8cxx.html" title=" " alt="" coords="131,213,357,269"/>
+<area shape="rect" href="test_8cxx.html" title="Available particle container implementations." alt="" coords="131,213,357,269"/>
 </map>
 </div>
 </div>
@@ -145,7 +161,7 @@ Functions</h2></td></tr>
 <tr class="separator:ad744a8f7b68cc63b5c022621bc3e6287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">GInX::barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
-<tr class="memdesc:adfd08d53d8297e3aa9cb563b7988dceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction.  <a href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">More...</a><br /></td></tr>
+<tr class="memdesc:adfd08d53d8297e3aa9cb563b7988dceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction for a vectorial function.  <a href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">More...</a><br /></td></tr>
 <tr class="separator:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a960b4e6e86b9ecb6bf5b503c60f75a92">GInX::barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
@@ -177,12 +193,16 @@ Functions</h2></td></tr>
 <tr class="separator:a7ac01528b553189bbc9c1d8fb61696f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Interpolators definitions. </p>
-<p >This file define the Barycentric interpolation in 1 and 3 dimensions. </p>
+<div class="textblock"><p >Barycentric Lagrange interpolation related functions definitions. </p>
+<p >This file define the Barycentric interpolation for function values and its derivatives in 1 and 3 dimensions. </p>
 </div></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_1ca346650303ffcb6d1a2bcc8f569f7f.html">PhotonSolverUtilities</a></li><li class="navelem"><a class="el" href="dir_7f1fdfce3632de3cadfafa2af1f21d71.html">src</a></li><li class="navelem"><a class="el" href="Interpolator_8hxx.html">Interpolator.hxx</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
+  </ul>
+</div>
 </body>
 </html>

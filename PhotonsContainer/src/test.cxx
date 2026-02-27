@@ -1,3 +1,10 @@
+/**
+ * \file test.cxx
+ * \brief Available particle container implementations.
+ *
+ *  This file includes the definitions of the thorn's scheduled functions. This
+ * includes the set up, evolution, output particle data and the data clean up.
+ */
 #include <cctk.h>
 
 #include "Photons.hxx"
@@ -21,6 +28,13 @@ using ParticleData = GInX::PhotonsData;
 using PC = GInX::PhotonsContainer<ParticleData>;
 std::vector<std::unique_ptr<PC>> photons;
 
+/**
+ * \brief Initialize particles' data
+ *
+ * This function initializes particles' position, velocity and energy
+ * distributing the particle using the methods defined inside of the
+ * PhotonsInitializers.hxx file and allwed in the param.ccl file
+ */
 extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -43,8 +57,13 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
           std::make_unique<PC>(patchdata.amrcore.get(), particles_mass));
 
       auto &pc = photons.at(patch);
-      pc->initialize(random_uniform_initializer<ParticleData, PC>,
-                     init_params_d, int_parameters);
+      if (!std::strcmp(initializer, "box")) {
+        pc->initialize(random_uniform_initializer<ParticleData, PC>,
+                       init_params_d, int_parameters);
+      } else if (!std::strcmp(initializer, "spherical")) {
+        pc->initialize(random_spherical_initializer<ParticleData, PC>,
+                       init_params_d, int_parameters);
+      }
     }
   }
 
@@ -63,6 +82,12 @@ extern "C" void PhotonsContainer_setup(CCTK_ARGUMENTS) {
   }
 }
 
+/**
+ * \brief Evolve the geodesics
+ *
+ * This function evolves the particles position by numerically solve the
+ * geodesic equations.
+ */
 extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
   DECLARE_CCTK_ARGUMENTS;
@@ -133,6 +158,9 @@ extern "C" void PhotonsContainer_evolve(CCTK_ARGUMENTS) {
   }
 }
 
+/**
+ * \brief Print out particle data.
+ */
 extern "C" void PhotonsContainer_print(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
 
@@ -150,6 +178,9 @@ extern "C" void PhotonsContainer_print(CCTK_ARGUMENTS) {
   }
 }
 
+/**
+ * \brief Clean the memory and data structures.
+ */
 extern "C" int PhotonsContainer_final_cleanup() {
   amrex::Gpu::Device::synchronize();
   photons.clear();

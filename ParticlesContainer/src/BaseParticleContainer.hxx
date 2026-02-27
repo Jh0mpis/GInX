@@ -1,31 +1,30 @@
 /**
  * \file BaseParticleContainer.hxx
  *
- * \brief Contains the BaseParticlesContainer and ParticleIterator classes
- * along with the BaseContainer and Iterator namespaces definition.
+ * \brief It Contains the BaseParticlesContainer and ParticleIterator classes
+ * inside of the GInX namespace.
  *
- * This file contains the BaseParticlesContainer abstract class. This
- * class extends from amrex::AmrParticleContainer and contains the particles
- * data using an array of structs (AoS).
+ * This file contains the BaseParticlesContainer abstract class.
+ * It extends from amrex::AmrParticleContainer and contains the particles
+ * data using an Array-of-Structs (AoS).
  *
- * Also, includes the definition of the ParticleIterator class, that could be
- * helpful for the manipulation of the particles.
+ * It also includes the definition of the ParticleIterator class, that may be
+ * helpful for particle data manipulation.
  */
 #ifndef BASEPARTICLESCONTAINER_HXX
 #define BASEPARTICLESCONTAINER_HXX
 
 // Include libraries
 #include "AMReX_CTOParallelForImpl.H"
-#include <cctk.h>
-
 #include <AMReX_AmrParticles.H>
 #include <AMReX_Particles.H>
+#include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
 #include <cctk_core.h>
 #include <string>
 
-namespace Iterator {
+namespace GInX {
 
 template <typename StructType>
 class ParticleIterator
@@ -52,17 +51,16 @@ public:
   }
 }; // class ParicleIterator
 
-} // namespace Iterator
-
-namespace BaseContainer {
-
 /**
  * \brief BaseParticleContainer abstract class definition.
  *
- * The BaseParticleContainer class is an abstract class that defines the methods
- * that have to be defined for the other <Particle>Containers derived classes.
+ * The BaseParticleContainer abstract class defines the methods
+ * that must be defined for the other <Particle>Containers derived classes.
  * This is templated on the new Container and the struct that defines the
  * parameters of the particles.
+ *
+ * It inherits from the AMRex AmrParticleContainer class, using a number of real
+ * attributes defined inside the particle struct.
  */
 template <typename OtherContainer, typename StructType>
 class BaseParticleContainer
@@ -171,8 +169,7 @@ public:
       return;
     }
 
-    for (Iterator::ParticleIterator<StructType> pti(*this, level);
-         pti.isValid(); ++pti) {
+    for (ParticleIterator<StructType> pti(*this, level); pti.isValid(); ++pti) {
       const int np = pti.numParticles();
       auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
 
@@ -185,7 +182,6 @@ public:
           const CCTK_REAL dz = particles[i].pos(2) - z[check];
           out |= (dx * dx + dy * dy + dz * dz <= radius[check] * radius[check]);
         }
-
         if (out) {
           particles[i].id() = -1;
           return;
@@ -194,6 +190,13 @@ public:
     }
   }
 
+  /**
+   * Print out particle data into files using ascii.
+   *
+   * @param it Current iteration.
+   * @param plot_every Print after plot_every iterations.
+   * @param out_dir Simulation directory path to output the data.
+   */
   void outputParticlesAscii(const int &it, const int &plot_every,
                             const std::string &out_dir) {
     if (plot_every > 0 && it % plot_every == 0) {
@@ -205,6 +208,13 @@ public:
     }
   };
 
+  /**
+   * Print out particle data into files using binary managed by AMReX.
+   *
+   * @param it Current iteration.
+   * @param plot_every Print after plot_every iterations.
+   * @param out_dir Simulation directory path to output the data.
+   */
   void outputParticlesPlot(const int &it, const int &plot_every,
                            const std::string &out_dir) {
     if (plot_every > 0 && it % plot_every == 0) {
@@ -218,6 +228,6 @@ public:
 
 }; // class BaseParticlesContainer
 
-} // namespace BaseContainer
+} // namespace GInX
 
 #endif // !BASEPARTICLESCONTAINER_HXX

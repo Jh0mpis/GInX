@@ -1,29 +1,27 @@
-# Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement
+# Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement
 
-The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for photons in a generic GRMHD background using Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with CUDA support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.
+The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for particles in a generic GRMHD background  using the Fast-Light approximation with Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with GPU support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.
 
 **Keywords: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.**
 
 ## Index
 
-The following readme presents a description of the project, to see the full documentation of the code you can check [GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GInX/)
+The following README file presents a description of the project, to see the full documentation of the code you can check [GInX:Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GInX/)
 
-- [Geodesics Integrator X](#geodesics-integrator-x)
-    - [Concrete Container](#concrete-container)
+- [GInX](#ginx)
+    - [Particles Container](#base-container)
     - [Photons Container](#photons-container)
     - [Photons Solver Utilities](#photons-solver-utilities)
 - [Files Structure](#files-structure)
 - [How to run it](#how-to-run-it)
     - [Installation with a compiled Einstein Toolkit](#installation-with-a-compiled-einstein-toolkit)
-    - [Parameters file](#parameters-file)
-        - [Initialization](#initialization)
     - [Create-run and running it](#create-run-and-running-it)
 
-## Geodesics Integrator X
+## GInX
 
-The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and both CPU and GPU.
+GInX is a null and timelike geodesic integrator using the fast light approximation. This code is written in C++17, is open source. It uses the barycentric Lagrange interpolation and a fourth-order Runge-Kutta method to accurately integrate the geodesics. The code's accuracy has been verified using conserved quantities in Schwarzschild and Kerr spacetimes. The code uses AMReX to enable parallel execution on both GPU and CPU architectures and to support Adaptive Mesh Refinement (AMR). Its performance was evaluated by measuring strong and weak scaling on CINECA's Leonardo, TACC Frontera and Vista clusters. It is designed to be easily integrated with others Einstein Toolkit thorns.
 
-Using the four ADM parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define the following tensors for any particle in GR:
+Using the four parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define particle's 4-momentum as
 
 $$p^\mu = E(n^\alpha + V^\alpha),$$
 
@@ -39,49 +37,61 @@ $$\frac{d\ln E}{dt} = \alpha K_{jk}\gamma^{lj}\gamma^{mk}V_lV_m - V_l\gamma^{lj}
 
 Those are the variables that we are evolving for the particles and the equations we are solving.
 
-This thorn contains the following utilities:
+GInX provides the following thorns
 
-### Concrete Container
+### Particles Container
 
-The concrete container is an intermediate layer between the `BaseParticleContainer` abstract class (This class is implemented in [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/)) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method `normalize_velocity` that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the `ConcreteContainer.hxx` where the abstract class is defined.
+This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The ParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.
 
+The particles container thorn contains the definition of the `BaseParticleContainer` templated class. This abstract class defines the basic methods that have to be defined on each of the derived classes, this class extends from the `amrex::AmrParticleContainer`.
+
+> [!NOTE]
+> For an extended explanation you can check the README file inside the thorn's folder.
 
 ### Photons Container
 
-This folder contains the `PhotonsContainer.hxx` header file where the Particle container for photons class, that inherits from `ConcreteContainer` abstract class and define the abstract method for the null particles normalization, i.e. `V_iV^i = 1`.
+This folder contains the `PhotonsContainer.hxx` header file where the Particle container for particles is defined. It inherits from `BaseParticleContainer` abstract class and define the abstract method for the null particles normalization, i.e., 
+
+$$V_iV^i = 1$$ 
+
+and timelike particles, i.e., 
+
+$$V_iV^i = 1 - \frac{m^2}{E^2}.$$
 
 This also contains the `Photons.hxx` file that contains the definition of the struct used for the Photons evolution.
 
 Finally, `PhotonsInitializers.hxx` contains different ways of initialize the system of photons, so far random initializations.
 
+The `test.cxx` file contains the definitions related with the particle's evolution.
+
 > [!NOTE]
-> Contains the `test.cxx` file, this files contain an example of how to use the PhotonsContainer and its methods, can be used as an example in the future or has to be removed and included in the documentation.
+> For an extended explanation you can check the README file inside the thorn's folder.
 
 ### Photons Solver Utilities
 
 This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:
 
-- `Discretizer.hxx`: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.
-- `Interpolator.hxx`: This file contains different interpolators like barycentric interpolator.
+- `Interpolator.hxx`: This file contains the definitions of the barycentric interpolation method.
 - `Utilities.hxx`: This file contains different product of symmetric 3x3 matrices and vectors.
+
+> [!NOTE]
+> For an extended explanation you can check the README file inside the thorn's folder.
 
 ## Files Structure
 
 ```bash
-GeodesicIntegratorX/
-├── ConcreteContainer/
+GInX/
+├── ParticlesContainer
 │   ├── configuration.ccl
-│   ├── doc/
 │   ├── interface.ccl
-│   ├── par/
 │   ├── param.ccl
 │   ├── schedule.ccl
 │   └── src/
-│       ├── ConcreteContainer.hxx
-│       └── make.code.defn
-├── PhotonsContainer/
+│       ├── BaseParticleContainer.hxx
+│       ├── make.code.defn
+│       └── metrics.cxx
+├── PhotonsContainer
 │   ├── configuration.ccl
-│   ├── doc/
 │   ├── interface.ccl
 │   ├── par/
 │   │   ├── HydroFile.par
@@ -95,14 +105,12 @@ GeodesicIntegratorX/
 │       ├── Photons.hxx
 │       ├── PhotonsInitializers.hxx
 │       └── test.cxx
-├── PhotonSolverUtilities/
+├── PhotonSolverUtilities
 │   ├── configuration.ccl
-│   ├── doc/
 │   ├── interface.ccl
 │   ├── param.ccl
 │   ├── schedule.ccl
 │   └── src/
-│       ├── Discretizer.hxx
 │       ├── Interpolator.hxx
 │       ├── make.code.defn
 │       └── Utilities.hxx
@@ -111,67 +119,30 @@ GeodesicIntegratorX/
 
 ##  How to run it
 
-In order to run and include the thorn inside your EinsteinToolkit project you have to compile it first and then build it using a compiled EinsteinToolkit.
+In order to run and include the thorn inside your Einstein Toolkit project you have to compile it first. Then include the thorns into your thornlist.
 
 ### Installation with a compiled Einstein Toolkit
 
 You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:
 
 ```bash
-# PUtilX <- Dependency
-!TARGET   = $ARR
-!TYPE     = git
-!URL      = https://github.com/Jh0mpis/ParticlesUtilities.git
-!REPO_BRANCH = dev
-!REPO_PATH = $2
-!CHECKOUT =
-ParticlesUtilities/ParticlesContainer
-
 # GInX thorn
 !TARGET   = $ARR
 !TYPE     = git
 !URL      = https://github.com/Jh0mpis/GInX.git
-!REPO_BRANCH = dev
+!REPO_BRANCH = main
 !REPO_PATH = $2
 !CHECKOUT =
-GeodesicIntegratorX/PhotonSolverUtilities
-GeodesicIntegratorX/ConcreteContainer
-GeodesicIntegratorX/PhotonsContainer
+GInX/ParticlesContainer
+GInX/PhotonSolverUtilities
+GInX/PhotonsContainer
 ```
 
 and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:
 
 ```bash
-./simfactory/bin/sim build -j4 ...
+./simfactory/bin/sim build -j4 ... --clean
 ```
-
-### Parameters file
-
-Al the parameters are defined inside of the `PhotonsContainer` thorn, plus the one shared with the `BaseParticleContainer` Thorn, check [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/) for more details.
-
-#### Initialization
-
-The parameters used for the initialization of the particles are the following ones:
-
-| Parameter           | Type        | Description                                                         | Range                                                                         | Default             |
-| ------------------- | ----------- | -------------------------------------------------- | ---------------------------------------- | ------------------- |
-| num_photons         | INTEGER     | Total number of photons in the simulation.                          | any                  | 0    |
-| initializer         | KEYWORD     | Available initializer function to be called.                        | box, spherical, none | none |
-| init_params_d       | REAL[10]    | double type parameters needed to pass to the initializer function.  | any                  | 0.0  |
-| init_params_i       | INTEGER[10] | integer type parameters needed to pass to the initializer function. | any                  | 0    |
-
-
-#### Variables shared with ParticlesUtilities
-
-The thorn shares the following parameters with the ParticlesUtilities thorn, check [ParticlesUtilities](https://github.com/Jh0mpis/ParticlesUtilities/) for more info.
-
-| Parameter           | Type    | Description                                                                                          | Range                          | Default |
-| ------------------- | ------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ | ------- |
-| particle_plot_every | INTEGER | The number of step where the simulation should print the particles data using amrex print utilities. | [0, $\infty$) 0 means no print | 0       |
-| particle_tsv_every  | INTEGER | The number of step where the simulation should print the particles data using ascii.                 | [0, $\infty$) 0 means no print | 0       |
-| banned_regions      | INTEGER | Number of banned regions for the simulation.                         | [0, 10]                               | 0                    |
-| region_<n>_position | REAL[3] | Size 3 array containing the coordinates of the banned region center. | any                                   | 0.0                  |
-| region_<n>_radius   | REAL | Banned region's radius.                                                 | any                                   | 0.0                  |
 
 ### Create-run and running it
 

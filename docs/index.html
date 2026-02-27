@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GeodesicIntegratorX: Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement</title>
+<title>GInX: Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -28,9 +32,9 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">GeodesicIntegratorX
+   <div id="projectname">GInX
    </div>
-   <div id="projectbrief">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</div>
+   <div id="projectbrief">Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using AMReX.</div>
   </td>
  </tr>
  </tbody>
@@ -55,6 +59,22 @@ $(function() {
 </script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('index.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -70,17 +90,17 @@ $(function() {
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement </div></div>
+  <div class="headertitle"><div class="title">Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><a class="anchor" id="md__home_jh0mpis_MHPC_Project_GInX_README"></a> The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for photons in a generic GRMHD background using Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with CUDA support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.</p>
+<div class="textblock"><p ><a class="anchor" id="md__home_jh0mpis_MHPC_Project_GInX_README"></a> The integration of null geodesic equations within the 3+1 formalism of general relativity plays a key role in the process of computing images via ray tracing and analyzing spectra in GRMHD simulations. The objective of this project is to develop a geodesic integrator for particles in a generic GRMHD background using the Fast-Light approximation with Adaptive Mesh Refinement (AMR), and to accelerate the integration with GPU computing. The implementation will utilize the C++ programming language in conjunction with the AMReX framework, which has been built with GPU support enabled. The project will focus both on the accurate numerical integration of null geodesic and on evaluating GPU-accelerated performance. The purpose of this tool is to serve as a post-processing module for the visualization and analysis of GRMHD simulation data. Additionally, it represents a critical first step toward the development of a full Monte Carlo radiation transport code, where fast and efficient geodesic integration is essential.</p>
 <p ><b>Keywords: Null geodesics, GRMHD simulations, Ray tracing in curved spacetime, Monte Carlo radiation transport, GPU acceleration, Adaptive Mesh Refinement (AMR), AMReX framework, Parallel numerical integration.</b></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Index</h1>
-<p >The following readme presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GInX/">GeodesicIntegratorX:Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
+<p >The following README file presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GInX/">GInX:Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
 <ul>
-<li>Geodesics Integrator X<ul>
-<li>Concrete Container</li>
+<li>GInX<ul>
+<li>Particles Container</li>
 <li>Photons Container</li>
 <li>Photons Solver Utilities</li>
 </ul>
@@ -88,60 +108,64 @@ Index</h1>
 <li>Files Structure</li>
 <li>How to run it<ul>
 <li>Installation with a compiled Einstein Toolkit</li>
-<li>Parameters file<ul>
-<li>Initialization</li>
-</ul>
-</li>
 <li>Create-run and running it</li>
 </ul>
 </li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
-Geodesics Integrator X</h1>
-<p >The geodesics integrator thorn aims to solve the geodesic equations in the 3+1 description of General Relativity using AMReX and both CPU and GPU.</p>
-<p >Using the four ADM parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define the following tensors for any particle in GR:</p>
+GInX</h1>
+<p ><a class="el" href="namespaceGInX.html" title="Interpolators namespace.">GInX</a> is a null and timelike geodesic integrator using the fast light approximation. This code is written in C++17, is open source. It uses the barycentric Lagrange interpolation and a fourth-order Runge-Kutta method to accurately integrate the geodesics. The code's accuracy has been verified using conserved quantities in Schwarzschild and Kerr spacetimes. The code uses AMReX to enable parallel execution on both GPU and CPU architectures and to support Adaptive Mesh Refinement (AMR). Its performance was evaluated by measuring strong and weak scaling on CINECA's Leonardo, TACC Frontera and Vista clusters. It is designed to be easily integrated with others Einstein Toolkit thorns.</p>
+<p >Using the four parameters used for 3+1 numerical relativity simulations ($\alpha$, $\vec{\beta}$, $K_{\mu\nu}$ and $\gamma_{\mu\nu}$) we can define particle's 4-momentum as</p>
 <p >$$p^\mu = E(n^\alpha + V^\alpha),$$</p>
 <p >where $p^\mu$ is the particle's four momentum and $n^\mu$ is the 4-velocity of the Euclidean Observer, then $E = -p_\nu n^\nu$ and $V^\mu$ is the particle energy and velocity respectively. Using the 4-momentum conservation equation</p>
 <p >$$p^\mu \nabla_\mu p^\nu = 0,$$</p>
 <p >along with the ADM properties we can find the following differential equation system for the position $X^i$, velocity $V_i = V^j\gamma_{ji}$ and $\ln(E)$ for each particle, this is:</p>
 <p >$$\frac{d X^i}{dt} = \alpha \gamma^{ij}V_j - \beta^i,$$ $$\frac{d V_i}{dt} = -\partial_i \alpha + \left(\gamma^{kj}V_k\partial_j\alpha - \alpha K_{jk}\gamma^{jl}\gamma^{km}V_mV_l\right)V_i + \frac{1}{2}\alpha \gamma^{jl}\gamma^{km}V_lV_m\partial_i\gamma_{jk} + V_j\partial_i\beta^j,$$ $$\frac{d\ln E}{dt} = \alpha K_{jk}\gamma^{lj}\gamma^{mk}V_lV_m - V_l\gamma^{lj}\partial_j\alpha.$$</p>
 <p >Those are the variables that we are evolving for the particles and the equations we are solving.</p>
-<p >This thorn contains the following utilities:</p>
+<p ><a class="el" href="namespaceGInX.html" title="Interpolators namespace.">GInX</a> provides the following thorns</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
-Concrete Container</h2>
-<p >The concrete container is an intermediate layer between the <code>BaseParticleContainer</code> abstract class (This class is implemented in <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a>) and the final particleContainer. This class contain the evolution method given by the previous equations using the Runge-Kutta and add the abstract method <code>normalize_velocity</code> that includes the normalization that has to be done for each type of particle, null or massive. This thorn only includes the <code>ConcreteContainer.hxx</code> where the abstract class is defined.</p>
+Particles Container</h2>
+<p >This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The ParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.</p>
+<p >The particles container thorn contains the definition of the <code>BaseParticleContainer</code> templated class. This abstract class defines the basic methods that have to be defined on each of the derived classes, this class extends from the <code>amrex::AmrParticleContainer</code>.</p>
+<blockquote class="doxtable">
+<p >&zwj;[!NOTE] For an extended explanation you can check the README file inside the thorn's folder. </p>
+</blockquote>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Photons Container</h2>
-<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for photons class, that inherits from <code>ConcreteContainer</code> abstract class and define the abstract method for the null particles normalization, i.e. <code>V_iV^i = 1</code>.</p>
+<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for particles is defined. It inherits from <code>BaseParticleContainer</code> abstract class and define the abstract method for the null particles normalization, i.e.,</p>
+<p >$$V_iV^i = 1$$</p>
+<p >and timelike particles, i.e.,</p>
+<p >$$V_iV^i = 1 - \frac{m^2}{E^2}.$$</p>
 <p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the Photons evolution.</p>
 <p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions.">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
+<p >The <code><a class="el" href="test_8cxx.html" title="Available particle container implementations.">test.cxx</a></code> file contains the definitions related with the particle's evolution.</p>
 <blockquote class="doxtable">
-<p >&zwj;[!NOTE] Contains the <code><a class="el" href="test_8cxx.html">test.cxx</a></code> file, this files contain an example of how to use the PhotonsContainer and its methods, can be used as an example in the future or has to be removed and included in the documentation. </p>
+<p >&zwj;[!NOTE] For an extended explanation you can check the README file inside the thorn's folder. </p>
 </blockquote>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Photons Solver Utilities</h2>
 <p >This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:</p>
 <ul>
-<li><code>Discretizer.hxx</code>: This file contains the discretization of the first derivatives on each direction at orders 2, 4, 6 and 8.</li>
-<li><code><a class="el" href="Interpolator_8hxx.html" title="Interpolators definitions.">Interpolator.hxx</a></code>: This file contains different interpolators like barycentric interpolator.</li>
+<li><code><a class="el" href="Interpolator_8hxx.html" title="Barycentric Lagrange interpolation related functions definitions.">Interpolator.hxx</a></code>: This file contains the definitions of the barycentric interpolation method.</li>
 <li><code><a class="el" href="Utilities_8hxx.html" title="Code utilities such as matrix and vector multiplications.">Utilities.hxx</a></code>: This file contains different product of symmetric 3x3 matrices and vectors.</li>
 </ul>
+<blockquote class="doxtable">
+<p >&zwj;[!NOTE] For an extended explanation you can check the README file inside the thorn's folder. </p>
+</blockquote>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Files Structure</h1>
-<div class="fragment"><div class="line">GeodesicIntegratorX/</div>
-<div class="line">├── ConcreteContainer/</div>
+<div class="fragment"><div class="line">GInX/</div>
+<div class="line">├── ParticlesContainer</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
-<div class="line">│   ├── par/</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
 <div class="line">│   └── src/</div>
-<div class="line">│       ├── ConcreteContainer.hxx</div>
-<div class="line">│       └── make.code.defn</div>
-<div class="line">├── PhotonsContainer/</div>
+<div class="line">│       ├── BaseParticleContainer.hxx</div>
+<div class="line">│       ├── make.code.defn</div>
+<div class="line">│       └── metrics.cxx</div>
+<div class="line">├── PhotonsContainer</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── par/</div>
 <div class="line">│   │   ├── HydroFile.par</div>
@@ -155,81 +179,35 @@ Files Structure</h1>
 <div class="line">│       ├── Photons.hxx</div>
 <div class="line">│       ├── PhotonsInitializers.hxx</div>
 <div class="line">│       └── test.cxx</div>
-<div class="line">├── PhotonSolverUtilities/</div>
+<div class="line">├── PhotonSolverUtilities</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
 <div class="line">│   └── src/</div>
-<div class="line">│       ├── Discretizer.hxx</div>
 <div class="line">│       ├── Interpolator.hxx</div>
 <div class="line">│       ├── make.code.defn</div>
 <div class="line">│       └── Utilities.hxx</div>
 <div class="line">└── README.md</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md7"></a>
 How to run it</h1>
-<p >In order to run and include the thorn inside your EinsteinToolkit project you have to compile it first and then build it using a compiled EinsteinToolkit.</p>
+<p >In order to run and include the thorn inside your Einstein Toolkit project you have to compile it first. Then include the thorns into your thornlist.</p>
 <h2><a class="anchor" id="autotoc_md8"></a>
 Installation with a compiled Einstein Toolkit</h2>
 <p >You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:</p>
-<div class="fragment"><div class="line"># PUtilX &lt;- Dependency</div>
-<div class="line">!TARGET   = $ARR</div>
-<div class="line">!TYPE     = git</div>
-<div class="line">!URL      = https://github.com/Jh0mpis/ParticlesUtilities.git</div>
-<div class="line">!REPO_BRANCH = dev</div>
-<div class="line">!REPO_PATH = $2</div>
-<div class="line">!CHECKOUT =</div>
-<div class="line">ParticlesUtilities/ParticlesContainer</div>
-<div class="line"> </div>
-<div class="line"># GInX thorn</div>
+<div class="fragment"><div class="line"># GInX thorn</div>
 <div class="line">!TARGET   = $ARR</div>
 <div class="line">!TYPE     = git</div>
 <div class="line">!URL      = https://github.com/Jh0mpis/GInX.git</div>
-<div class="line">!REPO_BRANCH = dev</div>
+<div class="line">!REPO_BRANCH = main</div>
 <div class="line">!REPO_PATH = $2</div>
 <div class="line">!CHECKOUT =</div>
-<div class="line">GeodesicIntegratorX/PhotonSolverUtilities</div>
-<div class="line">GeodesicIntegratorX/ConcreteContainer</div>
-<div class="line">GeodesicIntegratorX/PhotonsContainer</div>
+<div class="line">GInX/ParticlesContainer</div>
+<div class="line">GInX/PhotonSolverUtilities</div>
+<div class="line">GInX/PhotonsContainer</div>
 </div><!-- fragment --><p >and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:</p>
-<div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ...</div>
+<div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ... --clean</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
-Parameters file</h2>
-<p >Al the parameters are defined inside of the <code>PhotonsContainer</code> thorn, plus the one shared with the <code>BaseParticleContainer</code> Thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more details.</p>
-<h3><a class="anchor" id="autotoc_md10"></a>
-Initialization</h3>
-<p >The parameters used for the initialization of the particles are the following ones:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">num_photons   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Total number of photons in the simulation.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">initializer   </td><td class="markdownTableBodyNone">KEYWORD   </td><td class="markdownTableBodyNone">Available initializer function to be called.   </td><td class="markdownTableBodyNone">box, spherical, none   </td><td class="markdownTableBodyNone">none    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">init_params_d   </td><td class="markdownTableBodyNone">REAL[10]   </td><td class="markdownTableBodyNone">double type parameters needed to pass to the initializer function.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">init_params_i   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">integer type parameters needed to pass to the initializer function.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
-</table>
-<h3><a class="anchor" id="autotoc_md11"></a>
-Variables shared with ParticlesUtilities</h3>
-<p >The thorn shares the following parameters with the ParticlesUtilities thorn, check <a href="https://github.com/Jh0mpis/ParticlesUtilities/">ParticlesUtilities</a> for more info.</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">particle_plot_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using amrex print utilities.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">particle_tsv_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using ascii.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">banned_regions   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Number of banned regions for the simulation.   </td><td class="markdownTableBodyNone">[0, 10]   </td><td class="markdownTableBodyNone">0    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">region_&lt;n&gt;_position   </td><td class="markdownTableBodyNone">REAL[3]   </td><td class="markdownTableBodyNone">Size 3 array containing the coordinates of the banned region center.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">region_&lt;n&gt;_radius   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Banned region's radius.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0   </td></tr>
-</table>
-<h2><a class="anchor" id="autotoc_md12"></a>
 Create-run and running it</h2>
 <p >Once we have everything setted up we can create and run the simulation using the simfactory <code>create-run</code> command:</p>
 <div class="fragment"><div class="line">./simfactory/bin/sim create-run run-name --parfile=/parfile/path/parfile-name.par other-options</div>
@@ -238,9 +216,12 @@ Create-run and running it</h2>
 </div><!-- fragment --><p >It is going to create a new simulation on the same folder created before. If any of the previous commands fails you can always run the executable directly. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
 var Photons_8hxx =
 [
-    [ "Photons::PhotonsData", "structPhotons_1_1PhotonsData.html", null ]
+    [ "GInX::PhotonsData", "structGInX_1_1PhotonsData.html", null ]
 ];

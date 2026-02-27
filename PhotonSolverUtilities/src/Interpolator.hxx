@@ -1,8 +1,9 @@
 /**
  * \file Interpolator.hxx
- * \brief Interpolators definitions.
+ * \brief Barycentric Lagrange interpolation related functions definitions.
  *
- * This file define the Barycentric interpolation in 1 and 3 dimensions.
+ * This file define the Barycentric interpolation for function values and its
+ * derivatives in 1 and 3 dimensions.
  */
 #ifndef INTERPOLATOR_HXX
 #define INTERPOLATOR_HXX
@@ -36,7 +37,7 @@ namespace GInX {
  *
  * \f[
  * f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
- * x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
+ * x_i}f(x_i)}{\sum\limits_{l = 0}^N \frac{w_l}{x - x_l}}
  * \f]
  *
  * where \f$N\f$ is the order of interpolation.
@@ -45,8 +46,8 @@ namespace GInX {
  * @param points Vector containing the coordinates of each point.
  * @param weights The weights of each datapoint.
  * @param x The value where we are interpolating.
- * @param dx Vector \f$\Delta x\f$  with the space steps value.
- * @param plo Lower values of the entire domain.
+ * @param dx Vector \f$\Delta x\f$ on the particular direction.
+ * @param plo Lower coordinates in the box domain.
  */
 template <int N>
 AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE void
@@ -76,26 +77,7 @@ barycentric_cubic_1d(CCTK_REAL &value, const int (&points)[N],
 }
 
 /**
- * \brief Do a Barycentric interpolation in three direction.
- *
- * This function computes the interpolation of a function on three directions
- * using a barycentric Lagrange interpolation by doing:
- *
- * \f[
- * f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
- * z_i}\frac{v_j}{y
- * - y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
- * \frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
- * \frac{\sum\limits_{i=0}^N\frac{u_i}{z -
- * z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
- * \frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
- * x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
- * y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
- * \f]
- *
- * where \f$N\f$ is the order of interpolation.
- *
- * @see barycentric_cubic_1d
+ * \brief Do a Barycentric interpolation in three direction for a vectorial function.
  *
  * @param f Array containing the function values.
  * @param i0 Basis cell index accordingly to x.
@@ -104,8 +86,8 @@ barycentric_cubic_1d(CCTK_REAL &value, const int (&points)[N],
  * @param x Coordinate x value to interpolate.
  * @param y Coordinate y value to interpolate.
  * @param z Coordinate z value to interpolate.
- * @param dx Vector \f$\Delta x\f$  with the space steps value.
- * @param plo Lower values of the entire domain.
+ * @param dx Vector with the \f$\Delta x\f$ on each direction.
+ * @param plo Lower coordinates in the domain.
  * @param comp Function's component to compute.
  *
  * @return The interpolated value.
@@ -119,18 +101,9 @@ barycentric_cubic_3d(const amrex::Array4<CCTK_REAL const> &f,
                      const amrex::GpuArray<double, 3> &plo, const int &comp) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
+
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
 
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -241,11 +214,18 @@ barycentric_cubic_3d(const amrex::Array4<CCTK_REAL const> &f,
  *
  * \f[
  * f'(x) = \sum\limits_{i = 0}^N f(x_i)\frac{d}{dx}\left(\frac{\frac{w_i}{x -
- * x_i}}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}\right) = \sum\limits_{i =
- * 0}^N f(x_i)\frac{\frac{w_j}{(x-x_j)}\sum\limits_{m =
- * 0}^N\frac{w_m}{(x-x_m)^2} - \frac{w_j}{(x-x_j)^2}\sum\limits_{i = 0}^N
- * \frac{w_i}{x - x_i}}{\left(\sum\limits_{i = 0}^N \frac{w_i}{x -
- * x_i}\right)^2}
+ * x_i}}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}\right) = \frac{\sum\limits_{j =
+ * 0}^N f(x_j)\frac{w_j}{(x-x_j)}\sum\limits_{m =
+ * 0}^N\frac{w_m}{(x-x_m)^2} - \sum\limits_{j =
+ * 0}^N f(x_j)\frac{w_j}{(x-x_j)^2}\sum\limits_{m = 0}^N
+ * \frac{w_m}{x - x_m}}{\left(\sum\limits_{l = 0}^N \frac{w_l}{x -
+ * x_l}\right)^2}
+ * \f]
+ *
+ * In the case \f$x = x_i\f$, one of the nodes, we have the expression
+ *
+ * \f[
+ * f'(x) = \sum\limits_{j=0}^{N}\frac{w_j}{w_i}\frac{f(x_i)}{x_i-x_j}.
  * \f]
  *
  * @see barycentric_cubic_3d
@@ -394,18 +374,7 @@ barycentric_derivative_and_interpolate(CCTK_REAL &f_xyz, CCTK_REAL &df_xyz_0,
 
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -500,18 +469,7 @@ interpolate_array(amrex::GpuArray<CCTK_REAL, 6> &array6,
                   const amrex::GpuArray<double, 3> &plo) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -595,18 +553,7 @@ d_interpolate_array(amrex::GpuArray<CCTK_REAL, 6> &array6,
                     const amrex::GpuArray<double, 3> &plo) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -707,18 +654,7 @@ d_interpolate_array(amrex::GpuArray<CCTK_REAL, 3> &array3,
                     const amrex::GpuArray<double, 3> &plo) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -818,18 +754,7 @@ d_interpolate_array(CCTK_REAL &array, amrex::GpuArray<CCTK_REAL, 3> &d_array,
                     const amrex::GpuArray<double, 3> &plo) {
   const int order =
       (((INTERPOLATION_ORDER - 1) * INTERPOLATION_ORDER) >> 1) - 1;
-  /**
-   * \brief Nodes interpolator's array.
-   *
-   * Contains the nodes that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_INT all_nodes[14] = {0, 1, -1, 0, 1, -1, 0, 1, 2, -2, -1, 0, 1, 2};
-
-  /**
-   * \brief Weights interpolator's array.
-   *
-   * Contains the weights that we are going to use for the orders from 2 to 5.
-   */
   const CCTK_REAL all_weights[14] = {
       -1.,  1.,        0.5,        -1.,        0.5,  -1.0 / 6.0, 0.5,
       -0.5, 1.0 / 6.0, 1.0 / 24.0, -1.0 / 6.0, 0.25, -1.0 / 6.0, 1.0 / 24.0};
@@ -890,6 +815,6 @@ d_interpolate_array(CCTK_REAL &array, amrex::GpuArray<CCTK_REAL, 3> &d_array,
                                             plo[2], dx[2]);
 } // d_interpolate_array scalar
 
-} // namespace Interpolator
+} // namespace GInX
 
 #endif // !INTERPOLATOR_HXX

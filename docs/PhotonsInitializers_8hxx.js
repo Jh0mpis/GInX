@@ -1,5 +1,5 @@
 var PhotonsInitializers_8hxx =
 [
-    [ "random_photons_initializer", "PhotonsInitializers_8hxx.html#ab22cea706a52c2ab8487b4bed4b94f2d", null ],
-    [ "random_photons_per_container_initializer", "PhotonsInitializers_8hxx.html#ab9da5feed990e95182291eb403fe3848", null ]
+    [ "random_spherical_initializer", "PhotonsInitializers_8hxx.html#a3da2e15666f1bd04171b2b29599da13e", null ],
+    [ "random_uniform_initializer", "PhotonsInitializers_8hxx.html#ac8ff5c82e192902b4a6dcc6989677e40", null ]
 ];

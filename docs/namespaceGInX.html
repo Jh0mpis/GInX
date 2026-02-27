@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GeodesicIntegratorX: GInX Namespace Reference</title>
+<title>GInX: GInX Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -28,9 +32,9 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">GeodesicIntegratorX
+   <div id="projectname">GInX
    </div>
-   <div id="projectbrief">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</div>
+   <div id="projectbrief">Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using AMReX.</div>
   </td>
  </tr>
  </tbody>
@@ -54,6 +58,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('namespaceGInX.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,7 +89,6 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
@@ -82,6 +102,11 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGInX_1_1BaseParticleContainer.html">BaseParticleContainer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGInX_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> abstract class definition.  <a href="classGInX_1_1BaseParticleContainer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGInX_1_1ParticleIterator.html">ParticleIterator</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGInX_1_1PhotonsContainer.html">PhotonsContainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGInX_1_1PhotonsContainer.html" title="PhotonsContainer class definition.">PhotonsContainer</a> class definition.  <a href="classGInX_1_1PhotonsContainer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -97,7 +122,7 @@ Functions</h2></td></tr>
 <tr class="separator:ad744a8f7b68cc63b5c022621bc3e6287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo, const int &amp;comp)</td></tr>
-<tr class="memdesc:adfd08d53d8297e3aa9cb563b7988dceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction.  <a href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">More...</a><br /></td></tr>
+<tr class="memdesc:adfd08d53d8297e3aa9cb563b7988dceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a Barycentric interpolation in three direction for a vectorial function.  <a href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb">More...</a><br /></td></tr>
 <tr class="separator:adfd08d53d8297e3aa9cb563b7988dceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplParams" colspan="2">template&lt;int INTERPOLATION_ORDER&gt; </td></tr>
 <tr class="memitem:a960b4e6e86b9ecb6bf5b503c60f75a92"><td class="memTemplItemLeft" align="right" valign="top">AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceGInX.html#a960b4e6e86b9ecb6bf5b503c60f75a92">barycentric_cubic_3d</a> (const amrex::Array4&lt; CCTK_REAL const &gt; &amp;f, const long int &amp;i0, const long int &amp;j0, const long int &amp;k0, const CCTK_REAL &amp;x, const CCTK_REAL &amp;y, const CCTK_REAL &amp;z, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td></tr>
@@ -194,7 +219,7 @@ template&lt;int N&gt; </div>
 <p class="formulaDsp">
 \[
 f(x) = \frac{\sum\limits_{i = 0}^N \frac{w_i}{x -
-x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
+x_i}f(x_i)}{\sum\limits_{l = 0}^N \frac{w_l}{x - x_l}}
 \]
 </p>
 <p >where \(N\) is the order of interpolation.</p>
@@ -204,8 +229,8 @@ x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
     <tr><td class="paramname">points</td><td>Vector containing the coordinates of each point. </td></tr>
     <tr><td class="paramname">weights</td><td>The weights of each datapoint. </td></tr>
     <tr><td class="paramname">x</td><td>The value where we are interpolating. </td></tr>
-    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
-    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) on the particular direction. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower coordinates in the box domain. </td></tr>
   </table>
   </dd>
 </dl>
@@ -393,23 +418,7 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Do a Barycentric interpolation in three direction. </p>
-<p >This function computes the interpolation of a function on three directions using a barycentric Lagrange interpolation by doing:</p>
-<p class="formulaDsp">
-\[
-f(x, y, z) = \frac{\sum\limits_{i,j,k = 0}^N \frac{u_i}{z -
-z_i}\frac{v_j}{y
-- y_j}\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,j,k = 0}^N
-\frac{u_i}{z - z_i}\frac{v_j}{y - y_j}\frac{w_k}{x - x_k}} =
-\frac{\sum\limits_{i=0}^N\frac{u_i}{z -
-z_i}\left(\frac{\sum\limits_{j=0}^N\frac{v_j}{y-y_j}\left(\frac{\sum\limits_{k=0}^N
-\frac{w_k}{x - x_k}f(x_k, y_j, x_i)}{\sum\limits_{k= 0}^N \frac{w_k}{x -
-x_k}}\right)}{\sum\limits_{j= 0}^N \frac{v_j}{y -
-y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
-\]
-</p>
-<p >where \(N\) is the order of interpolation.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
+<p>Do a Barycentric interpolation in three direction for a vectorial function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">f</td><td>Array containing the function values. </td></tr>
@@ -419,17 +428,13 @@ y_j}}\right)}{\sum\limits_{i= 0}^N \frac{u_i}{z - z_i}}
     <tr><td class="paramname">x</td><td>Coordinate x value to interpolate. </td></tr>
     <tr><td class="paramname">y</td><td>Coordinate y value to interpolate. </td></tr>
     <tr><td class="paramname">z</td><td>Coordinate z value to interpolate. </td></tr>
-    <tr><td class="paramname">dx</td><td>Vector \(\Delta x\) with the space steps value. </td></tr>
-    <tr><td class="paramname">plo</td><td>Lower values of the entire domain. </td></tr>
+    <tr><td class="paramname">dx</td><td>Vector with the \(\Delta x\) on each direction. </td></tr>
+    <tr><td class="paramname">plo</td><td>Lower coordinates in the domain. </td></tr>
     <tr><td class="paramname">comp</td><td>Function's component to compute.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The interpolated value. </dd></dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
@@ -598,10 +603,6 @@ x_k}f(x_k, y_j, x_i)}{\sum\limits_{i,k = 0}^N
   </table>
   </dd>
 </dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
@@ -708,10 +709,6 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
   </table>
   </dd>
 </dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
@@ -818,10 +815,6 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
   </table>
   </dd>
 </dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
@@ -928,10 +921,6 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
   </table>
   </dd>
 </dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
@@ -1012,14 +1001,21 @@ x_i}f(x_i)}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}
 <p class="formulaDsp">
 \[
 f&#39;(x) = \sum\limits_{i = 0}^N f(x_i)\frac{d}{dx}\left(\frac{\frac{w_i}{x -
-x_i}}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}\right) = \sum\limits_{i =
-0}^N f(x_i)\frac{\frac{w_j}{(x-x_j)}\sum\limits_{m =
-0}^N\frac{w_m}{(x-x_m)^2} - \frac{w_j}{(x-x_j)^2}\sum\limits_{i = 0}^N
-\frac{w_i}{x - x_i}}{\left(\sum\limits_{i = 0}^N \frac{w_i}{x -
-x_i}\right)^2}
+x_i}}{\sum\limits_{i = 0}^N \frac{w_i}{x - x_i}}\right) = \frac{\sum\limits_{j =
+0}^N f(x_j)\frac{w_j}{(x-x_j)}\sum\limits_{m =
+0}^N\frac{w_m}{(x-x_m)^2} - \sum\limits_{j =
+0}^N f(x_j)\frac{w_j}{(x-x_j)^2}\sum\limits_{m = 0}^N
+\frac{w_m}{x - x_m}}{\left(\sum\limits_{l = 0}^N \frac{w_l}{x -
+x_l}\right)^2}
 \]
 </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction.">barycentric_cubic_3d</a> </dd>
+<p >In the case \(x = x_i\), one of the nodes, we have the expression</p>
+<p class="formulaDsp">
+\[
+f&#39;(x) = \sum\limits_{j=0}^{N}\frac{w_j}{w_i}\frac{f(x_i)}{x_i-x_j}.
+\]
+</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction for a vectorial function.">barycentric_cubic_3d</a> </dd>
 <dd>
 <a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -1115,7 +1111,7 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
 
 <p>Do the barycentric interpolation for a 3 dimensional and symmetric matrix. </p>
 <p >This function computes the interpolation for a 3 dimensional and symmetric matrix, such as the induced metric and the extrinsic curvature tensor in just one call using the barycentric_cubic_1d function similar to the barycentric_cubic_3d function.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction.">barycentric_cubic_3d</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceGInX.html#adfd08d53d8297e3aa9cb563b7988dceb" title="Do a Barycentric interpolation in three direction for a vectorial function.">barycentric_cubic_3d</a> </dd>
 <dd>
 <a class="el" href="namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287" title="Do a Barycentric interpolation in one direction.">barycentric_cubic_1d</a></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -1133,17 +1129,17 @@ template&lt;int INTERPOLATION_ORDER&gt; </div>
   </table>
   </dd>
 </dl>
-<p >Nodes interpolator's array.</p>
-<p >Contains the nodes that we are going to use for the orders from 2 to 5.</p>
-<p >Weights interpolator's array.</p>
-<p >Contains the weights that we are going to use for the orders from 2 to 5.</p>
 
 </div>
 </div>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceGInX.html">GInX</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -29,7 +29,7 @@ using namespace GInX;
 
 /**
  * \brief This function random initializes particles spherically distributed
- * around a sphere of radius real_params[0]*0.5 + 0.2
+ * around a sphere of radius real_params[0].
  *
  * @param pc The particle container that is going to be initialized.
  * cell.
@@ -119,9 +119,9 @@ void random_spherical_initializer(ParticleContainerClass &pc,
 
           // Generate a random position
           const amrex::Real ratio[AMREX_SPACEDIM] = {
-              (std::abs(p_hi[0] - p_lo[0]) - (radius * 0.5 + 0.2) * 2.) * 0.5 *
+              (std::abs(p_hi[0] - p_lo[0]) - (radius) * 2.) * 0.5 *
                       Random(engine) +
-                  radius * 0.5 + 0.2,
+                  radius,
               Random(engine) * M_PI, Random(engine) * 2. * M_PI};
 
           auto &p = p_struct[pidx];
@@ -154,10 +154,9 @@ void random_spherical_initializer(ParticleContainerClass &pc,
 
 /**
  * \brief This function random initializes particles uniformly distributed 
- * around a sphere of radius real_params[0]*0.5 + 0.2.
+ * in a box avoiding a sphere of radius real_params[0].
  *
  * @param pc The particle container that is going to be initialized.
- * cell.
  * @param real_params Double type array that contains the real parameters needed
  * to initialize the particles.
  * @param int_params Integer type array that contains the integer parameters

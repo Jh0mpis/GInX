@@ -54,6 +54,7 @@ class PhotonsContainer
                                                   StructType> {
 protected:
   CCTK_REAL mass = 0.;
+
 public:
   /**
    * \brief Using BaseParticlesContainer constructor
@@ -104,9 +105,8 @@ public:
  * t\right)\f] computes
  * \f[f\left(U, \frac{dU}{dx}; t\right)\f]
  *
- * where \f$U\f$ is a vector that contains \f$(x_u, y_u, z_u, vx_d, vy_d, vz_d,
- * E)\f$. That's why each rhs depends on the other components of the vector
- * \f$U\f$. For the position the differential equation  is:
+ * where \f$U\f$ is a vector which contains \f$(x, y, z, v_x, v_y, v_z,
+ * \ln E)\f$. The differential equation for the particles' position is
  *
  * \f[\frac{d}{dt} U[i] = \alpha \gamma^{ij} U[3 + j] - \beta^i\f]
  *
@@ -123,13 +123,13 @@ public:
  * + j] \partial_i\beta^j
  * \f}
  *
- * and finally, for the \f$ ln E \f$ the differential equation is:
+ * and finally, for the \f$ \ln E \f$ the differential equation is:
  *
  * \f[ \dfrac{d}{dt} U[6] = \alpha K_{jk}U[3 + l]U[3 + m]\gamma^{lj}\gamma^{mk}
  * - U[3+l]\gamma^{lj}\partial_j\alpha\f]
  *
- *  Where \f$i, j, k, l, m = 0, 1, 2\f$ and we have been using Einstein
- * notation.
+ *  Where \f$i, j, k, l, m = 0, 1, 2\f$ and \f$K_{ij}\f$ is the extrinsic
+ * curvature. We have been using Einstein notation.
  *
  *  @param u A GpuArray of size n_attributes + the coordinates that contains the
  * varaibles needed to evolve.
@@ -236,7 +236,7 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
 /**
  *  \brief Evolving using Runge-Kutta 4.
  *
- *  For the Runge-Kutta 4 we are solving the differential equation
+ * We are solving the differential equation
  * \f$\frac{dU}{dt} = f\left(U, \frac{dU}{dx}, t\right)\f$ using:
  *
  *  \f[
@@ -252,15 +252,15 @@ AMREX_GPU_HOST_DEVICE AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE
  * t}{2}\right),\f$
  *  * \f$f_4 = f(U_n + \Delta t f_3, t + \Delta t),\f$
  *
- *  And checking if it goes outside of the grid boundaries.
+ *  While computing we are checking if the particles still in the physical domain.
  *
  *  @see compute_rhs()
  *  @param lapse ADM lapse function.
  *  @param shift ADM shift vector.
- *  @param metric ADM 3 dimension metric.
+ *  @param metric ADM induced metric.
  *  @param curv Extrinsic curvature.
  *  @param dt Timestep.
- *  @param lev AMR Level of discretization.
+ *  @param lev Refinement level.
  */
 template <typename StructType>
 void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
@@ -420,18 +420,34 @@ void PhotonsContainer<StructType>::evolve(const amrex::MultiFab &lapse,
  * \brief Normalize the velocity accordingly to the metric on each particle
  * position.
  *
- * This function is made to normalize the velocity given a random initial data
- * using the Photons positions by using that
+ * This function normalizes the velocity given a random initial data.
+ * The invariant mass is described by
  *
  *  \f[
- *  P^\mu P_\mu = 0.
+ *  P^\mu P_\mu = 0,
  *  \f]
  *
- *  or equivalently
+ *  for null geodesics and 
  *
  *  \f[
- *  V^\alpha V_\alpha = V_\alpha V_\beta \gamma^{\alpha\beta} = 1.
+ *  P^\mu P_\mu = -m^2,
  *  \f]
+ *
+ *  for timelike particles.
+ *
+ *  Implying
+ *
+ *  \f[
+ *  V^\alpha V_\alpha = V_\alpha V_\beta \gamma^{\alpha\beta} = 1,
+ *  \f]
+ *
+ *  for null geodesic and
+ *
+ *  \f[
+ *  V^\alpha V_\alpha = V_\alpha V_\beta \gamma^{\alpha\beta} = 1 -\frac{m^2}{E^2}
+ *  \f]
+ *
+ *  for timelike particles.
  *
  * @param metric ADM 3 dimension metric.
  * @param Current refinement level.

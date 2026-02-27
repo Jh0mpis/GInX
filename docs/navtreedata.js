@@ -24,17 +24,17 @@
 */
 var NAVTREE =
 [
-  [ "GeodesicIntegratorX", "index.html", [
-    [ "Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement", "index.html", [
+  [ "GInX", "index.html", [
+    [ "Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement", "index.html", [
       [ "Index", "index.html#autotoc_md1", null ],
-      [ "Geodesics Integrator X", "index.html#autotoc_md2", [
-        [ "Photons Container", "index.html#autotoc_md3", null ],
-        [ "Photons Solver Utilities", "index.html#autotoc_md4", null ]
+      [ "GInX", "index.html#autotoc_md2", [
+        [ "Particles Container", "index.html#autotoc_md3", null ],
+        [ "Photons Container", "index.html#autotoc_md4", null ],
+        [ "Photons Solver Utilities", "index.html#autotoc_md5", null ]
       ] ],
-      [ "Files Structure", "index.html#autotoc_md5", null ],
-      [ "How to run it", "index.html#autotoc_md6", [
-        [ "Installation with a compiled Einstein Toolkit", "index.html#autotoc_md7", null ],
-        [ "Parameters file", "index.html#autotoc_md8", null ],
+      [ "Files Structure", "index.html#autotoc_md6", null ],
+      [ "How to run it", "index.html#autotoc_md7", [
+        [ "Installation with a compiled Einstein Toolkit", "index.html#autotoc_md8", null ],
         [ "Create-run and running it", "index.html#autotoc_md9", null ]
       ] ]
     ] ],
@@ -71,7 +71,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"Discretizer_8hxx.html"
+"BaseParticleContainer_8hxx.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

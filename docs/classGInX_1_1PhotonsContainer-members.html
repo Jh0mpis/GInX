@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GeodesicIntegratorX: Member List</title>
+<title>GInX: Member List</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -28,9 +32,9 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">GeodesicIntegratorX
+   <div id="projectname">GInX
    </div>
-   <div id="projectbrief">Geodesics Integrator tool for Photons in GRMHD using Adaptive Mesh Refinement using amrex.</div>
+   <div id="projectbrief">Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using AMReX.</div>
   </td>
  </tr>
  </tbody>
@@ -54,6 +58,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classGInX_1_1PhotonsContainer.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,11 +89,6 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="namespaceGInX.html">GInX</a></li><li class="navelem"><a class="el" href="classGInX_1_1PhotonsContainer.html">PhotonsContainer</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="headertitle"><div class="title">GInX::PhotonsContainer&lt; StructType &gt; Member List</div></div>
 </div><!--header-->
@@ -81,27 +97,21 @@ $(function() {
 <p>This is the complete list of members for <a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1">Base</a> typedef</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae92f3e7a22a89acec61478bacc19fa56">BaseParticleContainer</a>(amrex::AmrCore *amr_core)</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a5c541ed93526cab251ad0a140cbbb67f">check_banned_zones</a>(const int &amp;level, const CCTK_INT4 &amp;zones, const CCTK_REAL(&amp;x)[10], const CCTK_REAL(&amp;y)[10], const CCTK_REAL(&amp;z)[10], const CCTK_REAL(&amp;radius)[10])</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a78840e4ba1c860c23ce2242d15544cfc">compute_rhs</a>(const amrex::GpuArray&lt; CCTK_REAL, 7 &gt; &amp;u, const CCTK_REAL &amp;t, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;lapse, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;shift, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;metric, amrex::Array4&lt; CCTK_REAL const &gt; const &amp;K, const CCTK_REAL dt, const amrex::GpuArray&lt; double, 3 &gt; &amp;dx, const int lev, const amrex::GpuArray&lt; double, 3 &gt; &amp;plo)</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#aca9b91faecb11d4b335941311b473004">evolve</a>(const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#aca9b91faecb11d4b335941311b473004">evolve</a>(const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev) override</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#ad9773cf084d4c93f9351840152681b23">get_mass</a>()</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a5fb0fc1f29ce5dee8986f4f1c19335d4">initialize</a>(Function initializer_function, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a65b46d091a12e2d729441e5cf1fe1717">initialize</a>(Function initializer_function, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6">mass</a></td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a558cf6b4332bce50ec7268b5041017ff">n_attributes</a></td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#aebfb59cc226f15a7e7f0b152eaa697c0">name</a></td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a35354365e90d2ea2dfb0894bc159a1ec">normalize_velocity</a>(const amrex::MultiFab &amp;metric, const int level)</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae307e67f97f42d53e2473f42339ae1e6">outputParticlesAscii</a>(const int &amp;it, const int &amp;plot_every, const std::string &amp;out_dir)</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae82ea9d514e5444c40e1d7f2119ad1c4">outputParticlesPlot</a>(const int &amp;it, const int &amp;plot_every, const std::string &amp;out_dir)</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#ae2950b3b7c28613cc1142c8b824d5fad">PhotonsContainer</a>(amrex::AmrCore *amr_core, const CCTK_REAL m)</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a6d7956925384334f9a5d6d4c80c4d0f3">redistribute_particles</a>()</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a9a83c2fca6ee1849327e8c21f9c2bb81">~BaseParticleContainer</a>()=default</td><td class="entry"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt;</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c">~PhotonsContainer</a>()=default</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c">~PhotonsContainer</a>()=default</td><td class="entry"><a class="el" href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer&lt; StructType &gt;</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
+  </ul>
+</div>
 </body>
 </html>
