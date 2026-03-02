@@ -2,9 +2,13 @@
 
 IMPLEMENTS: ParticlesContainer
 
-INHERITS: ADMBaseX AMReX Loop
+INHERITS: ADMBaseX AMReX BaseParticlesContainer ParticlesSolverUtilities Loop
 
+USES INCLUDE HEADER: BaseParticleContainer.hxx
 USES INCLUDE HEADER: driver.hxx
 USES INCLUDE HEADER: loop_device.hxx
+USES INCLUDE HEADER: Interpolator.hxx
+USES INCLUDE HEADER: Utilities.hxx
 
-INCLUDES HEADER: BaseParticleContainer.hxx IN BaseParticleContainer.hxx
+INCLUDES HEADER: ParticlesContainer.hxx IN ParticlesContainer.hxx
+INCLUDES HEADER: Photons.hxx IN Photons.hxx

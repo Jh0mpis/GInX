@@ -1,6 +1,6 @@
 var classGInX_1_1PhotonsContainer =
 [
-    [ "Base", "classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1", null ],
+    [ "Base", "classGInX_1_1PhotonsContainer.html#aad8bc8c58bea1cf185970fb535ae8bac", null ],
     [ "PhotonsContainer", "classGInX_1_1PhotonsContainer.html#ae2950b3b7c28613cc1142c8b824d5fad", null ],
     [ "~PhotonsContainer", "classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c", null ],
     [ "compute_rhs", "classGInX_1_1PhotonsContainer.html#a78840e4ba1c860c23ce2242d15544cfc", null ],

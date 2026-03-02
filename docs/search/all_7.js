@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['mass_0',['mass',['../classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6',1,'GInX::PhotonsContainer']]],
+  ['mass_0',['mass',['../classGInX_1_1ParticlesContainer.html#a080f0e1c3e61a33cd8b3627989406a83',1,'GInX::ParticlesContainer']]],
   ['metrics_2ecxx_1',['metrics.cxx',['../metrics_8cxx.html',1,'']]]
 ];

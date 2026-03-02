@@ -2,7 +2,7 @@ var namespaceGInX =
 [
     [ "BaseParticleContainer", "classGInX_1_1BaseParticleContainer.html", "classGInX_1_1BaseParticleContainer" ],
     [ "ParticleIterator", "classGInX_1_1ParticleIterator.html", "classGInX_1_1ParticleIterator" ],
-    [ "PhotonsContainer", "classGInX_1_1PhotonsContainer.html", "classGInX_1_1PhotonsContainer" ],
+    [ "ParticlesContainer", "classGInX_1_1ParticlesContainer.html", "classGInX_1_1ParticlesContainer" ],
     [ "PhotonsData", "structGInX_1_1PhotonsData.html", null ],
     [ "barycentric_cubic_1d", "namespaceGInX.html#ad744a8f7b68cc63b5c022621bc3e6287", null ],
     [ "barycentric_cubic_3d", "namespaceGInX.html#a960b4e6e86b9ecb6bf5b503c60f75a92", null ],

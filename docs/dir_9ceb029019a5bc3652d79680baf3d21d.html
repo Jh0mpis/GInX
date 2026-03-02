@@ -94,6 +94,21 @@ $(document).ready(function(){initNavTree('dir_9ceb029019a5bc3652d79680baf3d21d.h
   <div class="headertitle"><div class="title">ParticlesContainer Directory Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Directory dependency graph for ParticlesContainer:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="dir_9ceb029019a5bc3652d79680baf3d21d_dep.png" border="0" usemap="#adir__9ceb029019a5bc3652d79680baf3d21d__dep" alt="/home/jh0mpis/MHPC-Project/GInX/ParticlesContainer"/></div>
+<map name="adir__9ceb029019a5bc3652d79680baf3d21d__dep" id="adir__9ceb029019a5bc3652d79680baf3d21d__dep">
+<area shape="rect" href="dir_8be69754b5dcea0ea16aeb8cd7126f65.html" title="src" alt="" coords="153,27,225,75"/>
+<area shape="rect" href="dir_c03e86b1364ee90691eeb716eaf934c2.html" title="BaseParticlesContainer" alt="" coords="5,123,177,171"/>
+<area shape="rect" href="dir_000004_000000.html" title="1" alt="" coords="129,109,139,123"/>
+<area shape="rect" href="dir_f87ba2c638c299122d39b71d3d744f48.html" title="ParticlesSolverUtilities" alt="" coords="201,123,371,171"/>
+<area shape="rect" href="dir_000004_000002.html" title="3" alt="" coords="250,97,260,111"/>
+<area shape="rect" href="dir_9ceb029019a5bc3652d79680baf3d21d.html" alt="" coords="142,16,401,85"/>
+</map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="subdirs" name="subdirs"></a>
 Directories</h2></td></tr>
@@ -101,101 +116,71 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<h1><a class="anchor" id="autotoc_md10"></a>
 Particles Container</h1>
-<p >This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach.</p>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<p >The thorn implements the geodesic evolution of null and timelike particles in a 3+1 general relativity background. It uses the implementations made in <code>ParticlesContainer</code> and <code>ParticlesSolverUtilities</code> thorns.</p>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Index</h2>
 <ul>
-<li>Base Particles Container</li>
+<li>Particles Container</li>
+<li>Dependencies</li>
 <li>Additional thorn features<ul>
-<li>Banned zones check</li>
-<li>Metric Initialization</li>
+<li>Random particle initialization</li>
 </ul>
 </li>
 <li>Parameters file<ul>
-<li>Output parameters</li>
-<li>Banned regions parameters</li>
-<li>Metric initialization parameters</li>
+<li>Random particle initialization</li>
+<li>BaseParticlesContainer shared parameters</li>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md22"></a>
-Base Particles Container</h2>
-<p >The particles container thorn contains the definition of the <code>BaseParticleContainer</code> templated class. This abstract class defines the basic methods that have to be defined on each of the derived classes, this class extends from the <code>amrex::AmrParticleContainer</code>.</p>
-<p >The <code>BaseParticleContainer</code> class is templated by the new <code>&lt;Particle&gt;Container</code> derived class first, and a struct object defining the particle position, velocity or momentum and another additional quantities needed by the particles.</p>
-<p >All the <code>BaseParticleContainer</code> and the iterator definitions are contained at the <code><a class="el" href="BaseParticleContainer_8hxx.html" title="It Contains the BaseParticlesContainer and ParticleIterator classes inside of the GInX namespace.">BaseParticleContainer.hxx</a></code> file. The metrics implementations are defined inside of the <code><a class="el" href="metrics_8cxx.html" title="Available metrics initialization function.">metrics.cxx</a></code> file.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
+Particles Container</h2>
+<p >The Photons container class has the definitions of the class, methods and functions needed to perform the geodesic evolution. It defines the <code>ParticlesContainer</code> class derived from the <code>BaseParticlesContainer</code> abstract class implemented in the <b>Particles Container</b> thorn.</p>
+<p >The <code>ParticlesContainer</code> class contains the definition of the <code>evolve</code>, <code>compute_rhs</code>, and <code>normalize_velocity</code> methods, all of it needed during the initialization and evolution of the geodesics. It also contains the value of the mass of the particles. It is defined inside of the <code><a class="el" href="ParticlesContainer_8hxx.html" title="ParticlesContainer class definition.">ParticlesContainer.hxx</a></code> file.</p>
+<p >It also contains the definition of two initializers, for the moment, that set up the particles' position and velocity inside of the <code>PhotonInitializers.hxx</code> file. Inside the <code><a class="el" href="ParticlesEvolution_8cxx.html">ParticlesEvolution.cxx</a></code> are the scheduled functions implemented by the thorn.</p>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Dependencies</h2>
-<p >In order to use this thorn you need to have compiled the following thorns:</p>
+<p >The code uses the thorns:</p>
 <ol type="1">
-<li>AMReX</li>
+<li>BaseParticlesContainer.</li>
+<li>ParticlesSolverUtilities</li>
 </ol>
-<ol type="1">
-<li>NSIMD</li>
-</ol>
-<ol type="1">
-<li>CarpetX/Loop</li>
-</ol>
-<p >and its requirements.</p>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<p >You need to have those thorns and its requirements compiled.</p>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Additional thorn features</h2>
-<p >The thorn also includes some extra features that can be common for all the derived particles.</p>
-<h3><a class="anchor" id="autotoc_md25"></a>
-Banned zones check</h3>
-<p >Given some metric, we could find some regions were the geodesics evolution have no sense or could reach to mathematical and computing singularities. For this reason the thorn implements parameters that allows to check if the particles are crossing the banned regions. This parameters allows the user to check up to 10 different regions by specifying the $x, y, z$ coordinates and a radius. The program is going to delete the particles that enter in that 3D sphere.</p>
-<p >This is managed by the parameters <code>banned_regions</code>, <code>region_&lt;n&gt;_position</code> and <code>region_&lt;n&gt;_radius</code> variables, where n goes from 1 to 10.</p>
-<h3><a class="anchor" id="autotoc_md26"></a>
-Metric Initialization</h3>
-<p >This thorn also provides some useful implementations, such as the initialization of some space time metrics using the ADM formalism, the current implemented metrics are:</p>
-<ul>
-<li>Cartesian Minkowski.</li>
-<li>Schwarzschild in Isotropic coordinates.</li>
-<li>Schwarzschild in Schwarzschild coordinates transformed into cartesian coordinates.</li>
-<li>Schwarzschild in Painlevé-Gullstrand coordinates.</li>
-<li>Kerr-Shild metric using cartesian coordinates.</li>
-</ul>
-<p >This is managed through the parameters <code>metric</code> to define the metric type and the parameters <code>metric_params_i</code> and <code>metric_params_d</code> used for the metric parameters needed.</p>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<p >The thorn also includes some extra features that can be used for the simulation.</p>
+<h3><a class="anchor" id="autotoc_md15"></a>
+Random particle initialization</h3>
+<p >The thorn provides two functions that initialize an arbitrary number of particles with random positions and velocities but fixed energy. The main difference is that one function initializes particles distributed within a sphere of radius $R$, while the other distributes them across the entire rectangular grid. This can be managed by the <code>num_photons</code>, <code>initializer</code>, <code>init_params_d[10]</code>, and <code>init_params_i[10]</code> parameters.</p>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Parameters file</h2>
-<p >The thorns contains the following parameters:</p>
-<h3><a class="anchor" id="autotoc_md28"></a>
-Output parameters</h3>
-<p >The thorn has the following parameters for the data output:</p>
+<p >The thorn have the parameters related with the particle initialization and the ones shared with the <code>BaseParticlesContainer</code> thorn.</p>
+<p >The most relevant parameter for timelike particles creation is:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">particle_plot_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using amrex print utilities.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">particle_tsv_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using ascii.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0   </td></tr>
+<td class="markdownTableBodyNone">particles_mass   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Particles' mass.   </td><td class="markdownTableBodyNone">0.0 to infinity   </td><td class="markdownTableBodyNone">0.0 (null particles)   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md29"></a>
-Banned regions parameters</h3>
-<p >In order to manage the banned regions check, the thorn has defined the following parameters:</p>
+<h3><a class="anchor" id="autotoc_md17"></a>
+Random particle initialization</h3>
+<p >The thorn has the following parameters for the particles initialization:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">banned_regions   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Number of banned regions for the simulation.   </td><td class="markdownTableBodyNone">[0, 10]   </td><td class="markdownTableBodyNone">0    </td></tr>
+<td class="markdownTableBodyNone">num_photons   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Total number of photons to be generated   </td><td class="markdownTableBodyNone">0 to infinity   </td><td class="markdownTableBodyNone">0    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">region_&lt;n&gt;_position   </td><td class="markdownTableBodyNone">REAL[3]   </td><td class="markdownTableBodyNone">Size 3 array containing the coordinates of the banned region center.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
+<td class="markdownTableBodyNone">initializer   </td><td class="markdownTableBodyNone">KEYWORDS   </td><td class="markdownTableBodyNone">Available initialization function to be called   </td><td class="markdownTableBodyNone">box, spherical   </td><td class="markdownTableBodyNone">none    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">region_&lt;n&gt;_radius   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Banned region's radius.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0   </td></tr>
-</table>
-<h3><a class="anchor" id="autotoc_md30"></a>
-Metric initialization parameters</h3>
-<p >For the metric parameters we have the following ones:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">metric   </td><td class="markdownTableBodyNone">KEYWORD   </td><td class="markdownTableBodyNone">Keyword for the type of metric the user wants to initialize.   </td><td class="markdownTableBodyNone">"Minkowski", "Isotropic Schwarzschild", "Schwarzschild", "Kerr-Shild", "Painleve", "none"   </td><td class="markdownTableBodyNone">none    </td></tr>
+<td class="markdownTableBodyNone">init_params_d[10]   </td><td class="markdownTableBodyNone">REAL[10]   </td><td class="markdownTableBodyNone">Double parameters needed to pass to the initializer function   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">metric_params_d   </td><td class="markdownTableBodyNone">REAL[10]   </td><td class="markdownTableBodyNone">double type parameters needed to pass to the metric Initializer.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">metric_params_i   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">integer type parameters needed to pass to the metric Initializer.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
+<td class="markdownTableBodyNone">init_params_i[10]   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">Integer parameters needed to pass to the initializer function   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
+<h3><a class="anchor" id="autotoc_md18"></a>
+BaseParticlesContainer shared parameters</h3>
+<p >The thorn shares all the parameters defined on the <code>BaseParticlesContainer</code> thorn. See <a class="el" href="/home/jh0mpis/MHPC-Project/GInX/BaseParticlesContainer/README.md#md__home_jh0mpis_MHPC_Project_GInX_BaseParticlesContainer_README">BaseParticlesContainer documentation</a>. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

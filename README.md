@@ -9,9 +9,9 @@ The integration of null geodesic equations within the 3+1 formalism of general r
 The following README file presents a description of the project, to see the full documentation of the code you can check [GInX:Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using amrex.](https://jh0mpis.github.io/GInX/)
 
 - [GInX](#ginx)
-    - [Particles Container](#base-container)
-    - [Photons Container](#photons-container)
-    - [Photons Solver Utilities](#photons-solver-utilities)
+    - [Base Particles Container](#base-particles-container)
+    - [Particles Container](#particles-container)
+    - [Particles Solver Utilities](#particles-solver-utilities)
 - [Files Structure](#files-structure)
 - [How to run it](#how-to-run-it)
     - [Installation with a compiled Einstein Toolkit](#installation-with-a-compiled-einstein-toolkit)
@@ -39,18 +39,18 @@ Those are the variables that we are evolving for the particles and the equations
 
 GInX provides the following thorns
 
-### Particles Container
+### Base Particles Container
 
-This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The ParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.
+This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The BaseParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.
 
 The particles container thorn contains the definition of the `BaseParticleContainer` templated class. This abstract class defines the basic methods that have to be defined on each of the derived classes, this class extends from the `amrex::AmrParticleContainer`.
 
 > [!NOTE]
 > For an extended explanation you can check the README file inside the thorn's folder.
 
-### Photons Container
+### Particles Container
 
-This folder contains the `PhotonsContainer.hxx` header file where the Particle container for particles is defined. It inherits from `BaseParticleContainer` abstract class and define the abstract method for the null particles normalization, i.e., 
+This folder contains the `ParticlesContainer.hxx` header file where the Particle container for particles is defined. It inherits from `BaseParticleContainer` abstract class and define the abstract method for the null particles normalization, i.e., 
 
 $$V_iV^i = 1$$ 
 
@@ -60,14 +60,14 @@ $$V_iV^i = 1 - \frac{m^2}{E^2}.$$
 
 This also contains the `Photons.hxx` file that contains the definition of the struct used for the Photons evolution.
 
-Finally, `PhotonsInitializers.hxx` contains different ways of initialize the system of photons, so far random initializations.
+Finally, `ParticlesInitializers.hxx` contains different ways of initialize the system of photons, so far random initializations.
 
-The `test.cxx` file contains the definitions related with the particle's evolution.
+The `ParticlesEvolution.cxx` file contains the definitions related with the particle's evolution.
 
 > [!NOTE]
 > For an extended explanation you can check the README file inside the thorn's folder.
 
-### Photons Solver Utilities
+### Particles Solver Utilities
 
 This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:
 
@@ -81,36 +81,40 @@ This folder includes the utilities needed to compute the right hand side of the 
 
 ```bash
 GInX/
-├── ParticlesContainer
+├── docs
+├── BaseParticlesContainer
 │   ├── configuration.ccl
 │   ├── interface.ccl
 │   ├── param.ccl
+│   ├── README.md
 │   ├── schedule.ccl
-│   └── src/
+│   └── src
 │       ├── BaseParticleContainer.hxx
 │       ├── make.code.defn
 │       └── metrics.cxx
-├── PhotonsContainer
+├── ParticlesContainer
 │   ├── configuration.ccl
 │   ├── interface.ccl
-│   ├── par/
+│   ├── par
 │   │   ├── HydroFile.par
-│   │   ├── PhotonsContainer.par
-│   │   └── PhotonsMultiGrid.par
+│   │   ├── ParticlesContainer.par
+│   │   └── ParticlesMultiGrid.par
 │   ├── param.ccl
+│   ├── README.md
 │   ├── schedule.ccl
-│   └── src/
+│   └── src
 │       ├── make.code.defn
-│       ├── PhotonsContainer.hxx
+│       ├── ParticlesContainer.hxx
+│       ├── ParticlesEvolution.cxx
 │       ├── Photons.hxx
-│       ├── PhotonsInitializers.hxx
-│       └── test.cxx
-├── PhotonSolverUtilities
+│       └── PhotonsInitializers.hxx
+├── ParticlesSolverUtilities
 │   ├── configuration.ccl
 │   ├── interface.ccl
 │   ├── param.ccl
+│   ├── README.md
 │   ├── schedule.ccl
-│   └── src/
+│   └── src
 │       ├── Interpolator.hxx
 │       ├── make.code.defn
 │       └── Utilities.hxx
@@ -133,9 +137,9 @@ You could add this thorn to your project by adding the following lines to your E
 !REPO_BRANCH = main
 !REPO_PATH = $2
 !CHECKOUT =
+GInX/BaseParticlesContainer
+GInX/ParticlesSolverUtilities
 GInX/ParticlesContainer
-GInX/PhotonSolverUtilities
-GInX/PhotonsContainer
 ```
 
 and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:

@@ -1,0 +1,10 @@
+# Interface definition for thorn Particles
+
+IMPLEMENTS: BaseParticlesContainer
+
+INHERITS: ADMBaseX AMReX Loop
+
+USES INCLUDE HEADER: driver.hxx
+USES INCLUDE HEADER: loop_device.hxx
+
+INCLUDES HEADER: BaseParticleContainer.hxx IN BaseParticleContainer.hxx

@@ -1,0 +1,7 @@
+# Configuration definitions for thorn Particles
+#
+REQUIRES AMREX NSIMD LOOP
+
+PROVIDES BaseParticlesContainer
+{
+}

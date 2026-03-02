@@ -1,4 +1,4 @@
 var metrics_8cxx =
 [
-    [ "ParticlesContainer_init_metric", "metrics_8cxx.html#aa0fdb4be909aa0b2dffa3290ebced5db", null ]
+    [ "BaseParticlesContainer_init_metric", "metrics_8cxx.html#ac987a57662abb7504b775cd30b4543a9", null ]
 ];

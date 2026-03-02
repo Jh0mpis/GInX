@@ -101,9 +101,9 @@ Index</h1>
 <p >The following README file presents a description of the project, to see the full documentation of the code you can check <a href="https://jh0mpis.github.io/GInX/">GInX:Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement using amrex.</a></p>
 <ul>
 <li>GInX<ul>
+<li>Base Particles Container</li>
 <li>Particles Container</li>
-<li>Photons Container</li>
-<li>Photons Solver Utilities</li>
+<li>Particles Solver Utilities</li>
 </ul>
 </li>
 <li>Files Structure</li>
@@ -125,26 +125,26 @@ GInX</h1>
 <p >Those are the variables that we are evolving for the particles and the equations we are solving.</p>
 <p ><a class="el" href="namespaceGInX.html" title="Interpolators namespace.">GInX</a> provides the following thorns</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
-Particles Container</h2>
-<p >This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The ParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.</p>
+Base Particles Container</h2>
+<p >This thorn contain several utilities for the evolution of particles using the AMReX Particles container approach. The BaseParticlesContainer thorn is an interface thorn that contains the common classes and functions for differential equation associated to systems of particles.</p>
 <p >The particles container thorn contains the definition of the <code>BaseParticleContainer</code> templated class. This abstract class defines the basic methods that have to be defined on each of the derived classes, this class extends from the <code>amrex::AmrParticleContainer</code>.</p>
 <blockquote class="doxtable">
 <p >&zwj;[!NOTE] For an extended explanation you can check the README file inside the thorn's folder. </p>
 </blockquote>
 <h2><a class="anchor" id="autotoc_md4"></a>
-Photons Container</h2>
-<p >This folder contains the <code><a class="el" href="PhotonsContainer_8hxx.html" title="PhotonsContainer class definition.">PhotonsContainer.hxx</a></code> header file where the Particle container for particles is defined. It inherits from <code>BaseParticleContainer</code> abstract class and define the abstract method for the null particles normalization, i.e.,</p>
+Particles Container</h2>
+<p >This folder contains the <code><a class="el" href="ParticlesContainer_8hxx.html" title="ParticlesContainer class definition.">ParticlesContainer.hxx</a></code> header file where the Particle container for particles is defined. It inherits from <code>BaseParticleContainer</code> abstract class and define the abstract method for the null particles normalization, i.e.,</p>
 <p >$$V_iV^i = 1$$</p>
 <p >and timelike particles, i.e.,</p>
 <p >$$V_iV^i = 1 - \frac{m^2}{E^2}.$$</p>
 <p >This also contains the <code><a class="el" href="Photons_8hxx.html" title="Photons struct.">Photons.hxx</a></code> file that contains the definition of the struct used for the Photons evolution.</p>
-<p >Finally, <code><a class="el" href="PhotonsInitializers_8hxx.html" title="PhotonsContainer initialization functions.">PhotonsInitializers.hxx</a></code> contains different ways of initialize the system of photons, so far random initializations.</p>
-<p >The <code><a class="el" href="test_8cxx.html" title="Available particle container implementations.">test.cxx</a></code> file contains the definitions related with the particle's evolution.</p>
+<p >Finally, <code>ParticlesInitializers.hxx</code> contains different ways of initialize the system of photons, so far random initializations.</p>
+<p >The <code><a class="el" href="ParticlesEvolution_8cxx.html">ParticlesEvolution.cxx</a></code> file contains the definitions related with the particle's evolution.</p>
 <blockquote class="doxtable">
 <p >&zwj;[!NOTE] For an extended explanation you can check the README file inside the thorn's folder. </p>
 </blockquote>
 <h2><a class="anchor" id="autotoc_md5"></a>
-Photons Solver Utilities</h2>
+Particles Solver Utilities</h2>
 <p >This folder includes the utilities needed to compute the right hand side of the differential equations. The files included there are:</p>
 <ul>
 <li><code><a class="el" href="Interpolator_8hxx.html" title="Barycentric Lagrange interpolation related functions definitions.">Interpolator.hxx</a></code>: This file contains the definitions of the barycentric interpolation method.</li>
@@ -156,36 +156,40 @@ Photons Solver Utilities</h2>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Files Structure</h1>
 <div class="fragment"><div class="line">GInX/</div>
-<div class="line">├── ParticlesContainer</div>
+<div class="line">├── docs</div>
+<div class="line">├── BaseParticlesContainer</div>
 <div class="line">│   ├── configuration.ccl</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── param.ccl</div>
+<div class="line">│   ├── README.md</div>
 <div class="line">│   ├── schedule.ccl</div>
-<div class="line">│   └── src/</div>
+<div class="line">│   └── src</div>
 <div class="line">│       ├── BaseParticleContainer.hxx</div>
 <div class="line">│       ├── make.code.defn</div>
 <div class="line">│       └── metrics.cxx</div>
-<div class="line">├── PhotonsContainer</div>
+<div class="line">├── ParticlesContainer</div>
 <div class="line">│   ├── configuration.ccl</div>
 <div class="line">│   ├── interface.ccl</div>
-<div class="line">│   ├── par/</div>
+<div class="line">│   ├── par</div>
 <div class="line">│   │   ├── HydroFile.par</div>
-<div class="line">│   │   ├── PhotonsContainer.par</div>
-<div class="line">│   │   └── PhotonsMultiGrid.par</div>
+<div class="line">│   │   ├── ParticlesContainer.par</div>
+<div class="line">│   │   └── ParticlesMultiGrid.par</div>
 <div class="line">│   ├── param.ccl</div>
+<div class="line">│   ├── README.md</div>
 <div class="line">│   ├── schedule.ccl</div>
-<div class="line">│   └── src/</div>
+<div class="line">│   └── src</div>
 <div class="line">│       ├── make.code.defn</div>
-<div class="line">│       ├── PhotonsContainer.hxx</div>
+<div class="line">│       ├── ParticlesContainer.hxx</div>
+<div class="line">│       ├── ParticlesEvolution.cxx</div>
 <div class="line">│       ├── Photons.hxx</div>
-<div class="line">│       ├── PhotonsInitializers.hxx</div>
-<div class="line">│       └── test.cxx</div>
-<div class="line">├── PhotonSolverUtilities</div>
+<div class="line">│       └── PhotonsInitializers.hxx</div>
+<div class="line">├── ParticlesSolverUtilities</div>
 <div class="line">│   ├── configuration.ccl</div>
 <div class="line">│   ├── interface.ccl</div>
 <div class="line">│   ├── param.ccl</div>
+<div class="line">│   ├── README.md</div>
 <div class="line">│   ├── schedule.ccl</div>
-<div class="line">│   └── src/</div>
+<div class="line">│   └── src</div>
 <div class="line">│       ├── Interpolator.hxx</div>
 <div class="line">│       ├── make.code.defn</div>
 <div class="line">│       └── Utilities.hxx</div>
@@ -203,9 +207,9 @@ Installation with a compiled Einstein Toolkit</h2>
 <div class="line">!REPO_BRANCH = main</div>
 <div class="line">!REPO_PATH = $2</div>
 <div class="line">!CHECKOUT =</div>
+<div class="line">GInX/BaseParticlesContainer</div>
+<div class="line">GInX/ParticlesSolverUtilities</div>
 <div class="line">GInX/ParticlesContainer</div>
-<div class="line">GInX/PhotonSolverUtilities</div>
-<div class="line">GInX/PhotonsContainer</div>
 </div><!-- fragment --><p >and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:</p>
 <div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ... --clean</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>

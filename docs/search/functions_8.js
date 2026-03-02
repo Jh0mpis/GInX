@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['particlescontainer_5finit_5fmetric_0',['ParticlesContainer_init_metric',['../metrics_8cxx.html#aa0fdb4be909aa0b2dffa3290ebced5db',1,'metrics.cxx']]],
-  ['photonscontainer_1',['PhotonsContainer',['../classGInX_1_1PhotonsContainer.html#ae2950b3b7c28613cc1142c8b824d5fad',1,'GInX::PhotonsContainer']]],
-  ['photonscontainer_5fevolve_2',['PhotonsContainer_evolve',['../test_8cxx.html#a842579d22cc8519a2eb289001656e1ec',1,'test.cxx']]],
-  ['photonscontainer_5ffinal_5fcleanup_3',['PhotonsContainer_final_cleanup',['../test_8cxx.html#a0987b37f1db24f0e8be9c161e537a822',1,'test.cxx']]],
-  ['photonscontainer_5fprint_4',['PhotonsContainer_print',['../test_8cxx.html#a859ced193d3f6cb793f234ab4bf12fea',1,'test.cxx']]],
-  ['photonscontainer_5fsetup_5',['PhotonsContainer_setup',['../test_8cxx.html#ae305a28039c2e91ec0a6cb0a6153bf93',1,'test.cxx']]]
+  ['particlescontainer_0',['ParticlesContainer',['../classGInX_1_1ParticlesContainer.html#ac9302f7f7084f415110f31e318bb33f9',1,'GInX::ParticlesContainer']]],
+  ['particlescontainer_5fevolve_1',['ParticlesContainer_evolve',['../ParticlesEvolution_8cxx.html#add1270d3d303e8290cfa33e1f9506296',1,'ParticlesEvolution.cxx']]],
+  ['particlescontainer_5ffinal_5fcleanup_2',['ParticlesContainer_final_cleanup',['../ParticlesEvolution_8cxx.html#ae483e6b9c53ebcd8dbf52bf0621eda99',1,'ParticlesEvolution.cxx']]],
+  ['particlescontainer_5fprint_3',['ParticlesContainer_print',['../ParticlesEvolution_8cxx.html#aa465c06188e5b7cdd3e9df52924bc1f7',1,'ParticlesEvolution.cxx']]],
+  ['particlescontainer_5fsetup_4',['ParticlesContainer_setup',['../ParticlesEvolution_8cxx.html#abf807dc01943d9e21c6d19d7a22fcb8b',1,'ParticlesEvolution.cxx']]]
 ];

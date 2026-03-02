@@ -1,7 +1,5 @@
-# Configuration definitions for thorn Particles
-#
-REQUIRES AMREX NSIMD LOOP
+# Configuration definitions for thorn particles
 
-PROVIDES ParticlesContainer
-{
-}
+REQUIRES AMREX NSIMD BaseParticlesContainer ParticlesSolverUtilities Loop
+
+Provides ParticlesContainer {}

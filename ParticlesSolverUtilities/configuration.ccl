@@ -1,0 +1,5 @@
+# Configuration definitions for thorn Particles
+#
+REQUIRES AMREX NSIMD
+
+PROVIDES ParticlesSolverUtilities{}

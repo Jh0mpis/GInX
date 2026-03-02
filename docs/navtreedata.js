@@ -28,9 +28,9 @@ var NAVTREE =
     [ "Geodesics Integrator tool for particles in GRMHD using Adaptive Mesh Refinement", "index.html", [
       [ "Index", "index.html#autotoc_md1", null ],
       [ "GInX", "index.html#autotoc_md2", [
-        [ "Particles Container", "index.html#autotoc_md3", null ],
-        [ "Photons Container", "index.html#autotoc_md4", null ],
-        [ "Photons Solver Utilities", "index.html#autotoc_md5", null ]
+        [ "Base Particles Container", "index.html#autotoc_md3", null ],
+        [ "Particles Container", "index.html#autotoc_md4", null ],
+        [ "Particles Solver Utilities", "index.html#autotoc_md5", null ]
       ] ],
       [ "Files Structure", "index.html#autotoc_md6", null ],
       [ "How to run it", "index.html#autotoc_md7", [

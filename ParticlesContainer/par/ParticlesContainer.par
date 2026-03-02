@@ -1,0 +1,76 @@
+ActiveThorns = "
+  ADMBaseX
+  CarpetX
+  BoxInBox
+  IOUtil
+  BaseParticlesContainer
+  ParticlesContainer
+  ParticlesSolverUtilities
+"
+
+Cactus::presync_mode = "mixed-error"
+
+CarpetX::verbose = yes
+CarpetX::poison_undefined_values = yes
+
+$ncells  = 32
+$lims = 10
+$dtfrac = 1.0
+
+CarpetX::xmin = -$lims
+CarpetX::ymin = -$lims
+CarpetX::zmin = -$lims
+CarpetX::xmax = +$lims
+CarpetX::ymax = +$lims
+CarpetX::zmax = +$lims
+
+
+CarpetX::ncells_x = $ncells
+CarpetX::ncells_y = $ncells
+CarpetX::ncells_z = $ncells
+
+CarpetX::periodic_x = yes
+CarpetX::periodic_y = yes
+CarpetX::periodic_z = yes
+
+CarpetX::max_grid_size_x = 10000000
+CarpetX::max_grid_size_y = 10000000
+CarpetX::max_grid_size_z = 10000000
+
+CarpetX::max_tile_size_x = 10000000
+CarpetX::max_tile_size_y = 10000000
+CarpetX::max_tile_size_z = 10000000
+
+CarpetX::ghost_size = 3
+CarpetX::dtfac = $dtfrac
+
+Cactus::cctk_itlast = $ncells
+
+IO::out_dir = $parfile
+IO::out_every = 1
+IO::parfile_write = no
+
+CarpetX::out_adios2_every = 0
+CarpetX::out_silo_every = 0
+CarpetX::out_openpmd_every = 0
+
+CarpetX::out_performance = no
+CarpetX::out_metadata = no
+CarpetX::out_tsv_vars = ""
+
+# BaseParticlesContainer parameters definition
+BaseParticlesContainer::particle_plot_every = 0
+BaseParticlesContainer::particle_tsv_every = $ncells
+BaseParticlesContainer::banned_regions = 1
+BaseParticlesContainer::region_1_position = [0.0, 0.0, 0.0]
+BaseParticlesContainer::region_1_radius = 3.0
+#BaseParticlesContainer::metric = "Isotropic Schwarzschild"
+BaseParticlesContainer::metric = "Painleve"
+#BaseParticlesContainer::metric = "Kerr-Schild"
+BaseParticlesContainer::metric_params_d = [0.5, 0.1]
+
+# ParticlesContainer parameters definition
+ParticlesContainer::initializer = box
+ParticlesContainer::num_photons = 5000
+ParticlesContainer::init_params_d = [3.0]
+ParticlesContainer::particles_mass = 0.01

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GInX: /home/jh0mpis/MHPC-Project/GInX/PhotonsContainer/src/PhotonsContainer.hxx Source File</title>
+<title>GInX: /home/jh0mpis/MHPC-Project/GInX/ParticlesContainer/src/PhotonsContainer.hxx Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -131,19 +131,19 @@ $(document).ready(function(){initNavTree('PhotonsContainer_8hxx_source.html','')
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> StructType&gt;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html">   52</a></span><span class="keyword">class </span><a class="code hl_class" href="classGInX_1_1PhotonsContainer.html">PhotonsContainer</a></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    : <span class="keyword">public</span> BaseContainer::BaseParticleContainer&lt;PhotonsContainer&lt;StructType&gt;,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    : <span class="keyword">public</span> <a class="code hl_class" href="classGInX_1_1BaseParticleContainer.html">BaseParticleContainer</a>&lt;PhotonsContainer&lt;StructType&gt;,</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                                                  StructType&gt; {</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">protected</span>:</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6">   56</a></span>  CCTK_REAL <a class="code hl_variable" href="classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6">mass</a> = 0.;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1">   62</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1">Base</a> =</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>      BaseContainer::BaseParticleContainer&lt;PhotonsContainer&lt;StructType&gt;,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html#aad8bc8c58bea1cf185970fb535ae8bac">   62</a></span>  <span class="keyword">using </span><a class="code hl_class" href="classGInX_1_1BaseParticleContainer.html">Base</a> =</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>      <a class="code hl_class" href="classGInX_1_1BaseParticleContainer.html">BaseParticleContainer&lt;PhotonsContainer&lt;StructType&gt;</a>,</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                                           StructType&gt;;</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keyword">using </span>Base::Base;</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html#ae2950b3b7c28613cc1142c8b824d5fad">   67</a></span>  <a class="code hl_function" href="classGInX_1_1PhotonsContainer.html#ae2950b3b7c28613cc1142c8b824d5fad">PhotonsContainer</a>(amrex::AmrCore *amr_core, <span class="keyword">const</span> CCTK_REAL m)</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      : <a class="code hl_typedef" href="classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1">Base</a>(amr_core), <a class="code hl_variable" href="classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6">mass</a>{m} {};</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      : <a class="code hl_class" href="classGInX_1_1BaseParticleContainer.html">Base</a>(amr_core), <a class="code hl_variable" href="classGInX_1_1PhotonsContainer.html#ac03c95c2d137a9e4d23ae203f09d8ad6">mass</a>{m} {};</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c">   70</a></span>  <a class="code hl_function" href="classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c">~PhotonsContainer</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
@@ -285,7 +285,7 @@ $(document).ready(function(){initNavTree('PhotonsContainer_8hxx_source.html','')
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>  <span class="keyword">const</span> CCTK_REAL boundarie_hz = phi0[2] - 0.0 * dx[2];</div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>  <span class="keyword">const</span> CCTK_REAL boundarie_lz = plo0[2] + 0.0 * dx[2];</div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  <span class="keywordflow">for</span> (Iterator::ParticleIterator&lt;StructType&gt; pti(*<span class="keyword">this</span>, lev); pti.isValid();</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  <span class="keywordflow">for</span> (<a class="code hl_class" href="classGInX_1_1ParticleIterator.html">ParticleIterator&lt;StructType&gt;</a> pti(*<span class="keyword">this</span>, lev); pti.isValid();</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>       ++pti) {</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> np = pti.numParticles();</div>
@@ -511,8 +511,9 @@ $(document).ready(function(){initNavTree('PhotonsContainer_8hxx_source.html','')
 <div class="ttc" id="aUtilities_8hxx_html"><div class="ttname"><a href="Utilities_8hxx.html">Utilities.hxx</a></div><div class="ttdoc">Code utilities such as matrix and vector multiplications.</div></div>
 <div class="ttc" id="aUtilities_8hxx_html_a26c5486af11db8bad5950abbfdf3abe4"><div class="ttname"><a href="Utilities_8hxx.html#a26c5486af11db8bad5950abbfdf3abe4">SMatVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE amrex::GpuArray&lt; CCTK_REAL, 3 &gt; SMatVecMul(amrex::GpuArray&lt; CCTK_REAL, 6 &gt; A, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:30</div></div>
 <div class="ttc" id="aUtilities_8hxx_html_a681b9c6520b384f44fa55ba2b7e6f961"><div class="ttname"><a href="Utilities_8hxx.html#a681b9c6520b384f44fa55ba2b7e6f961">VecVecMul</a></div><div class="ttdeci">AMREX_GPU_DEVICE AMREX_GPU_HOST AMREX_FORCE_INLINE CCTK_ATTRIBUTE_ALWAYS_INLINE CCTK_REAL VecVecMul(amrex::GpuArray&lt; CCTK_REAL, 3 &gt; U, amrex::GpuArray&lt; CCTK_REAL, 3 &gt; V)</div><div class="ttdef"><b>Definition:</b> Utilities.hxx:51</div></div>
+<div class="ttc" id="aclassGInX_1_1BaseParticleContainer_html"><div class="ttname"><a href="classGInX_1_1BaseParticleContainer.html">GInX::BaseParticleContainer</a></div><div class="ttdoc">BaseParticleContainer abstract class definition.</div><div class="ttdef"><b>Definition:</b> BaseParticleContainer.hxx:67</div></div>
+<div class="ttc" id="aclassGInX_1_1ParticleIterator_html"><div class="ttname"><a href="classGInX_1_1ParticleIterator.html">GInX::ParticleIterator</a></div><div class="ttdef"><b>Definition:</b> BaseParticleContainer.hxx:31</div></div>
 <div class="ttc" id="aclassGInX_1_1PhotonsContainer_html"><div class="ttname"><a href="classGInX_1_1PhotonsContainer.html">GInX::PhotonsContainer</a></div><div class="ttdoc">PhotonsContainer class definition.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:54</div></div>
-<div class="ttc" id="aclassGInX_1_1PhotonsContainer_html_a2bf50aa0e16a61a635be02323d001be1"><div class="ttname"><a href="classGInX_1_1PhotonsContainer.html#a2bf50aa0e16a61a635be02323d001be1">GInX::PhotonsContainer::Base</a></div><div class="ttdeci">BaseContainer::BaseParticleContainer&lt; PhotonsContainer&lt; StructType &gt;, StructType &gt; Base</div><div class="ttdoc">Using BaseParticlesContainer constructor.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:64</div></div>
 <div class="ttc" id="aclassGInX_1_1PhotonsContainer_html_a35354365e90d2ea2dfb0894bc159a1ec"><div class="ttname"><a href="classGInX_1_1PhotonsContainer.html#a35354365e90d2ea2dfb0894bc159a1ec">GInX::PhotonsContainer::normalize_velocity</a></div><div class="ttdeci">void normalize_velocity(const amrex::MultiFab &amp;metric, const int level)</div><div class="ttdoc">Normalize the velocity accordingly to the metric on each particle position.</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:456</div></div>
 <div class="ttc" id="aclassGInX_1_1PhotonsContainer_html_a64d44ca43574067a186f485d265cce4c"><div class="ttname"><a href="classGInX_1_1PhotonsContainer.html#a64d44ca43574067a186f485d265cce4c">GInX::PhotonsContainer::~PhotonsContainer</a></div><div class="ttdeci">~PhotonsContainer()=default</div></div>
 <div class="ttc" id="aclassGInX_1_1PhotonsContainer_html_a6d7956925384334f9a5d6d4c80c4d0f3"><div class="ttname"><a href="classGInX_1_1PhotonsContainer.html#a6d7956925384334f9a5d6d4c80c4d0f3">GInX::PhotonsContainer::redistribute_particles</a></div><div class="ttdeci">void redistribute_particles()</div><div class="ttdef"><b>Definition:</b> PhotonsContainer.hxx:535</div></div>
@@ -527,7 +528,7 @@ $(document).ready(function(){initNavTree('PhotonsContainer_8hxx_source.html','')
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c4362dae0e56ab65c933fb7a6c8e1102.html">PhotonsContainer</a></li><li class="navelem"><a class="el" href="dir_c052d154f839a9676b9f303f76aaf7bd.html">src</a></li><li class="navelem"><a class="el" href="PhotonsContainer_8hxx.html">PhotonsContainer.hxx</a></li>
+    <li class="navelem"><a class="el" href="dir_9ceb029019a5bc3652d79680baf3d21d.html">ParticlesContainer</a></li><li class="navelem"><a class="el" href="dir_8be69754b5dcea0ea16aeb8cd7126f65.html">src</a></li><li class="navelem"><a class="el" href="PhotonsContainer_8hxx.html">PhotonsContainer.hxx</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4 </li>
   </ul>
 </div>
