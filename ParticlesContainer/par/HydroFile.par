@@ -1,5 +1,5 @@
 ################################################################################
-# Scaling test of BBHDisk simulation
+# Scaling test of BBHDisk simulation + Particles evolution
 ################################################################################
 
 ActiveThorns = "
@@ -16,9 +16,9 @@ ActiveThorns = "
     TmunuBaseX
     #AnalyticalSpacetimeX
     #Z4c
+    BaseParticlesContainer
     ParticlesContainer
-    PhotonsContainer
-    PhotonSolverUtilities
+    ParticlesSolverUtilities
 "
 
 $nlevels = 12
@@ -186,5 +186,5 @@ EOSX::eps_min = 1e-10
 BaseParticlesContainer::metric = "none"
 
 # PhotonsContainer parameters definition
-PhotonsContainer::num_photons = 10000000
-PhotonsContainer::initializer = "box"
+ParticlesContainer::num_photons = 10000000
+ParticlesContainer::initializer = "box"

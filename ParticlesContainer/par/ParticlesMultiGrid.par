@@ -4,8 +4,8 @@ ActiveThorns = "
   BoxInBox
   IOUtil
   BaseParticlesContainer
-  PhotonsContainer
-  PhotonSolverUtilities
+  ParticlesContainer
+  ParticlesSolverUtilities
 "
 
 $nlevels = 12
@@ -83,12 +83,12 @@ CarpetX::out_metadata = no
 CarpetX::out_tsv_vars = ""
 
 # PhotonsContainer parameters definition
-ParticlesContainer::particle_plot_every = 0
-ParticlesContainer::particle_tsv_every = 0
-PhotonsContainer::metric = "iso"
-PhotonsContainer::metric_params_d = [1.0]
+BaseParticlesContainer::particle_plot_every = 0
+BaseParticlesContainer::particle_tsv_every = 0
+ParticlesContainer::metric = "iso"
+ParticlesContainer::metric_params_d = [1.0]
 
-# ParticlesContainer parameters definition
+# BaseParticlesContainer parameters definition
 BaseParticlesContainer::banned_regions = 1
 BaseParticlesContainer::region_1_position = [0.0, 0.0, 0.0]
 BaseParticlesContainer::region_1_radius = 0.5
@@ -96,4 +96,4 @@ BaseParticlesContainer::metric = "Isotropic Schwarzschild"
 BaseParticlesContainer::metric_params_d = [1.0]
 
 # PhotonsContainer parameters definition
-PhotonsContainer::num_photons = 100000
+ParticlesContainer::num_photons = 100000
