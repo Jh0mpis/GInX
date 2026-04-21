@@ -1,0 +1,215 @@
+# Parameter definitions for thorn RaytracingX
+# =====================================================
+
+private:
+
+BOOLEAN do_raytracing "Override to skip raytracing if desired"  STEERABLE=ALWAYS
+{
+} true
+
+INT raytrace_every "Perform raytrace every 'raytrace_every' iterations" STEERABLE=ALWAYS
+{
+    0:* :: "Any positive integer, 0 turns this feature off"
+} 0
+
+INT raytrace_at_iteration[100] "Raytrace at each iteration number in array" STEERABLE=ALWAYS
+{
+    0:* :: "Any positive integer"
+} 0
+
+INT num_raytrace_iterations "Number of specified iterations to raytrace at" STEERABLE=ALWAYS
+{
+    0:100 :: "Any positive integer, max 100"
+} 0
+
+CCTK_REAL raytrace_at_time[100] "Raytrace at each iteration number in array" STEERABLE=ALWAYS
+{
+    0:* :: "Any positive real number"
+} 0
+
+INT num_raytrace_times "Number of specified times to raytrace at" STEERABLE=ALWAYS
+{
+    0:100 :: "Any positive integer, max 100"
+} 0
+
+INT max_iterations "Maximum iterations for raytracing calculation" STEERABLE=ALWAYS
+{
+    0:* :: "Any positive integer"
+} 10000
+
+CCTK_REAL max_energy "Maximum photon energy defining event horizon" STEERABLE = ALWAYS
+{
+    (0.:* :: "Any real number"
+} 1.0e9
+
+CCTK_REAL vertical_fov "Vertical field of view (in degrees)" STEERABLE = ALWAYS
+{
+    (0.:180.) :: "Any real number 0<vertical_fov<180"
+} 45.
+
+CCTK_REAL horizontal_fov "Horizontal field of view (in degrees)" STEERABLE = ALWAYS
+{
+    (0.:180.) :: "Any real number 0<vertical_fov<180"
+} 45.
+
+INT num_pixels_width "Number of pixels across image width" STEERABLE = ALWAYS
+{
+    (0:* :: "Any positive integer"
+} 500
+
+INT num_pixels_height "Number of pixels across image height" STEERABLE = ALWAYS
+{
+    (0:* :: "Any positive integer"
+} 500
+
+CCTK_REAL camera_pos[3] "Camera Position (in units of M)" STEERABLE = ALWAYS
+{
+    *:* :: "Any real number"
+} 0.0
+
+CCTK_REAL camera_vel[3] "Camera velocity" STEERABLE = ALWAYS
+{
+    *:* :: "Any real number"
+} 0.0
+
+CCTK_REAL camera_point[3] "Camera pointing direction" STEERABLE = ALWAYS
+{
+    *:* :: "Any real number"
+} 0.0
+
+CCTK_REAL camera_up[3] "Camera upwards direction" STEERABLE = ALWAYS
+{
+    *:* :: "Any real number"
+} 0.0
+
+BOOLEAN verbose "Print additional output"  STEERABLE=ALWAYS
+{
+} false
+
+BOOLEAN output_final_data "Print the data for a particle before it is deleted"  STEERABLE=ALWAYS
+{
+} false
+
+STRING final_data_file_name "Filename for the deleted particle data" STEERABLE=ALWAYS
+{
+    ""
+} "particle_data_on_deletion"
+
+RESTRICTED: REAL region_1_a "Spin of region 1" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_2_a "Spin of region 2" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_3_a "Spin of region 3" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_4_a "Spin of region 4" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_5_a "Spin of region 5" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_6_a "Spin of region 6" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_7_a "Spin of region 7" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_8_a "Spin of region 8" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_9_a "Spin of region 9" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+RESTRICTED: REAL region_10_a "Spin of region 10" STEERABLE=always
+{
+    -1:1 :: "Any positive value between -1 and 1"
+} 0.0
+
+SHARES: BaseParticlesContainer
+
+# Base Output Variables
+USES INT particle_plot_every
+USES INT particle_tsv_every
+
+# Base Banned regions parameters
+USES INT banned_regions
+
+## Region 1
+USES REAL region_1_position[3]
+USES REAL region_1_radius
+## Region 2
+USES REAL region_2_position[3]
+USES REAL region_2_radius
+## Region 3
+USES REAL region_3_position[3]
+USES REAL region_3_radius
+## Region 4
+USES REAL region_4_position[3]
+USES REAL region_4_radius
+## Region 5
+USES REAL region_5_position[3]
+USES REAL region_5_radius
+## Region 6
+USES REAL region_6_position[3]
+USES REAL region_6_radius
+## Region 7
+USES REAL region_7_position[3]
+USES REAL region_7_radius
+## Region 8
+USES REAL region_8_position[3]
+USES REAL region_8_radius
+## Region 9
+USES REAL region_9_position[3]
+USES REAL region_9_radius
+## Region 10
+USES REAL region_10_position[3]
+USES REAL region_10_radius
+
+SHARES: IO
+
+USES STRING filereader_ID_dir
+USES STRING filereader_ID_files
+USES STRING filereader_ID_vars
+
+USES STRING out_dir
+USES CCTK_INT out_every
+USES KEYWORD out_mode
+USES CCTK_INT out_proc_every
+
+USES BOOLEAN checkpoint_ID
+USES INT checkpoint_every
+USES REAL checkpoint_every_walltime_hours
+USES BOOLEAN checkpoint_on_terminate
+USES STRING checkpoint_dir
+USES STRING checkpoint_file
+
+USES KEYWORD recover
+USES STRING recover_dir
+USES STRING recover_file
+
+USES CCTK_REAL out_xline_y
+USES CCTK_REAL out_xline_z
+USES CCTK_REAL out_yline_x
+USES CCTK_REAL out_yline_z
+USES CCTK_REAL out_zline_x
+USES CCTK_REAL out_zline_y
