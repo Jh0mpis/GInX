@@ -1,0 +1,309 @@
+##############################
+# FM torus
+##############################
+
+$ncells     = 128
+$nlevels    = 4
+$dtfac = 0.4
+$xmin = -63.984375
+$xmax = 64.015625
+
+ActiveThorns = "
+    ADMBaseX
+    CarpetX
+ #   CoordinatesX
+    BoxInBox
+    HydroBaseX
+    IOUtil
+    ODESolvers
+    TmunuBaseX
+    AsterX
+    AsterSeeds
+    AsterMasks
+    FishboneMoncriefIDX
+#    RadiativeCooling
+#    TimerReport
+#    Subcycling
+    BaseParticlesContainer
+    ParticlesContainer
+    ParticlesSolverUtilities
+    RaytracingX
+"
+
+CarpetX::max_grid_sizes_x = [ 128,  128,  96,   96 ]
+CarpetX::max_grid_sizes_y = [ 128,  128,  96,   96 ]
+CarpetX::max_grid_sizes_z = [ 128,  128,  96,   96 ]
+
+Cactus::cctk_show_schedule = yes
+Cactus::presync_mode = "mixed-error"
+
+Cactus::terminate = "iteration"
+Cactus::cctk_itlast = 1
+
+#Cactus::terminate = "time"
+#Cactus::cctk_final_time = 10000
+
+CarpetX::blocking_factor_x = 8
+CarpetX::blocking_factor_y = 8
+CarpetX::blocking_factor_z = 8
+
+CarpetX::max_tile_size_x = 1024000
+CarpetX::max_tile_size_y = 1024000
+CarpetX::max_tile_size_z = 1024000
+
+CarpetX::verbose = yes
+CarpetX::poison_undefined_values = no
+
+#CarpetX::use_subcycling_wip = yes
+#CarpetX::restrict_during_sync = no
+
+CarpetX::refine_grid_layout = yes
+CarpetX::out_performance_every = 2048
+
+CarpetX::xmin = $xmin
+CarpetX::ymin = $xmin
+CarpetX::zmin = $xmin
+CarpetX::xmax = $xmax
+CarpetX::ymax = $xmax
+CarpetX::zmax = $xmax
+CarpetX::ncells_x = $ncells
+CarpetX::ncells_y = $ncells
+CarpetX::ncells_z = $ncells
+
+CarpetX::boundary_x = "neumann"
+CarpetX::boundary_y = "neumann"
+CarpetX::boundary_z = "neumann"
+CarpetX::boundary_upper_x = "neumann"
+CarpetX::boundary_upper_y = "neumann"
+CarpetX::boundary_upper_z = "neumann"
+
+CarpetX::max_num_levels = $nlevels
+CarpetX::regrid_every = 0  # 2^12
+CarpetX::regrid_error_threshold = 0.9
+
+CarpetX::prolongation_type = "poly-eno3lfb" #"poly-cons3lfb" #"ddf"
+CarpetX::prolongation_order = 3
+CarpetX::ghost_size = 3
+CarpetX::dtfac = $dtfac
+CarpetX::interpolation_order = 1
+
+ODESolvers::verbose = no
+ODESolvers::method = "SSPRK3"
+
+BoxInBox::num_regions = 1
+# Region 1
+BoxInBox::shape_1 = "cube"
+BoxInBox::num_levels_1 = $nlevels
+BoxInBox::position_x_1 = 0.015625 # 1/4 of finest grid spacing x
+BoxInBox::position_y_1 = 0.015625 # 1/4 of finest grid spacing y
+BoxInBox::position_z_1 = 0.015625 # 1/4 of finest grid spacing z
+BoxInBox::radius_1 = [-1.,  32.,    12.,    6.]
+
+ADMBaseX::initial_data    = "FishboneMoncriefID"
+ADMBaseX::initial_lapse   = "FishboneMoncriefID"
+ADMBaseX::initial_shift   = "FishboneMoncriefID"
+ADMBaseX::initial_dtlapse = "zero"
+ADMBaseX::initial_dtshift = "zero"
+
+FishboneMoncriefIDX::FM_Cowling = yes
+FishboneMoncriefIDX::a = 0.9375
+FishboneMoncriefIDX::M = 1.0
+FishboneMoncriefIDX::random_min = 0.0
+FishboneMoncriefIDX::random_max = 0.0
+FishboneMoncriefIDX::r_in             =  6.0 # Inner radius of disk
+FishboneMoncriefIDX::r_at_max_density = 12.0 # Radius at which disk reaches max density in equatorial plane
+
+# Equation of State parameters
+FishboneMoncriefIDX::kappa = 4.249572342020723e-03
+FishboneMoncriefIDX::gamma = 4./3.
+# Set magnetic field
+FishboneMoncriefIDX::seed_magnetic = "yes"
+FishboneMoncriefIDX::A_b = 0.1
+# FishboneMoncriefIDX::press_cut = 0.00004
+FishboneMoncriefIDX::A_n = 1.0
+FishboneMoncriefIDX::use_pressure = "no"
+FishboneMoncriefIDX::A_c = 0.0
+FishboneMoncriefIDX::rho_cut = 0.2
+FishboneMoncriefIDX::wrt_rho_max = "no"
+
+# Set atmo
+FishboneMoncriefIDX::atmo_type = "free-graded"
+FishboneMoncriefIDX::nrho = 3.0/2.0
+FishboneMoncriefIDX::npress = 5.0/2.0
+FishboneMoncriefIDX::press_min = 0.333333333333333e-7
+FishboneMoncriefIDX::rho_min = 1.0e-5
+
+#ADMBaseX::initial_data       = "analytical_spacetime"
+#ADMBaseX::initial_lapse      = "analytical_spacetime"
+#ADMBaseX::initial_shift      = "analytical_spacetime"
+
+#Z4c::calc_ADM_vars = no                  # for Weyl
+#Z4c::calc_ADMRHS_vars = no               # for Weyl
+#Z4c::calc_constraints = yes
+#Z4c::chi_floor = 1.0e-6
+#Z4c::alphaG_floor = 1.0e-8
+#Z4c::epsdiss = 0.32
+#Z4c::boundary_conditions = "radiative"
+
+#AnalyticalSpacetimeX::analytical_metric_type = "SuperposedBBH" #"BoostedBH"
+#AnalyticalSpacetimeX::traj_read_table = "yes"
+#AnalyticalSpacetimeX::traj_print_every = 128 #10
+#AnalyticalSpacetimeX::traj_print = "no" #"yes"
+#AnalyticalSpacetimeX::traj_table_name = "/work/09228/jkalinan/vista/initial_data/CircularOrbit_pp08_q1_sep20.h5"
+#AnalyticalSpacetimeX::AST_adjust_mass1 = 1.0
+#AnalyticalSpacetimeX::AST_adjust_mass2 = 1.0
+#AnalyticalSpacetimeX::set_positions = "yes"
+#AnalyticalSpacetimeX::AST_cutoff_floor = 1e-1
+#AnalyticalSpacetimeX::AST_a1_buffer = 0.01
+#AnalyticalSpacetimeX::AST_a2_buffer = 0.01
+#AnalyticalSpacetimeX::move_every = 128 #1
+#AnalyticalSpacetimeX::evolve_metric_every = 128 #1
+#AnalyticalSpacetimeX::set_analytic_metric_always = "yes"
+
+AsterSeeds::test_type = "none"
+
+AsterX::debug_mode = "no" #"yes"
+AsterX::flux_type = "HLLE"
+AsterX::vector_potential_gauge = "generalized Lorentz" #"algebraic"
+AsterX::lorenz_damp_fac = 5.0 # 1.5/largest dt
+AsterX::local_spatial_order = 4
+AsterX::local_estimate_error = "no"
+AsterX::update_tmunu = "no"
+AsterX::recon_type = "z_vec"
+AsterX::use_uct = "yes"
+AsterX::use_entropy_fix = "yes"
+AsterX::excise = "yes"
+AsterX::use_mask = "yes"
+
+ReconX::reconstruction_method = "minmod"
+ReconX::ppm_zone_flattening = "yes"
+ReconX::ppm_shock_detection = "no"
+
+Con2PrimFactory::c2p_prime = "Noble"
+Con2PrimFactory::c2p_second = "Palenzuela"
+Con2PrimFactory::c2p_tol = 1e-12
+Con2PrimFactory::max_iter = 1000
+
+Con2PrimFactory::rho_abs_min = 1e-10
+Con2PrimFactory::atmo_tol = 1e-3
+Con2PrimFactory::unit_test = "yes"
+Con2PrimFactory::B_lim = 1e8
+Con2PrimFactory::vw_lim = 10.0
+Con2PrimFactory::Ye_lenient = "yes"
+Con2PrimFactory::use_press_atmo = "yes"
+
+Con2PrimFactory::cons_error_limit = -1 #deactivated
+Con2PrimFactory::use_z = "yes"
+Con2PrimFactory::alp_thresh = 0.4
+Con2PrimFactory::rho_BH     = 1e-10
+Con2PrimFactory::eps_BH     = 0.00003 
+Con2PrimFactory::vwlim_BH   = 0.0
+
+Con2PrimFactory::p_atmo          = 1e-15
+
+Con2PrimFactory::r_atmo            = 100.0
+
+#Con2PrimFactory::tauFluid_atmo     = 1e-15
+
+Con2PrimFactory::thermal_eos_atmo  = "yes"
+
+EOSX::evolution_eos = "IdealGas"
+EOSX::gl_gamma = 4./3.
+EOSX::poly_gamma = 4./3.
+EOSX::poly_k = 4.249572342020723e-03
+EOSX::rho_max = 1e20
+EOSX::rho_min = 1e-30
+EOSX::eps_max = 1e10 #1e8
+EOSX::eps_min = 1e-30
+EOSX::particle_mass = 1.0
+
+CarpetX::out_norm_vars = "all"
+CarpetX::out_norm_omit_unstable = yes
+CarpetX::out_norm_every = 64
+
+CarpetX::out_silo_vars = "
+    HydroBaseX::rho
+    HydroBaseX::vel
+    HydroBaseX::eps
+    HydroBaseX::press
+    HydroBaseX::temperature
+    HydroBaseX::Bvec
+    HydroBaseX::entropy
+    HydroBaseX::Ye
+#    AsterX::con2prim_flag
+#    AsterX::dens
+#    AsterX::mom
+#    AsterX::tau
+#    AsterX::DEnt
+#    AsterX::DYe
+    ADMBaseX::lapse
+#    ADMBaseX::shift
+#    ADMBaseX::metric
+#    ADMBaseX::curv
+#    CarpetX::regrid_error
+#    RadiativeCooling::lcool
+#    AsterMasks::aster_mask_cc
+"
+
+CarpetX::out_tsv_vars = "
+    HydroBaseX::rho
+    HydroBaseX::vel
+    HydroBaseX::eps
+    HydroBaseX::press
+    HydroBaseX::temperature
+    HydroBaseX::Bvec
+    HydroBaseX::entropy
+    HydroBaseX::Ye
+#    AsterX::con2prim_flag
+#    AsterX::dens
+#    AsterX::mom
+#    AsterX::tau
+#    AsterX::DEnt
+#    AsterX::DYe
+    ADMBaseX::lapse
+    ADMBaseX::shift
+    ADMBaseX::metric
+#    ADMBaseX::curv
+#    CarpetX::regrid_error
+#    RadiativeCooling::lcool
+#    AsterMasks::aster_mask_cc
+"
+CarpetX::out_metadata = no
+
+#TimerReport::out_every = 512
+#TimerReport::out_filename = "TimerReport"
+#TimerReport::output_all_timers_together = yes
+#TimerReport::output_all_timers_readable = yes
+#TimerReport::n_top_timers = 50
+
+IO::checkpoint_dir = "./checkpoint"
+IO::recover_dir    = "./checkpoint"
+IO::checkpoint_ID = no
+#IO::checkpoint_every = -1
+IO::checkpoint_every_walltime_hours = 9.8
+IO::checkpoint_on_terminate = yes
+IO::recover                 = "autoprobe"
+
+CarpetX::checkpoint_method = "openpmd"
+CarpetX::recover_method    = "openpmd"
+
+# BaseParticlesContainer parameters definition
+BaseParticlesContainer::particle_tsv_every = 80
+
+# ParticlesContainer parameters definition
+ParticlesContainer::run_test = true
+
+# RaytracingX parameters definition
+RaytracingX::num_pixels_width = 100
+RaytracingX::num_pixels_height = 100
+RaytracingX::camera_pos = [30., 0., 0.]
+RaytracingX::camera_vel = [0., 0., 0.]
+RaytracingX::camera_point = [-1., 0., 0.]
+RaytracingX::camera_up = [0., 0., 1.]
+RaytracingX::vertical_fov = 60
+RaytracingX::horizontal_fov = 60
+RaytracingX::verbose = true
+RaytracingX::output_final_data = true
+RaytracingX::final_data_file_name = "deleted_particle_data"
+RaytracingX::num_raytrace_iterations = 1
+RaytracingX::raytrace_at_iteration = [0]
