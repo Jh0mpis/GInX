@@ -1,0 +1,11 @@
+# Schedule definition for thorn RaytracingX
+# ===================================================
+
+if (do_raytracing) {
+
+    SCHEDULE raytrace_image AT evol {
+        LANG: C
+        OPTIONS: GLOBAL
+    } "Raytrace Image"
+
+}

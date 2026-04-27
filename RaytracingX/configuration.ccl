@@ -1,0 +1,4 @@
+# Configuration options for thorn RaytracingX
+# =====================================================
+
+REQUIRES AMREX ParticlesContainer ParticlesSolverUtilities Loop
